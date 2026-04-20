@@ -1,0 +1,197 @@
+{
+  "simulations": 50000,
+  "team1": {
+    "name": "Old World Wanderers",
+    "race": "Old World Alliance",
+    "rerolls": 3,
+    "hasApothecary": true,
+    "strategy": {
+      "wrestle": 0.6,
+      "standFirm": 0.6,
+      "divingTackle": 0.5,
+      "pro": 0.5
+    },
+    "players": [
+      {
+        "position": "Old World Human Lineman",
+        "name": "Roderick"
+      },
+      {
+        "position": "Old World Human Lineman",
+        "name": "Aldhelm"
+      },
+      {
+        "position": "Old World Human Lineman",
+        "name": "Oswin"
+      },
+      {
+        "position": "Old World Halfling Hopefuls",
+        "name": "Pip",
+        "extraSkills": [
+          "Diving Tackle"
+        ],
+        "strategy": {
+          "divingTackle": 1.0
+        }
+      },
+      {
+        "position": "Old World Halfling Hopefuls",
+        "name": "Merry"
+      },
+      {
+        "position": "Old World Dwarf Lineman",
+        "name": "Gundrun",
+        "extraSkills": [
+          "Guard"
+        ],
+        "strategy": {
+          "standFirm": 0.9
+        }
+      },
+      {
+        "position": "Old World Dwarf Lineman",
+        "name": "Horgar",
+        "extraSkills": [
+          "Guard"
+        ],
+        "strategy": {
+          "standFirm": 0.9
+        }
+      },
+      {
+        "position": "Old World Human Thrower",
+        "name": "Bertram"
+      },
+      {
+        "position": "Old World Human Catcher",
+        "name": "Swiftfoot"
+      },
+      {
+        "position": "Old World Human Blitzer",
+        "name": "Sir Aldric",
+        "extraSkills": [
+          "Mighty Blow"
+        ]
+      },
+      {
+        "position": "Old World Dwarf Troll Slayer",
+        "name": "Grudgebearer",
+        "strategy": {
+          "wrestle": 0.2
+        }
+      },
+      {
+        "position": "Old World Human Lineman",
+        "name": "Runa"
+      },
+      {
+        "position": "Old World Halfling Hopefuls",
+        "name": "Brenna"
+      },
+      {
+        "position": "Old World Human Lineman",
+        "name": "Nessa"
+      },
+      {
+        "position": "Old World Human Lineman",
+        "name": "Aldric"
+      }
+    ]
+  },
+  "team2": {
+    "name": "Imperial Lions",
+    "race": "Imperial Nobility",
+    "rerolls": 2,
+    "hasApothecary": true,
+    "strategy": {
+      "wrestle": 0.85,
+      "standFirm": 0.9,
+      "divingTackle": 0.3,
+      "pro": 0.7
+    },
+    "players": [
+      {
+        "position": "Imperial Retainer Lineman",
+        "name": "Horatio"
+      },
+      {
+        "position": "Imperial Retainer Lineman",
+        "name": "Benedikt"
+      },
+      {
+        "position": "Imperial Retainer Lineman",
+        "name": "Kasimir"
+      },
+      {
+        "position": "Bodyguard",
+        "name": "Klaus",
+        "strategy": {
+          "standFirm": 1.0,
+          "wrestle": 1.0
+        }
+      },
+      {
+        "position": "Bodyguard",
+        "name": "Heinrich",
+        "strategy": {
+          "standFirm": 1.0,
+          "wrestle": 1.0
+        }
+      },
+      {
+        "position": "Bodyguard",
+        "name": "Werner",
+        "extraSkills": [
+          "Guard"
+        ],
+        "strategy": {
+          "standFirm": 1.0,
+          "wrestle": 1.0
+        }
+      },
+      {
+        "position": "Bodyguard",
+        "name": "Dieter",
+        "extraSkills": [
+          "Block"
+        ],
+        "strategy": {
+          "standFirm": 1.0,
+          "wrestle": 0.4
+        }
+      },
+      {
+        "position": "Imperial Thrower",
+        "name": "Lord Sigmar",
+        "strategy": {
+          "pro": 0.9
+        }
+      },
+      {
+        "position": "Noble Blitzer",
+        "name": "Baron von Strasse",
+        "strategy": {
+          "pro": 0.85
+        }
+      },
+      {
+        "position": "Noble Blitzer",
+        "name": "Count Aldric",
+        "extraSkills": [
+          "Dodge"
+        ],
+        "strategy": {
+          "pro": 0.85
+        }
+      },
+      {
+        "position": "Imperial Retainer Lineman",
+        "name": "Ludovic"
+      },
+      {
+        "position": "Imperial Retainer Lineman",
+        "name": "Wulfric"
+      }
+    ]
+  }
+}

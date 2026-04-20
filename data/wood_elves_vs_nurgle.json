@@ -1,0 +1,177 @@
+{
+  "simulations": 50000,
+  "team1": {
+    "name": "Loren Falcons",
+    "race": "Wood Elves",
+    "rerolls": 3,
+    "hasApothecary": true,
+    "strategy": {
+      "wrestle": 0.3,
+      "standFirm": 0.1,
+      "divingTackle": 0.7,
+      "pro": 0.5
+    },
+    "players": [
+      {
+        "position": "Wood Elf Lineman",
+        "name": "Sylvanos"
+      },
+      {
+        "position": "Wood Elf Lineman",
+        "name": "Aerindel"
+      },
+      {
+        "position": "Wood Elf Lineman",
+        "name": "Faladrel"
+      },
+      {
+        "position": "Wood Elf Lineman",
+        "name": "Thalion"
+      },
+      {
+        "position": "Wood Elf Lineman",
+        "name": "Celeborn"
+      },
+      {
+        "position": "Wood Elf Thrower",
+        "name": "Swiftarrow",
+        "extraSkills": [
+          "Accurate"
+        ]
+      },
+      {
+        "position": "Wood Elf Catcher",
+        "name": "Windfoot"
+      },
+      {
+        "position": "Wood Elf Catcher",
+        "name": "Leafdancer"
+      },
+      {
+        "position": "Wardancer",
+        "name": "Thornblade",
+        "extraSkills": [
+          "Tackle"
+        ],
+        "strategy": {
+          "divingTackle": 0.0
+        }
+      },
+      {
+        "position": "Wardancer",
+        "name": "Spiritleap"
+      },
+      {
+        "position": "Loren Forest Treeman",
+        "name": "Rootanchor"
+      },
+      {
+        "position": "Wood Elf Lineman",
+        "name": "Edric"
+      },
+      {
+        "position": "Wood Elf Lineman",
+        "name": "Padric"
+      },
+      {
+        "position": "Wood Elf Lineman",
+        "name": "Gareth"
+      },
+      {
+        "position": "Wood Elf Thrower",
+        "name": "Idris"
+      }
+    ]
+  },
+  "team2": {
+    "name": "Plague Bearers",
+    "race": "Nurgle",
+    "rerolls": 3,
+    "hasApothecary": false,
+    "strategy": {
+      "wrestle": 0.2,
+      "standFirm": 0.8,
+      "divingTackle": 0.0,
+      "pro": 0.3
+    },
+    "players": [
+      {
+        "position": "Rotter Lineman",
+        "name": "Pox"
+      },
+      {
+        "position": "Rotter Lineman",
+        "name": "Festus"
+      },
+      {
+        "position": "Rotter Lineman",
+        "name": "Blight"
+      },
+      {
+        "position": "Rotter Lineman",
+        "name": "Scab"
+      },
+      {
+        "position": "Bloater",
+        "name": "Bubos",
+        "extraSkills": [
+          "Block"
+        ],
+        "strategy": {
+          "standFirm": 1.0
+        }
+      },
+      {
+        "position": "Bloater",
+        "name": "Putris",
+        "extraSkills": [
+          "Block"
+        ],
+        "strategy": {
+          "standFirm": 1.0
+        }
+      },
+      {
+        "position": "Bloater",
+        "name": "Gangrene",
+        "strategy": {
+          "standFirm": 1.0
+        }
+      },
+      {
+        "position": "Bloater",
+        "name": "Poxwalker",
+        "strategy": {
+          "standFirm": 1.0
+        }
+      },
+      {
+        "position": "Pestigor",
+        "name": "Hornrot"
+      },
+      {
+        "position": "Pestigor",
+        "name": "Bilehorn",
+        "extraSkills": [
+          "Block"
+        ]
+      },
+      {
+        "position": "Rotspawn",
+        "name": "Grandfather's Fist"
+      },
+      {
+        "position": "Rotter Lineman",
+        "name": "Petra"
+      },
+      {
+        "position": "Rotter Lineman",
+        "name": "Keldor"
+      },
+      {
+        "position": "Rotter Lineman",
+        "name": "Oskar"
+      }
+    ]
+  }
+}

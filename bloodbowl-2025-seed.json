@@ -1,0 +1,7204 @@
+{
+  "skills": [
+    {
+      "name": "Block",
+      "category": "General",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "When both players are knocked down by a block, the player with Block may choose which result on the block dice applies."
+    },
+    {
+      "name": "Dauntless",
+      "category": "General",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "When blocking a player with higher Strength, roll a D6. If the result equals or exceeds the target's Strength, this player counts their Strength as equal to the target's for that block."
+    },
+    {
+      "name": "Fend",
+      "category": "General",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "Opponents may not follow up after pushing this player back as a result of a block."
+    },
+    {
+      "name": "Frenzy",
+      "category": "General",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player must always follow up a knocked-down opponent and must make a second block against them if possible. When blitzing, must always move toward the target."
+    },
+    {
+      "name": "Kick",
+      "category": "General",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "If this player takes the kick-off, you may place the ball anywhere in the opposing half, rather than scattering it."
+    },
+    {
+      "name": "Pro",
+      "category": "General",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "Once per team turn, this player may attempt to re-roll any single dice roll by rolling a 3+. This re-roll may itself be re-rolled with a team re-roll."
+    },
+    {
+      "name": "Steady Footing",
+      "category": "General",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player may stand up at the start of their activation without spending movement, and may then move their full MA."
+    },
+    {
+      "name": "Strip Ball",
+      "category": "General",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "When this player blocks a ball carrier and uses a Push or Defender Stumbles result, the ball is knocked loose even if the target stays on their feet."
+    },
+    {
+      "name": "Sure Hands",
+      "category": "General",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player may re-roll a failed pick-up attempt. The Strip Ball skill has no effect on this player."
+    },
+    {
+      "name": "Tackle",
+      "category": "General",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "Opposing players may not use the Dodge skill to avoid this player's blocks or to re-roll armour breaks caused by this player."
+    },
+    {
+      "name": "Taunt",
+      "category": "General",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "If possible, opposing players adjacent to this player must block this player before taking any other action during a blitz."
+    },
+    {
+      "name": "Wrestle",
+      "category": "General",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "When this player is blocked or makes a block and a Both Down result is rolled, this player may choose to have both players fall over instead of applying the normal result."
+    },
+    {
+      "name": "Catch",
+      "category": "Agility",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player may re-roll a failed catch attempt."
+    },
+    {
+      "name": "Defensive",
+      "category": "Agility",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "When this player is on the line of scrimmage, opposing players in adjacent squares lose the Guard skill."
+    },
+    {
+      "name": "Diving Catch",
+      "category": "Agility",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player may attempt to catch a ball that lands in a square adjacent to them. If a successful catch is made, the player moves into that square."
+    },
+    {
+      "name": "Diving Tackle",
+      "category": "Agility",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "After an opponent dodges out of an adjacent square, this player may fall prone in the vacated square. The opposing player must then immediately roll to avoid falling over."
+    },
+    {
+      "name": "Dodge",
+      "category": "Agility",
+      "isActive": true,
+      "isEliteSkill": true,
+      "description": "This player may re-roll a failed dodge roll. Players with the Tackle skill negate this re-roll."
+    },
+    {
+      "name": "Hit and Run",
+      "category": "Agility",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "After making a block action, this player may move one additional square, ignoring tackle zones for that move."
+    },
+    {
+      "name": "Jump Up",
+      "category": "Agility",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player may stand up as a free action during their activation. If used as part of a Blitz, they may still make a block."
+    },
+    {
+      "name": "Leap",
+      "category": "Agility",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player may jump over any adjacent square, even one occupied by another player, as part of their movement. Roll to avoid falling."
+    },
+    {
+      "name": "Safe Pair of Hands",
+      "category": "Agility",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "If this player is knocked down or placed prone while carrying the ball, the ball does not bounce. Instead it is placed in the player's square."
+    },
+    {
+      "name": "Pass Block",
+      "category": "Agility",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "If an opposing player declares a Pass action, this player may immediately move up to 3 squares to attempt an interception."
+    },
+    {
+      "name": "Sidestep",
+      "category": "Agility",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "When pushed back as a result of a block, this player may choose which adjacent square they move to rather than the default pushed-back square."
+    },
+    {
+      "name": "Sprint",
+      "category": "Agility",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player may attempt to move up to 3 extra squares when Going For It, rather than the normal 2."
+    },
+    {
+      "name": "Sure Feet",
+      "category": "Agility",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player may re-roll a failed Going For It roll once per team turn."
+    },
+    {
+      "name": "Accurate",
+      "category": "Passing",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player may add +1 to the result of any Pass roll they make."
+    },
+    {
+      "name": "Cannoneer",
+      "category": "Passing",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "When this player throws a bomb, they may use the Hail Mary Pass rules to throw it anywhere on the pitch."
+    },
+    {
+      "name": "Cloud Burster",
+      "category": "Passing",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player may choose to make a pass that is deliberately inaccurate or wildly inaccurate to place the ball in a specific area."
+    },
+    {
+      "name": "Dump-off",
+      "category": "Passing",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "If this player is targeted by a block, they may immediately make a quick pass (even out of turn) before the block is resolved."
+    },
+    {
+      "name": "Give and Go",
+      "category": "Passing",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "After making a successful hand-off action, this player may immediately move up to 3 squares."
+    },
+    {
+      "name": "Hail Mary Pass",
+      "category": "Passing",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player may throw the ball to any square on the pitch, regardless of range or tackle zones. However, the pass is always treated as Wildly Inaccurate."
+    },
+    {
+      "name": "Leader",
+      "category": "Passing",
+      "isActive": false,
+      "isEliteSkill": true,
+      "description": "While this player is on the pitch, your team gains one additional team re-roll each half, but only this player may use it."
+    },
+    {
+      "name": "Nerves of Steel",
+      "category": "Passing",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player ignores tackle zones when making or catching a pass, and does not suffer negative modifiers to Pass or Catch rolls from being in an opponent's tackle zone."
+    },
+    {
+      "name": "On the Ball",
+      "category": "Passing",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "When a kick-off is declared, this player may immediately move up to 3 squares before the kick-off scatter is determined."
+    },
+    {
+      "name": "Pass",
+      "category": "Passing",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player may re-roll a failed Pass roll."
+    },
+    {
+      "name": "Punt",
+      "category": "Passing",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player may use their leg to kick the ball. When used as a kick-off, the ball may be placed up to 2 extra squares further away."
+    },
+    {
+      "name": "Safe Pass",
+      "category": "Passing",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player never fumbles a pass. If a Fumble result is rolled, the pass is treated as an Inaccurate Pass instead."
+    },
+    {
+      "name": "Arm Bar",
+      "category": "Strength",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "When this player assists a block or a foul, the opposing player that is being blocked or fouled is considered to have their Strength reduced by 1 (to a minimum of 1)."
+    },
+    {
+      "name": "Brawler",
+      "category": "Strength",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "When this player makes a block, they may re-roll one block dice. This skill may not be used if the block is assisted."
+    },
+    {
+      "name": "Break Tackle",
+      "category": "Strength",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "When making a dodge roll, this player may use their Strength instead of Agility (to a maximum of 6+)."
+    },
+    {
+      "name": "Bullseye",
+      "category": "Strength",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "When this player uses Throw Team-mate, they may re-roll the scatter roll for where the thrown player lands."
+    },
+    {
+      "name": "Grab",
+      "category": "Strength",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "Instead of following up, this player may move the pushed-back player to any adjacent empty square (not the square the player was pushed from)."
+    },
+    {
+      "name": "Guard",
+      "category": "Strength",
+      "isActive": true,
+      "isEliteSkill": true,
+      "description": "This player may assist a block even when in an opponent's tackle zone. Their assist counts even if the opponent has the Fend or Wrestle skill."
+    },
+    {
+      "name": "Juggernaut",
+      "category": "Strength",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "When making a blitz, this player may treat a Both Down result as a Push result. Also, the target's Fend, Stand Firm, and Wrestle skills have no effect against this blitz."
+    },
+    {
+      "name": "Mighty Blow",
+      "category": "Strength",
+      "isActive": true,
+      "isEliteSkill": true,
+      "description": "When a player with this skill causes an opponent to become KO'd or Injured, add +1 to either the Armour roll or the Injury roll (not both)."
+    },
+    {
+      "name": "Multiple Block",
+      "category": "Strength",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player may make a single block against two adjacent opponents at once. Both opponents use a single block dice, but the result applied is chosen by the active player."
+    },
+    {
+      "name": "Piling On",
+      "category": "Strength",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "When an adjacent opponent is knocked down, this player may fall prone to re-roll the Armour or Injury roll. This player is then prone and ends their activation."
+    },
+    {
+      "name": "Stand Firm",
+      "category": "Strength",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player is never pushed back as a result of a block, though they may still be knocked down."
+    },
+    {
+      "name": "Strong Arm",
+      "category": "Strength",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player adds +1 to Pass rolls when using the Throw Team-mate skill."
+    },
+    {
+      "name": "Thick Skull",
+      "category": "Strength",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "This player treats a Stunned result on the Injury table as a Knocked Out result instead, and is never KO'd by a result of 8 on the injury roll."
+    },
+    {
+      "name": "Dirty Player",
+      "category": "Devious",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player may add +1 to either the Armour roll or the Injury roll (not both) when making a foul."
+    },
+    {
+      "name": "Eye Gouge",
+      "category": "Devious",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "When this player assists a foul, they may attempt to poke the prone target in the eye. Roll a D6: on a 4+ the target receives a Badly Hurt result in addition to any other result."
+    },
+    {
+      "name": "Fumblerooski",
+      "category": "Devious",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "When this player moves, they may deliberately leave the ball behind in any square they pass through, even if they are currently carrying it."
+    },
+    {
+      "name": "Lethal Flight",
+      "category": "Devious",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "When this player throws a bomb, the bomb does not scatter on a misfire. Instead, the bomb detonates in the thrower's square."
+    },
+    {
+      "name": "Lone Fouler",
+      "category": "Devious",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player may foul without needing assisting players, and their foul is never automatically detected by the referee on a double."
+    },
+    {
+      "name": "Pile Driver",
+      "category": "Devious",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "When this player makes a block that results in the target being knocked down, this player may follow up and then immediately make a foul against the knocked-down player."
+    },
+    {
+      "name": "Put the Boot In",
+      "category": "Devious",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "When this player makes a foul, they may move into the target's square to make the foul. The target must be prone and this player must be adjacent."
+    },
+    {
+      "name": "Quick Foul",
+      "category": "Devious",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player may commit a foul immediately after making a block that knocks the target down, before other actions are taken. The foul does not end the team turn."
+    },
+    {
+      "name": "Saboteur",
+      "category": "Devious",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "Once per game, this player may attempt to sabotage an opposing player's equipment. Roll a D6: on a 4+ reduce the target's Armour by 1 for the rest of the game."
+    },
+    {
+      "name": "Shadowing",
+      "category": "Devious",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "When an opponent moves out of a square adjacent to this player, this player may attempt to shadow them. Roll off; if this player wins, the opponent's move ends immediately."
+    },
+    {
+      "name": "Sneaky Git",
+      "category": "Devious",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player is not automatically sent off when they roll a double when fouling. Instead, the referee simply fails to spot the foul."
+    },
+    {
+      "name": "Violent Innovator",
+      "category": "Devious",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "When this player commits a foul, they may use an unusual technique. Roll a D6: on a 4+ add +1 to the Armour roll; on a 1\u20133 the referee spots the foul automatically."
+    },
+    {
+      "name": "Big Hand",
+      "category": "Mutation",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player ignores Disturbing Presence and any weather conditions when attempting to pick up or catch the ball."
+    },
+    {
+      "name": "Claws",
+      "category": "Mutation",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "When this player makes a block and the Armour roll would be modified, any roll of 8+ after modification breaks armour, regardless of the target's actual Armour value."
+    },
+    {
+      "name": "Disturbing Presence",
+      "category": "Mutation",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "Any opposing player making a Pass, Throw Team-mate, or catch roll must subtract 1 from the roll for each player with this skill within 3 squares of them."
+    },
+    {
+      "name": "Extra Arms",
+      "category": "Mutation",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player may re-roll a failed catch or interception attempt once per action."
+    },
+    {
+      "name": "Foul Appearance",
+      "category": "Mutation",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "Any opposing player wishing to block or blitz this player must first roll a D6. On a 1, they are too horrified to act and the block does not take place."
+    },
+    {
+      "name": "Horns",
+      "category": "Mutation",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player gains +1 Strength when performing a blitz action."
+    },
+    {
+      "name": "Iron Hard Skin",
+      "category": "Mutation",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "Opposing players may not use skills that modify Armour or Injury rolls against this player (e.g. Mighty Blow, Dirty Player)."
+    },
+    {
+      "name": "Monstrous Mouth",
+      "category": "Mutation",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player may re-roll a failed catch attempt. The Strip Ball skill has no effect on this player."
+    },
+    {
+      "name": "Prehensile Tail",
+      "category": "Mutation",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "Opposing players attempting to dodge away from this player suffer a -1 penalty to their dodge roll."
+    },
+    {
+      "name": "Tentacles",
+      "category": "Mutation",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "When an opposing player attempts to move out of a square adjacent to this player, roll a D6. On a 3+ the opposing player is held in place and their action ends."
+    },
+    {
+      "name": "Two Heads",
+      "category": "Mutation",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player may add +1 to all dodge rolls they make."
+    },
+    {
+      "name": "Very Long Legs",
+      "category": "Mutation",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player ignores intervening players when determining if they can intercept a pass. They also add +1 to Jump Up rolls."
+    },
+    {
+      "name": "Always Hungry",
+      "category": "Trait",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "When this player uses Throw Team-mate, roll a D6 before throwing. On a 1 the player eats their team-mate instead \u2014 the thrown player is immediately removed as a casualty."
+    },
+    {
+      "name": "Animal Savagery",
+      "category": "Trait",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "At the start of their activation, this player must roll a D6. On a 1\u20133 they lash out and must immediately block an adjacent team-mate (chosen by the opposing coach)."
+    },
+    {
+      "name": "Animosity",
+      "category": "Trait",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player resents some of their team-mates. When handing off or passing to a player of a different type on the same team, roll a D6; on a 1 the action is refused."
+    },
+    {
+      "name": "Ball and Chain",
+      "category": "Trait",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player moves in a random direction each square and cannot stop voluntarily. Any player they move into is blocked. They cannot carry the ball."
+    },
+    {
+      "name": "Bloodlust",
+      "category": "Trait",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "At the start of their activation, this player must bite an adjacent player (team-mate or opponent) or risk going Wild. If no player is adjacent, this player is removed as a KO'd player."
+    },
+    {
+      "name": "Bombardier",
+      "category": "Trait",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "Instead of a normal Pass action, this player may throw a bomb. The bomb scatters if it misses and explodes, potentially knocking down players in adjacent squares."
+    },
+    {
+      "name": "Bone Head",
+      "category": "Trait",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "At the start of this player's activation, roll a D6. On a 1 this player forgets what they are doing and may not perform any action for that turn."
+    },
+    {
+      "name": "Breathe Fire",
+      "category": "Trait",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "Instead of a block, this player may breathe fire on an adjacent opponent. The target is knocked down and may suffer an injury."
+    },
+    {
+      "name": "Chainsaw",
+      "category": "Trait",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player uses a chainsaw instead of making a normal block. The chainsaw always rolls 2D6 against the target's Armour. On a fumble, this player hits themselves instead."
+    },
+    {
+      "name": "Decay",
+      "category": "Trait",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "When this player suffers a Casualty result on the Injury table, the result is one step worse (e.g., a Badly Hurt becomes a Serious Injury)."
+    },
+    {
+      "name": "Drunkard",
+      "category": "Trait",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "At the start of this player's activation, randomly move them one square in a direction determined by a scatter die before they take their action."
+    },
+    {
+      "name": "Hatred",
+      "category": "Trait",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "When this player makes a block or blitz action against a specific race (as defined by their team), they may re-roll one block dice."
+    },
+    {
+      "name": "Hypnotic Gaze",
+      "category": "Trait",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "As an action, this player may attempt to hypnotise an adjacent opponent. Roll a D6: on a 3+ the target is removed from the pitch until the next drive."
+    },
+    {
+      "name": "Insignificant",
+      "category": "Trait",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "This player is so small and unimportant that they cannot be targeted by the Pass Block skill. Opposing players may not use Pass Block to move because of this player's passes."
+    },
+    {
+      "name": "Kick Team-mate",
+      "category": "Trait",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "Instead of using Throw Team-mate, this player may kick a team-mate with the Right Stuff trait. The team-mate scatters and lands as if thrown Wildly Inaccurate."
+    },
+    {
+      "name": "Loner",
+      "category": "Trait",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "When this player wishes to use a team re-roll, they must first roll a D6. On a result equal to or higher than the number shown (e.g., 4+), they may use the re-roll."
+    },
+    {
+      "name": "My Ball",
+      "category": "Trait",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "This player will not willingly give up the ball. They may not make a hand-off or be the target of a Pass action. If the ball scatters into their square, they automatically pick it up."
+    },
+    {
+      "name": "No Ball",
+      "category": "Trait",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "This player cannot hold or catch the ball. If the ball lands in their square it immediately scatters again."
+    },
+    {
+      "name": "Pick-me-up",
+      "category": "Trait",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "When an adjacent team-mate is knocked prone, this player may immediately stand them up as a free action without spending a team re-roll or action."
+    },
+    {
+      "name": "Plague Ridden",
+      "category": "Trait",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "When this player causes a Casualty result, the injured player may be infected with a plague. Infected players join the Nurgle team if they are not already on it."
+    },
+    {
+      "name": "Pogo Stick",
+      "category": "Trait",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "This player carries a pogo stick and may leap over occupied squares just like the Leap skill, but without needing to make an Agility roll to land safely."
+    },
+    {
+      "name": "Projectile Vomit",
+      "category": "Trait",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "Instead of a block, this player may vomit on an adjacent player. The target is knocked down and must make an Armour roll. The vomit also scatters one square."
+    },
+    {
+      "name": "Really Stupid",
+      "category": "Trait",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "At the start of this player's activation, roll a D6. On a 1\u20133 (with no adjacent friendly Big Guy) the player does nothing this turn."
+    },
+    {
+      "name": "Regeneration",
+      "category": "Trait",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "After being Injured, this player may attempt to regenerate. Roll a D6: on a 4+ the player regenerates and is placed in the Knocked Out box instead of the Casualty box."
+    },
+    {
+      "name": "Right Stuff",
+      "category": "Trait",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "This player may be thrown by a team-mate with the Throw Team-mate skill. When thrown, this player may attempt to land without being injured."
+    },
+    {
+      "name": "Secret Weapon",
+      "category": "Trait",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "This player carries an illegal weapon. If they are on the pitch at the end of a drive, they are automatically sent off regardless of the foul rules."
+    },
+    {
+      "name": "Stab",
+      "category": "Trait",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "Instead of a block, this player may stab an adjacent opponent. Roll a D6: on a 2+ the target must make an Armour roll. On a 1 the stab is fumbled and this player falls prone."
+    },
+    {
+      "name": "Stunty",
+      "category": "Trait",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "This player must use the Stunty Injury table if injured, and opposing players gain +1 to hit this player. However, this player ignores friendly players when moving."
+    },
+    {
+      "name": "Swoop",
+      "category": "Trait",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "When this player is thrown, they may alter the direction and distance of their flight path, replacing the normal scatter with up to 3 squares in any direction."
+    },
+    {
+      "name": "Take Root",
+      "category": "Trait",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "At the start of their activation, roll a D6. On a 2+ this player takes root: they cannot move but gain +2 Strength. On a 1 they cannot act at all this turn."
+    },
+    {
+      "name": "Throw Team-mate",
+      "category": "Trait",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "This player may pick up and throw a team-mate with the Right Stuff trait in place of a normal Pass action. The throw uses a special range and scatter table."
+    },
+    {
+      "name": "Timmm-ber!",
+      "category": "Trait",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "When this player takes root, they may choose to fall on an adjacent opposing player, treating it as a block with +2 Strength. This player is then prone."
+    },
+    {
+      "name": "Titchy",
+      "category": "Trait",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "This player is so small they do not count as an intervening player for the purposes of passing or throwing. They also do not provide assists."
+    },
+    {
+      "name": "Stakes",
+      "category": "Trait",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "When this player blocks a Vampire or Undead player and causes them to be Knocked Out or Injured, the casualty roll is made with an additional +1."
+    },
+    {
+      "name": "Trickster",
+      "category": "Trait",
+      "isActive": true,
+      "isEliteSkill": false,
+      "description": "Once per team turn, this player may swap positions with an adjacent team-mate as a free action, potentially confusing the opposition."
+    },
+    {
+      "name": "Unchannelled Fury",
+      "category": "Trait",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "At the start of this player's activation, roll a D6. On a 1\u20133 this player must immediately block the nearest player (friend or foe) before taking any other action."
+    },
+    {
+      "name": "Unsteady",
+      "category": "Trait",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "When this player ends their movement, roll a D6. On a 1 they lose their footing and are placed prone (no Armour roll)."
+    },
+    {
+      "name": "Weeping Dagger",
+      "category": "Trait",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "When this player causes a Casualty result with a Stab action, the injury roll is made with an additional +1, and the victim cannot benefit from Regeneration."
+    },
+    {
+      "name": "Blind Rage",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Akhorne may choose to re-roll the D6 when rolling for the Dauntless Skill."
+    },
+    {
+      "name": "Savage Blow",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, when Anqi performs a Block Action against an opposition player he may choose to re-roll any number of the Block Dice."
+    },
+    {
+      "name": "Blast It!",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Whenever Barik makes a Hail Mary Pass, he may re-roll any Scatter results for determining where the ball lands, and any team-mate attempting to catch the ball applies a +1 modifier to the roll."
+    },
+    {
+      "name": "Putrid Regurgitation",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per half, Bilerot may use the Projectile Vomit Special Action. This may still be used even if Bilerot has already performed a Block Action this Turn."
+    },
+    {
+      "name": "Sneakiest of the Lot",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "If your team includes the Black Gobbo, then you may declare two Foul Actions per Turn rather than the usual one. However, one of these foul actions must be declared by the Black Gobbo himself."
+    },
+    {
+      "name": "Look into my Eyes",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, if Boa begins his activation Marking an opposition player in possession of the ball, he may roll a D6. On a 2+ the opposition player loses possession of the ball, Boa immediately gains possession of the ball, and Boa's activation immediately ends."
+    },
+    {
+      "name": "Kaboom!",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, if an opposition player catches a bomb thrown by Bomber, you can choose to have it explode rather than the opposition player immediately attempting to throw it again."
+    },
+    {
+      "name": "Tasty Morsel",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, when Karina fails a Bloodlust roll, she may choose to bite an opposition player with a ST of 3 or lower as if they were a Thrall Lineman team-mate."
+    },
+    {
+      "name": "Star of the Show",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, when Count Luthor scores a Touchdown, his controlling coach gains one Team Re-roll until the end of the following Drive."
+    },
+    {
+      "name": "All You Can Eat",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, Cindy may perform two Throw Bomb Special Actions rather than one; though she must commit to doing so before making the first Action."
+    },
+    {
+      "name": "Reliable",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "If Deeproot makes a Fumbled Throw when performing a Throw Team-mate Action, the player that was being thrown will Bounce as normal but will automatically land safely."
+    },
+    {
+      "name": "A Sneaky Pair",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Dribl & Drull must be hired as a pair. Additionally, whenever Dribl or Drull perform either a Foul Action or a Stab Special Action against an opposition player Marked by both Dribl & Drull, they may apply a +1 modifier to the roll."
+    },
+    {
+      "name": "Mesmerizing Gaze",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per half, Eldril may re-roll the dice when performing a Hypnotic Gaze Special Action."
+    },
+    {
+      "name": "Baleful Hex",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, at the beginning of Estelle's activation, she may select an opposition player within 5 squares and roll a D6. On a 2+, the selected player becomes Distracted."
+    },
+    {
+      "name": "Whirling Dervish",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per Activation, Fungus may re-roll the D6 when determining which direction he moves in."
+    },
+    {
+      "name": "Frenzied Rush",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per half, when Glart declares a Blitz Action he may gain the Frenzy Skill until the end of his activation."
+    },
+    {
+      "name": "Shot to Nothing",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, when Gloriel is activated she may use this special rule. If she does, Gloriel gains the Hail Mary Pass Skill until the end of her activation."
+    },
+    {
+      "name": "Primal Savagery",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, when Glotl fails an Animal Savagery roll, it may lash out at an opposition player rather than a team-mate."
+    },
+    {
+      "name": "I'll Carry You",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Grak & Crumbleberry must be hired as a pair. Additionally, once per half, if Grak begins his activation adjacent to Crumbleberry he may pick up Crumbleberry; temporarily removing Crumbleberry from the pitch."
+    },
+    {
+      "name": "Gored by the Bull",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game when Grashnak performs a Block Action as part of a Blitz Action, he may roll one additional Block Dice against the opposition player regardless of their ST, to a maximum of three Block Dice."
+    },
+    {
+      "name": "Incorporeal",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, when Gretchen is activated she can use this special rule. Until the end of her activation, Gretchen does not have to make Dodge rolls for leaving a square within an opposition player's Tackle Zone."
+    },
+    {
+      "name": "Consummate Professional",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, Griff may apply a +1 modifier to an Agility Test he has made. This modifier may be applied after the roll has been made."
+    },
+    {
+      "name": "Slayer",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, when an opposition Big Guy is Knocked Down as a result of a Block Action performed by Grim, you may apply an additional +1 modifier to either the Armour Roll or the Injury Roll."
+    },
+    {
+      "name": "Wisdom of the White Dwarf",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, when Grombrindal is activated he may select one team-mate within 2 squares. The selected team-mate gains one of the following Skills until the end of turn: Break Tackle, Dauntless, Mighty Blow, Sure Feet."
+    },
+    {
+      "name": "Quick Bite",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, if Guffle is Marking an opposition player who catches the ball, he may immediately make an Armour Roll against that player."
+    },
+    {
+      "name": "Unstoppable Momentum",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Whenever H'Thark performs a Block Action as part of a Blitz Action, he may re-roll a single Block Dice."
+    },
+    {
+      "name": "Treacherous",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, if Hakflem is adjacent to a teammate who is in possession of the ball when he is activated, then Hakflem can choose to gain possession of the ball."
+    },
+    {
+      "name": "Old Pro",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, Helmut may use his Pro Skill to re-roll a single dice rolled as part of an Armour Roll."
+    },
+    {
+      "name": "Dwarfen Scourge",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, when an opposition player is Knocked Down as a result of a Block Action performed by Ivan, you may apply an additional +1 modifier to the Armour Roll or Injury Roll."
+    },
+    {
+      "name": "Raiding Party",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per Drive, when Ivar begins his activation he may select one Open team-mate within 5 squares. The selected player may immediately move 1 square though they must end this move Marking an opposition player."
+    },
+    {
+      "name": "The Flashing Blade",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, at the start of his activation, Jeremiah may declare a Stab Special Action against an opposition player he is Marking."
+    },
+    {
+      "name": "Swift as the Breeze",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, Jordell can choose to pass a single Dodge, Leap, or Rush Test on a 2+, regardless of any modifiers."
+    },
+    {
+      "name": "Dwarfen Grit",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, when Josef's armour is broken as the result of an Armour Roll, you may choose to have the Armour Roll re-rolled."
+    },
+    {
+      "name": "Indomitable",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, when Karla successfully rolls to use her Dauntless Skill, she may increase her ST characteristic to double that of the target of the Block Action."
+    },
+    {
+      "name": "Black Ink",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, at the start of any of his activations, Kiroth can select an opposition player he is Marking. The selected player becomes Distracted until they are next activated."
+    },
+    {
+      "name": "I'll Be Back!",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "The first time in a game that Kreek would be Sent-off as per the Secret Weapon Trait, he is not Sent-off and may instead continue as part of the game."
+    },
+    {
+      "name": "Lord of Chaos",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, when Lord Borak performs a Block Action he may re-roll a single Block Dice."
+    },
+    {
+      "name": "Vicious Vines",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per half, when Maple declares a Block Action he may do so against an opposition player who is 2 squares away following all the normal rules for performing a Block Action, though he may not follow-up."
+    },
+    {
+      "name": "Maximum Carnage",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, after Max performs a Chainsaw Attack Special Action he may immediately perform another Chainsaw Attack Special Action that targets a different opposition player."
+    },
+    {
+      "name": "Crushing Blow",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, when an opposition player is Knocked Down as the result of a Block Action performed by Zug, you may apply an additional +1 modifier to the Armour Roll."
+    },
+    {
+      "name": "The Ballista",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, when Morg performs a Throw Team-mate Action, he may re-roll the Passing Ability Test."
+    },
+    {
+      "name": "Kick 'em While They're Down!",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, Nobbla may use the Chainsaw Attack Special Action against a Prone or Stunned opposition player. This does not count as a Foul Action."
+    },
+    {
+      "name": "Halfling Luck",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, Puggy may re-roll a single dice that was rolled either as a signal dice roll, a multiple dice roll, or a dice pool."
+    },
+    {
+      "name": "Toxin Connoisseur",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, when Rashnak successfully breaks an opposition player's armour as a result of a Stab Special Action, you may apply an additional +1 modifier to the Injury Roll."
+    },
+    {
+      "name": "Thinking Man's Troll",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per half, Ripper may re-roll a single dice that was rolled either as a signal dice roll, a multiple dice roll, or a dice pool."
+    },
+    {
+      "name": "Catch of the Day",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per half, if Rodney is Standing and begins his activation within 3 squares of a ball which is on the ground he may roll a D6. On a 3+ Rodney immediately gains possession of the ball."
+    },
+    {
+      "name": "Slashing Nails",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per half, when Roxanna declares a Blitz Action, she gains the Claws Skill until the end of her activation."
+    },
+    {
+      "name": "Ram",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, when an opposition player is Knocked Down as a result of a Block Action performed by Rumbelow, you may apply an additional +1 modifier to either the Armour Roll or the Injury Roll."
+    },
+    {
+      "name": "Yoink!",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, when Scrappa attempts to Intercept a Pass Action he may roll a D6. On a 2+, Scrappa doesn't need to roll to Intercept; instead, he will automatically Intercept the Pass Action."
+    },
+    {
+      "name": "Fury of the Blood God",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, if Scyla rolls a 1 for his Unchannelled Fury roll after declaring a Block Action then, instead of applying the usual effects, Scyla may perform two Block Actions instead."
+    },
+    {
+      "name": "Master Assassin",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, when Skitter performs a Stab Special Action, he may choose to re-roll the Armour Roll."
+    },
+    {
+      "name": "Pump Up the Crowd",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, when Skrorg causes an opposition player to be removed as a Casualty as the result of a Block Action, Skrorg's controlling coach gains one Team Re-roll until the end of the current Drive."
+    },
+    {
+      "name": "Strong Passing Game",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, when Skrull performs a Pass Action he may modify the result of the Passing Ability Test by the value of his ST characteristic, to a maximum of 6."
+    },
+    {
+      "name": "Working In Tandem",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "The Swift Twins must be hired as a pair. Additionally, if Lucien performs a Block Action against an opposition player who is also Marked by Valen, Lucien may re-roll a single Block Dice."
+    },
+    {
+      "name": "Furious Outburst",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per half, so long as she is Standing at the start of her activation, Swiftvine can place herself adjacent to a Standing opposition player within 3 squares of her and immediately make a Stab Special Action against them."
+    },
+    {
+      "name": "Beer Barrel Bash!",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per Drive, at the start of his activation, Thorsson may select an opposition player within three squares and roll a D6. On a 3+, the selected player is immediately Knocked Down."
+    },
+    {
+      "name": "Krump and Smash",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, when an opposition player is Knocked Down as a result of a Block Action performed by Varag, he may re-roll the Armour Roll."
+    },
+    {
+      "name": "Savage Mauling",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, when Wilhelm makes an Injury Roll against an opposition player, he may choose to re-roll the result."
+    },
+    {
+      "name": "Woodland Fury",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, when Willow performs a Block Action that would result in her being Knocked Down, she can choose to re-roll a single Block Dice."
+    },
+    {
+      "name": "Watch Out!",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "The first time each Drive that Withergrasp is the target of a Block Action performed by an opposition player, he counts as having the Dodge Skill."
+    },
+    {
+      "name": "Excuse Me, Are You a Zoat?",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per game, when Zolcath is activated he may select an opposition player within 3 squares. The selected player immediately loses their Tackle Zone until they are next activated."
+    },
+    {
+      "name": "Blastin' Solves Everything",
+      "category": "Special",
+      "isActive": false,
+      "isEliteSkill": false,
+      "description": "Once per half, at the start of his activation, Zzharg may select a Standing opposition player within 3 squares and roll a D6. On a 3+, the selected player is hit."
+    }
+  ],
+  "teamNames": [
+    {
+      "name": "Amazons",
+      "tier": 1,
+      "rerollCost": 60,
+      "canHaveApothecary": true,
+      "leagues": "Elven Kingdoms League",
+      "rosterPositions": [
+        {
+          "name": "Eagle Warrior Linewoman",
+          "cost": 50000,
+          "maxCount": 16,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 8,
+          "normalSkillAccess": [
+            "General"
+          ],
+          "doubleSkillAccess": [
+            "Strength",
+            "Agility"
+          ],
+          "startingSkills": [
+            "Dodge"
+          ],
+          "keywords": "Lineman"
+        },
+        {
+          "name": "Python Warrior Thrower",
+          "cost": 80000,
+          "maxCount": 2,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": 3,
+          "av": 8,
+          "normalSkillAccess": [
+            "General",
+            "Passing"
+          ],
+          "doubleSkillAccess": [
+            "Strength",
+            "Agility"
+          ],
+          "startingSkills": [
+            "Dodge",
+            "On the Ball"
+          ],
+          "keywords": "Thrower"
+        },
+        {
+          "name": "Piranha Warrior Blitzer",
+          "cost": 90000,
+          "maxCount": 2,
+          "ma": 7,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 8,
+          "normalSkillAccess": [
+            "General",
+            "Agility"
+          ],
+          "doubleSkillAccess": [
+            "Strength"
+          ],
+          "startingSkills": [
+            "Dodge",
+            "Hit and Run"
+          ],
+          "keywords": "Blitzer"
+        },
+        {
+          "name": "Jaguar Warrior Blocker",
+          "cost": 110000,
+          "maxCount": 2,
+          "ma": 6,
+          "st": 4,
+          "ag": 3,
+          "pa": 4,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility"
+          ],
+          "startingSkills": [
+            "Defensive",
+            "Dodge"
+          ],
+          "keywords": "Blocker"
+        }
+      ]
+    },
+    {
+      "name": "Black Orcs",
+      "tier": 3,
+      "rerollCost": 60,
+      "canHaveApothecary": true,
+      "leagues": "Badlands Brawl",
+      "rosterPositions": [
+        {
+          "name": "Goblin Bruiser Lineman",
+          "cost": 45000,
+          "maxCount": 16,
+          "ma": 6,
+          "st": 2,
+          "ag": 3,
+          "pa": 4,
+          "av": 8,
+          "normalSkillAccess": [
+            "Agility",
+            "Devious"
+          ],
+          "doubleSkillAccess": [
+            "General",
+            "Passing",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Dodge",
+            "Right Stuff",
+            "Stunty",
+            "Thick Skull"
+          ],
+          "keywords": "Lineman, Stunty"
+        },
+        {
+          "name": "Black Orc",
+          "cost": 90000,
+          "maxCount": 6,
+          "ma": 4,
+          "st": 4,
+          "ag": 4,
+          "pa": 5,
+          "av": 10,
+          "normalSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious"
+          ],
+          "startingSkills": [
+            "Brawler",
+            "Grab"
+          ],
+          "keywords": "Blocker"
+        },
+        {
+          "name": "Trained Troll",
+          "cost": 115000,
+          "maxCount": 1,
+          "ma": 4,
+          "st": 5,
+          "ag": 5,
+          "pa": 5,
+          "av": 10,
+          "normalSkillAccess": [
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General",
+            "Passing"
+          ],
+          "startingSkills": [
+            "Always Hungry",
+            "Mighty Blow",
+            "Projectile Vomit",
+            "Really Stupid",
+            "Regeneration",
+            "Throw Team-mate"
+          ],
+          "keywords": "Big Guy"
+        }
+      ]
+    },
+    {
+      "name": "Bretonnian",
+      "tier": 2,
+      "rerollCost": 60,
+      "canHaveApothecary": true,
+      "leagues": "Old World Classic",
+      "rosterPositions": [
+        {
+          "name": "Squire",
+          "cost": 50000,
+          "maxCount": 16,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 8,
+          "normalSkillAccess": [
+            "General"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Wrestle"
+          ],
+          "keywords": "Lineman"
+        },
+        {
+          "name": "Knight Thrower",
+          "cost": 80000,
+          "maxCount": 2,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": 3,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Passing"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Dauntless",
+            "Nerves of Steel"
+          ],
+          "keywords": "Thrower"
+        },
+        {
+          "name": "Knight Catcher",
+          "cost": 85000,
+          "maxCount": 2,
+          "ma": 7,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 9,
+          "normalSkillAccess": [
+            "Agility",
+            "General"
+          ],
+          "doubleSkillAccess": [
+            "Strength"
+          ],
+          "startingSkills": [
+            "Catch",
+            "Dauntless",
+            "Nerves of Steel"
+          ],
+          "keywords": "Catcher"
+        },
+        {
+          "name": "Grail Knight",
+          "cost": 95000,
+          "maxCount": 2,
+          "ma": 7,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 10,
+          "normalSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility"
+          ],
+          "startingSkills": [
+            "Block",
+            "Dauntless",
+            "Steady Footing"
+          ],
+          "keywords": "Blitzer"
+        }
+      ]
+    },
+    {
+      "name": "Chaos Chosen",
+      "tier": 3,
+      "rerollCost": 50,
+      "canHaveApothecary": true,
+      "leagues": "Favoured of Chaos",
+      "rosterPositions": [
+        {
+          "name": "Beastman Runner Lineman",
+          "cost": 55000,
+          "maxCount": 16,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": 3,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Mutation"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious",
+            "Passing",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Horns",
+            "Thick Skull"
+          ],
+          "keywords": "Lineman"
+        },
+        {
+          "name": "Chosen Blocker",
+          "cost": 100000,
+          "maxCount": 4,
+          "ma": 5,
+          "st": 4,
+          "ag": 3,
+          "pa": 5,
+          "av": 10,
+          "normalSkillAccess": [
+            "General",
+            "Mutation",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious"
+          ],
+          "startingSkills": [
+            "Arm Bar"
+          ],
+          "keywords": "Blocker"
+        },
+        {
+          "name": "Chaos Troll",
+          "cost": 115000,
+          "maxCount": 1,
+          "ma": 4,
+          "st": 5,
+          "ag": 5,
+          "pa": 5,
+          "av": 10,
+          "normalSkillAccess": [
+            "Mutation",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General",
+            "Passing"
+          ],
+          "startingSkills": [
+            "Always Hungry",
+            "Loner (4+)",
+            "Mighty Blow",
+            "Projectile Vomit",
+            "Really Stupid",
+            "Regeneration",
+            "Throw Team-mate"
+          ],
+          "keywords": "Big Guy"
+        },
+        {
+          "name": "Chaos Ogre",
+          "cost": 140000,
+          "maxCount": 1,
+          "ma": 5,
+          "st": 5,
+          "ag": 4,
+          "pa": 5,
+          "av": 10,
+          "normalSkillAccess": [
+            "Mutation",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General"
+          ],
+          "startingSkills": [
+            "Bone Head",
+            "Loner (4+)",
+            "Mighty Blow",
+            "Thick Skull",
+            "Throw Team-mate"
+          ],
+          "keywords": "Big Guy"
+        },
+        {
+          "name": "Minotaur",
+          "cost": 150000,
+          "maxCount": 1,
+          "ma": 5,
+          "st": 5,
+          "ag": 4,
+          "pa": 6,
+          "av": 9,
+          "normalSkillAccess": [
+            "Mutation",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General"
+          ],
+          "startingSkills": [
+            "Frenzy",
+            "Horns",
+            "Loner (4+)",
+            "Mighty Blow",
+            "Thick Skull",
+            "Unchannelled Fury"
+          ],
+          "keywords": "Big Guy"
+        }
+      ]
+    },
+    {
+      "name": "Chaos Dwarves",
+      "tier": 1,
+      "rerollCost": 70,
+      "canHaveApothecary": true,
+      "leagues": "Badlands Brawl, Favoured of Chaos",
+      "rosterPositions": [
+        {
+          "name": "Hobgoblin Lineman",
+          "cost": 40000,
+          "maxCount": 16,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 8,
+          "normalSkillAccess": [
+            "Devious"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General",
+            "Strength"
+          ],
+          "startingSkills": [],
+          "keywords": "Lineman"
+        },
+        {
+          "name": "Hobgoblin Sneaky Stabba",
+          "cost": 60000,
+          "maxCount": 2,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": 5,
+          "av": 8,
+          "normalSkillAccess": [
+            "Devious",
+            "General"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Shadowing",
+            "Stab"
+          ],
+          "keywords": "Blitzer"
+        },
+        {
+          "name": "Chaos Dwarf Blocker",
+          "cost": 70000,
+          "maxCount": 4,
+          "ma": 4,
+          "st": 3,
+          "ag": 4,
+          "pa": 6,
+          "av": 10,
+          "normalSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious",
+            "Mutation"
+          ],
+          "startingSkills": [
+            "Block",
+            "Iron Hard Skin",
+            "Thick Skull"
+          ],
+          "keywords": "Blocker"
+        },
+        {
+          "name": "Chaos Dwarf Flamesmith",
+          "cost": 80000,
+          "maxCount": 2,
+          "ma": 5,
+          "st": 3,
+          "ag": 4,
+          "pa": 6,
+          "av": 10,
+          "normalSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious",
+            "Mutation"
+          ],
+          "startingSkills": [
+            "Brawler",
+            "Breathe Fire",
+            "Disturbing Presence",
+            "Thick Skull"
+          ],
+          "keywords": "Blocker"
+        },
+        {
+          "name": "Bull Centaur Blitzer",
+          "cost": 130000,
+          "maxCount": 2,
+          "ma": 6,
+          "st": 4,
+          "ag": 4,
+          "pa": 6,
+          "av": 10,
+          "normalSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious",
+            "Mutation"
+          ],
+          "startingSkills": [
+            "Sprint",
+            "Sure Feet",
+            "Thick Skull",
+            "Unsteady"
+          ],
+          "keywords": "Blitzer"
+        },
+        {
+          "name": "Minotaur",
+          "cost": 150000,
+          "maxCount": 1,
+          "ma": 5,
+          "st": 5,
+          "ag": 4,
+          "pa": 6,
+          "av": 9,
+          "normalSkillAccess": [
+            "Strength",
+            "Mutation"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General"
+          ],
+          "startingSkills": [
+            "Frenzy",
+            "Horns",
+            "Loner (4+)",
+            "Mighty Blow",
+            "Thick Skull",
+            "Unchannelled Fury"
+          ],
+          "keywords": "Big Guy"
+        }
+      ]
+    },
+    {
+      "name": "Chaos Renegades",
+      "tier": 3,
+      "rerollCost": 70,
+      "canHaveApothecary": true,
+      "leagues": "Favoured of Chaos",
+      "specialRules": "Bribery and Corruption",
+      "rosterPositions": [
+        {
+          "name": "Renegade Human Lineman",
+          "cost": 50000,
+          "maxCount": 16,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 9,
+          "normalSkillAccess": [
+            "Devious",
+            "General",
+            "Mutation"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Animosity (All)"
+          ],
+          "keywords": "Lineman"
+        },
+        {
+          "name": "Renegade Goblin",
+          "cost": 40000,
+          "maxCount": 1,
+          "ma": 6,
+          "st": 2,
+          "ag": 3,
+          "pa": 4,
+          "av": 8,
+          "normalSkillAccess": [
+            "Agility",
+            "Devious",
+            "Mutation"
+          ],
+          "doubleSkillAccess": [
+            "General",
+            "Passing"
+          ],
+          "startingSkills": [
+            "Animosity (All)",
+            "Dodge",
+            "Right Stuff",
+            "Stunty"
+          ],
+          "keywords": "Lineman, Stunty"
+        },
+        {
+          "name": "Renegade Orc",
+          "cost": 50000,
+          "maxCount": 1,
+          "ma": 5,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 10,
+          "normalSkillAccess": [
+            "Devious",
+            "General",
+            "Mutation"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Animosity (All)"
+          ],
+          "keywords": "Lineman"
+        },
+        {
+          "name": "Renegade Skaven",
+          "cost": 50000,
+          "maxCount": 1,
+          "ma": 7,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 8,
+          "normalSkillAccess": [
+            "Devious",
+            "General",
+            "Mutation"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Animosity (All)"
+          ],
+          "keywords": "Lineman"
+        },
+        {
+          "name": "Renegade Dark Elf",
+          "cost": 65000,
+          "maxCount": 1,
+          "ma": 6,
+          "st": 3,
+          "ag": 2,
+          "pa": 3,
+          "av": 9,
+          "normalSkillAccess": [
+            "Agility",
+            "Devious",
+            "General",
+            "Mutation"
+          ],
+          "doubleSkillAccess": [
+            "Strength"
+          ],
+          "startingSkills": [
+            "Animosity (All)"
+          ],
+          "keywords": "Lineman"
+        },
+        {
+          "name": "Renegade Human Thrower",
+          "cost": 75000,
+          "maxCount": 1,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": 3,
+          "av": 9,
+          "normalSkillAccess": [
+            "Devious",
+            "General",
+            "Mutation",
+            "Passing"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Animosity (All)",
+            "Pass",
+            "Sure Hands"
+          ],
+          "keywords": "Thrower"
+        },
+        {
+          "name": "Renegade Troll",
+          "cost": 115000,
+          "maxCount": 1,
+          "ma": 4,
+          "st": 5,
+          "ag": 5,
+          "pa": 5,
+          "av": 10,
+          "normalSkillAccess": [
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General",
+            "Mutation",
+            "Passing"
+          ],
+          "startingSkills": [
+            "Animosity (All)",
+            "Always Hungry",
+            "Loner (4+)",
+            "Mighty Blow",
+            "Projectile Vomit",
+            "Really Stupid",
+            "Regeneration",
+            "Throw Team-mate"
+          ],
+          "keywords": "Big Guy"
+        },
+        {
+          "name": "Renegade Ogre",
+          "cost": 140000,
+          "maxCount": 1,
+          "ma": 5,
+          "st": 5,
+          "ag": 4,
+          "pa": 5,
+          "av": 10,
+          "normalSkillAccess": [
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General",
+            "Mutation"
+          ],
+          "startingSkills": [
+            "Animosity (All)",
+            "Bone Head",
+            "Loner (4+)",
+            "Mighty Blow",
+            "Thick Skull",
+            "Throw Team-mate"
+          ],
+          "keywords": "Big Guy"
+        },
+        {
+          "name": "Renegade Minotaur",
+          "cost": 150000,
+          "maxCount": 1,
+          "ma": 5,
+          "st": 5,
+          "ag": 4,
+          "pa": 6,
+          "av": 9,
+          "normalSkillAccess": [
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General",
+            "Mutation"
+          ],
+          "startingSkills": [
+            "Animosity (All)",
+            "Frenzy",
+            "Horns",
+            "Loner (4+)",
+            "Mighty Blow",
+            "Thick Skull",
+            "Unchannelled Fury"
+          ],
+          "keywords": "Big Guy"
+        },
+        {
+          "name": "Renegade Rat Ogre",
+          "cost": 150000,
+          "maxCount": 1,
+          "ma": 6,
+          "st": 5,
+          "ag": 4,
+          "pa": 6,
+          "av": 9,
+          "normalSkillAccess": [
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General",
+            "Mutation"
+          ],
+          "startingSkills": [
+            "Animosity (All)",
+            "Animal Savagery",
+            "Frenzy",
+            "Loner (4+)",
+            "Mighty Blow",
+            "Prehensile Tail"
+          ],
+          "keywords": "Big Guy"
+        }
+      ]
+    },
+    {
+      "name": "Dark Elf",
+      "tier": 1,
+      "rerollCost": 50,
+      "canHaveApothecary": true,
+      "leagues": "Elven Kingdoms League",
+      "rosterPositions": [
+        {
+          "name": "Dark Elf Lineman",
+          "cost": 65000,
+          "maxCount": 16,
+          "ma": 6,
+          "st": 3,
+          "ag": 2,
+          "pa": 3,
+          "av": 9,
+          "normalSkillAccess": [
+            "Agility",
+            "General"
+          ],
+          "doubleSkillAccess": [
+            "Devious",
+            "Strength"
+          ],
+          "startingSkills": [],
+          "keywords": "Lineman"
+        },
+        {
+          "name": "Runner",
+          "cost": 80000,
+          "maxCount": 2,
+          "ma": 7,
+          "st": 3,
+          "ag": 2,
+          "pa": 3,
+          "av": 8,
+          "normalSkillAccess": [
+            "General",
+            "Agility",
+            "Passing"
+          ],
+          "doubleSkillAccess": [
+            "Devious",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Dump-off",
+            "Punt"
+          ],
+          "keywords": "Runner"
+        },
+        {
+          "name": "Assassin",
+          "cost": 90000,
+          "maxCount": 2,
+          "ma": 7,
+          "st": 3,
+          "ag": 2,
+          "pa": 4,
+          "av": 8,
+          "normalSkillAccess": [
+            "Agility",
+            "Devious"
+          ],
+          "doubleSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Hit and Run",
+            "Shadowing",
+            "Stab"
+          ],
+          "keywords": "Blitzer"
+        },
+        {
+          "name": "Blitzer",
+          "cost": 105000,
+          "maxCount": 2,
+          "ma": 7,
+          "st": 3,
+          "ag": 2,
+          "pa": 3,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Agility"
+          ],
+          "doubleSkillAccess": [
+            "Devious",
+            "Passing",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Block"
+          ],
+          "keywords": "Blitzer"
+        },
+        {
+          "name": "Witch Elf",
+          "cost": 110000,
+          "maxCount": 2,
+          "ma": 7,
+          "st": 3,
+          "ag": 2,
+          "pa": 4,
+          "av": 8,
+          "normalSkillAccess": [
+            "General",
+            "Agility"
+          ],
+          "doubleSkillAccess": [
+            "Devious",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Dodge",
+            "Frenzy",
+            "Jump Up"
+          ],
+          "keywords": "Blitzer"
+        }
+      ]
+    },
+    {
+      "name": "Dwarves",
+      "tier": 1,
+      "rerollCost": 60,
+      "canHaveApothecary": true,
+      "leagues": "Badlands Brawl, Old World Classic",
+      "rosterPositions": [
+        {
+          "name": "Dwarf Blocker Lineman",
+          "cost": 70000,
+          "maxCount": 16,
+          "ma": 4,
+          "st": 3,
+          "ag": 4,
+          "pa": 5,
+          "av": 10,
+          "normalSkillAccess": [
+            "Devious",
+            "General"
+          ],
+          "doubleSkillAccess": [
+            "Strength"
+          ],
+          "startingSkills": [
+            "Block",
+            "Defensive",
+            "Thick Skull"
+          ],
+          "keywords": "Lineman, Blocker"
+        },
+        {
+          "name": "Dwarf Runner",
+          "cost": 80000,
+          "maxCount": 2,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Passing"
+          ],
+          "doubleSkillAccess": [
+            "Strength"
+          ],
+          "startingSkills": [
+            "Sprint",
+            "Sure Hands",
+            "Thick Skull"
+          ],
+          "keywords": "Runner"
+        },
+        {
+          "name": "Troll Slayer",
+          "cost": 95000,
+          "maxCount": 2,
+          "ma": 5,
+          "st": 3,
+          "ag": 4,
+          "pa": 5,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Devious"
+          ],
+          "startingSkills": [
+            "Block",
+            "Dauntless",
+            "Frenzy",
+            "Hatred",
+            "Thick Skull"
+          ],
+          "keywords": "Blitzer"
+        },
+        {
+          "name": "Dwarf Blitzer",
+          "cost": 100000,
+          "maxCount": 2,
+          "ma": 5,
+          "st": 3,
+          "ag": 4,
+          "pa": 4,
+          "av": 10,
+          "normalSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Passing"
+          ],
+          "startingSkills": [
+            "Block",
+            "Diving Tackle",
+            "Tackle",
+            "Thick Skull"
+          ],
+          "keywords": "Blitzer"
+        },
+        {
+          "name": "Deathroller",
+          "cost": 170000,
+          "maxCount": 1,
+          "ma": 5,
+          "st": 7,
+          "ag": 5,
+          "pa": null,
+          "av": 11,
+          "normalSkillAccess": [
+            "Devious",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "General"
+          ],
+          "startingSkills": [
+            "Break Tackle",
+            "Dirty Player",
+            "Juggernaut",
+            "Loner (4+)",
+            "Mighty Blow",
+            "No Ball",
+            "Secret Weapon",
+            "Stand Firm",
+            "Tackle"
+          ],
+          "keywords": "Big Guy, Secret Weapon"
+        }
+      ]
+    },
+    {
+      "name": "Elf Union",
+      "tier": 2,
+      "rerollCost": 50,
+      "canHaveApothecary": true,
+      "leagues": "Elven Kingdoms League, Old World Classic",
+      "rosterPositions": [
+        {
+          "name": "Elven Union Lineman",
+          "cost": 65000,
+          "maxCount": 16,
+          "ma": 6,
+          "st": 3,
+          "ag": 2,
+          "pa": 3,
+          "av": 8,
+          "normalSkillAccess": [
+            "General",
+            "Agility"
+          ],
+          "doubleSkillAccess": [
+            "Strength"
+          ],
+          "startingSkills": [
+            "Fumblerooski"
+          ],
+          "keywords": "Lineman"
+        },
+        {
+          "name": "Elven Union Thrower",
+          "cost": 75000,
+          "maxCount": 2,
+          "ma": 6,
+          "st": 3,
+          "ag": 2,
+          "pa": 2,
+          "av": 8,
+          "normalSkillAccess": [
+            "General",
+            "Agility",
+            "Passing"
+          ],
+          "doubleSkillAccess": [
+            "Strength"
+          ],
+          "startingSkills": [
+            "Hail Mary Pass"
+          ],
+          "keywords": "Thrower"
+        },
+        {
+          "name": "Elven Union Catcher",
+          "cost": 100000,
+          "maxCount": 2,
+          "ma": 8,
+          "st": 3,
+          "ag": 2,
+          "pa": 4,
+          "av": 8,
+          "normalSkillAccess": [
+            "General",
+            "Agility"
+          ],
+          "doubleSkillAccess": [
+            "Strength"
+          ],
+          "startingSkills": [
+            "Catch",
+            "Diving Catch",
+            "Nerves of Steel"
+          ],
+          "keywords": "Catcher"
+        },
+        {
+          "name": "Elven Union Blitzer",
+          "cost": 115000,
+          "maxCount": 2,
+          "ma": 7,
+          "st": 3,
+          "ag": 2,
+          "pa": 3,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Agility"
+          ],
+          "doubleSkillAccess": [
+            "Strength",
+            "Passing"
+          ],
+          "startingSkills": [
+            "Block",
+            "Sidestep"
+          ],
+          "keywords": "Blitzer"
+        }
+      ]
+    },
+    {
+      "name": "Gnomes",
+      "tier": 4,
+      "rerollCost": 50,
+      "canHaveApothecary": true,
+      "leagues": "Elven Kingdoms League, Halfling Thimble Cup",
+      "rosterPositions": [
+        {
+          "name": "Gnome Lineman",
+          "cost": 40000,
+          "maxCount": 16,
+          "ma": 5,
+          "st": 2,
+          "ag": 3,
+          "pa": 4,
+          "av": 7,
+          "normalSkillAccess": [
+            "Agility"
+          ],
+          "doubleSkillAccess": [
+            "Devious",
+            "General",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Jump Up",
+            "Right Stuff",
+            "Stunty",
+            "Wrestle"
+          ],
+          "keywords": "Lineman, Stunty"
+        },
+        {
+          "name": "Gnome Illusionist",
+          "cost": 50000,
+          "maxCount": 2,
+          "ma": 5,
+          "st": 2,
+          "ag": 3,
+          "pa": 3,
+          "av": 7,
+          "normalSkillAccess": [
+            "Agility",
+            "Passing"
+          ],
+          "doubleSkillAccess": [
+            "Devious",
+            "General"
+          ],
+          "startingSkills": [
+            "Jump Up",
+            "Stunty",
+            "Trickster",
+            "Wrestle"
+          ],
+          "keywords": "Blitzer, Stunty"
+        },
+        {
+          "name": "Woodland Fox",
+          "cost": 50000,
+          "maxCount": 2,
+          "ma": 7,
+          "st": 2,
+          "ag": 2,
+          "pa": null,
+          "av": 6,
+          "normalSkillAccess": [
+            "Agility"
+          ],
+          "doubleSkillAccess": [],
+          "startingSkills": [
+            "Dodge",
+            "My Ball",
+            "Sidestep",
+            "Stunty"
+          ],
+          "keywords": "Runner, Stunty"
+        },
+        {
+          "name": "Gnome BeastMaster",
+          "cost": 55000,
+          "maxCount": 2,
+          "ma": 5,
+          "st": 2,
+          "ag": 3,
+          "pa": 4,
+          "av": 8,
+          "normalSkillAccess": [
+            "Agility"
+          ],
+          "doubleSkillAccess": [
+            "Devious",
+            "General",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Guard",
+            "Jump Up",
+            "Stunty",
+            "Wrestle"
+          ],
+          "keywords": "Blocker, Stunty"
+        },
+        {
+          "name": "Altern Forest Treeman",
+          "cost": 120000,
+          "maxCount": 2,
+          "ma": 2,
+          "st": 6,
+          "ag": 5,
+          "pa": 5,
+          "av": 11,
+          "normalSkillAccess": [
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General",
+            "Passing"
+          ],
+          "startingSkills": [
+            "Mighty Blow",
+            "Stand Firm",
+            "Strong Arm",
+            "Take Root",
+            "Thick Skull",
+            "Throw Team-mate",
+            "Timmm-ber!"
+          ],
+          "keywords": "Big Guy"
+        }
+      ]
+    },
+    {
+      "name": "Goblins",
+      "tier": 4,
+      "rerollCost": 60,
+      "canHaveApothecary": true,
+      "leagues": "Badlands Brawl, Old World Classic",
+      "specialRules": "Bribery and Corruption",
+      "rosterPositions": [
+        {
+          "name": "Goblin Lineman",
+          "cost": 40000,
+          "maxCount": 16,
+          "ma": 6,
+          "st": 2,
+          "ag": 3,
+          "pa": 4,
+          "av": 8,
+          "normalSkillAccess": [
+            "Agility",
+            "Devious"
+          ],
+          "doubleSkillAccess": [
+            "General",
+            "Passing",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Dodge",
+            "Right Stuff",
+            "Stunty"
+          ],
+          "keywords": "Lineman, Stunty"
+        },
+        {
+          "name": "Trained Troll",
+          "cost": 115000,
+          "maxCount": 2,
+          "ma": 4,
+          "st": 5,
+          "ag": 5,
+          "pa": 5,
+          "av": 10,
+          "normalSkillAccess": [
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General",
+            "Passing"
+          ],
+          "startingSkills": [
+            "Always Hungry",
+            "Mighty Blow",
+            "Projectile Vomit",
+            "Really Stupid",
+            "Regeneration",
+            "Throw Team-mate"
+          ],
+          "keywords": "Big Guy"
+        },
+        {
+          "name": "Looney",
+          "cost": 40000,
+          "maxCount": 1,
+          "ma": 6,
+          "st": 2,
+          "ag": 3,
+          "pa": null,
+          "av": 8,
+          "normalSkillAccess": [
+            "Devious"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Chainsaw",
+            "No Ball",
+            "Secret Weapon",
+            "Stunty"
+          ],
+          "keywords": "Stunty, Secret Weapon"
+        },
+        {
+          "name": "Bomma",
+          "cost": 45000,
+          "maxCount": 1,
+          "ma": 6,
+          "st": 2,
+          "ag": 3,
+          "pa": 4,
+          "av": 8,
+          "normalSkillAccess": [
+            "Devious",
+            "Passing"
+          ],
+          "doubleSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Bombardier",
+            "Dodge",
+            "Secret Weapon",
+            "Stunty"
+          ],
+          "keywords": "Stunty, Secret Weapon"
+        },
+        {
+          "name": "Ooligan",
+          "cost": 60000,
+          "maxCount": 1,
+          "ma": 6,
+          "st": 2,
+          "ag": 3,
+          "pa": 5,
+          "av": 8,
+          "normalSkillAccess": [
+            "Agility",
+            "Devious"
+          ],
+          "doubleSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Dirty Player",
+            "Disturbing Presence",
+            "Dodge",
+            "Right Stuff",
+            "Stunty",
+            "Taunt"
+          ],
+          "keywords": "Stunty"
+        },
+        {
+          "name": "Doom Diver",
+          "cost": 65000,
+          "maxCount": 1,
+          "ma": 6,
+          "st": 2,
+          "ag": 3,
+          "pa": 6,
+          "av": 8,
+          "normalSkillAccess": [
+            "Agility"
+          ],
+          "doubleSkillAccess": [
+            "Devious",
+            "General",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Dodge",
+            "Right Stuff",
+            "Stunty",
+            "Swoop"
+          ],
+          "keywords": "Stunty"
+        },
+        {
+          "name": "Fanatic",
+          "cost": 70000,
+          "maxCount": 1,
+          "ma": 3,
+          "st": 7,
+          "ag": 3,
+          "pa": null,
+          "av": 8,
+          "normalSkillAccess": [
+            "Devious",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General"
+          ],
+          "startingSkills": [
+            "Ball and Chain",
+            "No Ball",
+            "Secret Weapon",
+            "Stunty"
+          ],
+          "keywords": "Stunty, Secret Weapon"
+        },
+        {
+          "name": "Pogoer",
+          "cost": 75000,
+          "maxCount": 1,
+          "ma": 7,
+          "st": 2,
+          "ag": 3,
+          "pa": 4,
+          "av": 8,
+          "normalSkillAccess": [
+            "Agility"
+          ],
+          "doubleSkillAccess": [
+            "Devious",
+            "General",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Dodge",
+            "Pogo Stick",
+            "Stunty"
+          ],
+          "keywords": "Stunty"
+        }
+      ]
+    },
+    {
+      "name": "Halflings",
+      "tier": 4,
+      "rerollCost": 60,
+      "canHaveApothecary": true,
+      "leagues": "Halfling Thimble Cup, Old World Classic",
+      "specialRules": "Halfling Thimble Cup",
+      "rosterPositions": [
+        {
+          "name": "Halfling Hopeful Lineman",
+          "cost": 30000,
+          "maxCount": 16,
+          "ma": 5,
+          "st": 2,
+          "ag": 3,
+          "pa": 4,
+          "av": 7,
+          "normalSkillAccess": [
+            "Agility"
+          ],
+          "doubleSkillAccess": [
+            "Devious",
+            "General",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Dodge",
+            "Right Stuff",
+            "Stunty"
+          ],
+          "keywords": "Lineman, Stunty"
+        },
+        {
+          "name": "Halfling Hefty",
+          "cost": 50000,
+          "maxCount": 2,
+          "ma": 5,
+          "st": 2,
+          "ag": 3,
+          "pa": 3,
+          "av": 8,
+          "normalSkillAccess": [
+            "Agility",
+            "Passing"
+          ],
+          "doubleSkillAccess": [
+            "Devious",
+            "General",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Dodge",
+            "Fend",
+            "Stunty"
+          ],
+          "keywords": "Blitzer, Stunty"
+        },
+        {
+          "name": "Halfling Catcher",
+          "cost": 55000,
+          "maxCount": 2,
+          "ma": 5,
+          "st": 2,
+          "ag": 3,
+          "pa": 4,
+          "av": 7,
+          "normalSkillAccess": [
+            "Agility"
+          ],
+          "doubleSkillAccess": [
+            "Devious",
+            "General",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Catch",
+            "Dodge",
+            "Right Stuff",
+            "Sprint",
+            "Stunty"
+          ],
+          "keywords": "Catcher, Stunty"
+        },
+        {
+          "name": "Altern Forest Treeman",
+          "cost": 120000,
+          "maxCount": 2,
+          "ma": 2,
+          "st": 6,
+          "ag": 5,
+          "pa": 5,
+          "av": 11,
+          "normalSkillAccess": [
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General",
+            "Passing"
+          ],
+          "startingSkills": [
+            "Mighty Blow",
+            "Stand Firm",
+            "Strong Arm",
+            "Take Root",
+            "Thick Skull",
+            "Throw Team-mate",
+            "Timmm-ber!"
+          ],
+          "keywords": "Big Guy"
+        }
+      ]
+    },
+    {
+      "name": "High Elves",
+      "tier": 1,
+      "rerollCost": 50,
+      "canHaveApothecary": true,
+      "leagues": "Elven Kingdoms League, Old World Classic",
+      "rosterPositions": [
+        {
+          "name": "High Elf Lineman",
+          "cost": 65000,
+          "maxCount": 16,
+          "ma": 6,
+          "st": 3,
+          "ag": 2,
+          "pa": 3,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Agility"
+          ],
+          "doubleSkillAccess": [
+            "Strength",
+            "Passing"
+          ],
+          "startingSkills": [],
+          "keywords": "Lineman"
+        },
+        {
+          "name": "Catcher",
+          "cost": 90000,
+          "maxCount": 4,
+          "ma": 8,
+          "st": 3,
+          "ag": 2,
+          "pa": 3,
+          "av": 8,
+          "normalSkillAccess": [
+            "General",
+            "Agility"
+          ],
+          "doubleSkillAccess": [
+            "Strength"
+          ],
+          "startingSkills": [
+            "Catch"
+          ],
+          "keywords": "Catcher"
+        },
+        {
+          "name": "Thrower",
+          "cost": 100000,
+          "maxCount": 2,
+          "ma": 6,
+          "st": 3,
+          "ag": 2,
+          "pa": 2,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Agility",
+            "Passing"
+          ],
+          "doubleSkillAccess": [
+            "Strength"
+          ],
+          "startingSkills": [
+            "Cloud Burster",
+            "Pass",
+            "Safe Pass"
+          ],
+          "keywords": "Thrower"
+        },
+        {
+          "name": "Blitzer",
+          "cost": 100000,
+          "maxCount": 2,
+          "ma": 7,
+          "st": 3,
+          "ag": 2,
+          "pa": 4,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Agility"
+          ],
+          "doubleSkillAccess": [
+            "Strength",
+            "Passing"
+          ],
+          "startingSkills": [
+            "Block"
+          ],
+          "keywords": "Blitzer"
+        }
+      ]
+    },
+    {
+      "name": "Humans",
+      "tier": 2,
+      "rerollCost": 50,
+      "canHaveApothecary": true,
+      "leagues": "Old World Classic",
+      "rosterPositions": [
+        {
+          "name": "Human Lineman",
+          "cost": 50000,
+          "maxCount": 16,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 9,
+          "normalSkillAccess": [
+            "General"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious",
+            "Strength"
+          ],
+          "startingSkills": [],
+          "keywords": "Lineman"
+        },
+        {
+          "name": "Halfling Hopeful",
+          "cost": 30000,
+          "maxCount": 3,
+          "ma": 5,
+          "st": 2,
+          "ag": 3,
+          "pa": 4,
+          "av": 7,
+          "normalSkillAccess": [
+            "Agility"
+          ],
+          "doubleSkillAccess": [
+            "Devious",
+            "General",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Dodge",
+            "Right Stuff",
+            "Stunty"
+          ],
+          "keywords": "Lineman, Stunty"
+        },
+        {
+          "name": "Human Thrower",
+          "cost": 75000,
+          "maxCount": 2,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": 3,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Passing"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Pass",
+            "Sure Hands"
+          ],
+          "keywords": "Thrower"
+        },
+        {
+          "name": "Human Catcher",
+          "cost": 75000,
+          "maxCount": 2,
+          "ma": 8,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 8,
+          "normalSkillAccess": [
+            "General",
+            "Agility"
+          ],
+          "doubleSkillAccess": [
+            "Devious",
+            "Strength",
+            "Passing"
+          ],
+          "startingSkills": [
+            "Catch",
+            "Dodge"
+          ],
+          "keywords": "Catcher"
+        },
+        {
+          "name": "Human Blitzer",
+          "cost": 85000,
+          "maxCount": 2,
+          "ma": 7,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious"
+          ],
+          "startingSkills": [
+            "Block",
+            "Tackle"
+          ],
+          "keywords": "Blitzer"
+        },
+        {
+          "name": "Ogre",
+          "cost": 140000,
+          "maxCount": 1,
+          "ma": 5,
+          "st": 5,
+          "ag": 4,
+          "pa": 5,
+          "av": 10,
+          "normalSkillAccess": [
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General"
+          ],
+          "startingSkills": [
+            "Bone Head",
+            "Loner (3+)",
+            "Mighty Blow",
+            "Thick Skull",
+            "Throw Team-mate"
+          ],
+          "keywords": "Big Guy"
+        }
+      ]
+    },
+    {
+      "name": "Imperial Nobility",
+      "tier": 2,
+      "rerollCost": 60,
+      "canHaveApothecary": true,
+      "leagues": "Old World Classic",
+      "specialRules": "Bribery and Corruption",
+      "rosterPositions": [
+        {
+          "name": "Imperial Retainer Lineman",
+          "cost": 45000,
+          "maxCount": 16,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 8,
+          "normalSkillAccess": [
+            "General"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Fend"
+          ],
+          "keywords": "Lineman"
+        },
+        {
+          "name": "Bodyguard",
+          "cost": 85000,
+          "maxCount": 4,
+          "ma": 5,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility"
+          ],
+          "startingSkills": [
+            "Stand Firm",
+            "Wrestle"
+          ],
+          "keywords": "Blocker"
+        },
+        {
+          "name": "Imperial Thrower",
+          "cost": 75000,
+          "maxCount": 2,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": 2,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Passing"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Give and Go",
+            "Pass",
+            "Pro"
+          ],
+          "keywords": "Thrower"
+        },
+        {
+          "name": "Noble Blitzer",
+          "cost": 90000,
+          "maxCount": 2,
+          "ma": 7,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Agility"
+          ],
+          "doubleSkillAccess": [
+            "Passing",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Block",
+            "Catch",
+            "Pro"
+          ],
+          "keywords": "Blitzer"
+        },
+        {
+          "name": "Ogre",
+          "cost": 140000,
+          "maxCount": 1,
+          "ma": 5,
+          "st": 5,
+          "ag": 4,
+          "pa": 5,
+          "av": 10,
+          "normalSkillAccess": [
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General"
+          ],
+          "startingSkills": [
+            "Bone Head",
+            "Loner (3+)",
+            "Mighty Blow",
+            "Thick Skull",
+            "Throw Team-mate"
+          ],
+          "keywords": "Big Guy"
+        }
+      ]
+    },
+    {
+      "name": "Khorne",
+      "tier": 3,
+      "rerollCost": 60,
+      "canHaveApothecary": true,
+      "leagues": "Favoured of Chaos",
+      "rosterPositions": [
+        {
+          "name": "Bloodborn Marauder Lineman",
+          "cost": 50000,
+          "maxCount": 16,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 8,
+          "normalSkillAccess": [
+            "General",
+            "Mutation"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious",
+            "Passing",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Frenzy"
+          ],
+          "keywords": "Lineman"
+        },
+        {
+          "name": "Bloodseeker",
+          "cost": 105000,
+          "maxCount": 4,
+          "ma": 5,
+          "st": 4,
+          "ag": 4,
+          "pa": 6,
+          "av": 10,
+          "normalSkillAccess": [
+            "General",
+            "Strength",
+            "Mutation"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious"
+          ],
+          "startingSkills": [
+            "Frenzy"
+          ],
+          "keywords": "Blitzer"
+        },
+        {
+          "name": "Khorngor",
+          "cost": 70000,
+          "maxCount": 2,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Strength",
+            "Mutation"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious",
+            "Passing"
+          ],
+          "startingSkills": [
+            "Horns",
+            "Juggernaut",
+            "Jump Up",
+            "Thick Skull"
+          ],
+          "keywords": "Blitzer"
+        },
+        {
+          "name": "Bloodspawn",
+          "cost": 160000,
+          "maxCount": 1,
+          "ma": 5,
+          "st": 5,
+          "ag": 4,
+          "pa": 6,
+          "av": 9,
+          "normalSkillAccess": [
+            "Strength",
+            "Mutation"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General"
+          ],
+          "startingSkills": [
+            "Claws",
+            "Frenzy",
+            "Loner (4+)",
+            "Mighty Blow",
+            "Unchannelled Fury"
+          ],
+          "keywords": "Big Guy"
+        }
+      ]
+    },
+    {
+      "name": "Lizardmen",
+      "tier": 1,
+      "rerollCost": 70,
+      "canHaveApothecary": true,
+      "leagues": "Favoured of Order, Lustrian Superleague",
+      "rosterPositions": [
+        {
+          "name": "Skink Runner Lineman",
+          "cost": 60000,
+          "maxCount": 16,
+          "ma": 8,
+          "st": 2,
+          "ag": 3,
+          "pa": 4,
+          "av": 8,
+          "normalSkillAccess": [
+            "Agility"
+          ],
+          "doubleSkillAccess": [
+            "Devious",
+            "General",
+            "Passing",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Dodge",
+            "Stunty"
+          ],
+          "keywords": "Lineman, Stunty"
+        },
+        {
+          "name": "Saurus Blocker",
+          "cost": 90000,
+          "maxCount": 6,
+          "ma": 6,
+          "st": 4,
+          "ag": 5,
+          "pa": 6,
+          "av": 10,
+          "normalSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility"
+          ],
+          "startingSkills": [
+            "Juggernaut",
+            "Unsteady"
+          ],
+          "keywords": "Blocker"
+        },
+        {
+          "name": "Chameleon Skink",
+          "cost": 70000,
+          "maxCount": 2,
+          "ma": 7,
+          "st": 2,
+          "ag": 3,
+          "pa": 3,
+          "av": 8,
+          "normalSkillAccess": [
+            "Agility",
+            "Passing"
+          ],
+          "doubleSkillAccess": [
+            "Devious",
+            "General",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Dodge",
+            "On the Ball",
+            "Shadowing",
+            "Stunty"
+          ],
+          "keywords": "Runner, Stunty"
+        },
+        {
+          "name": "Kroxigor",
+          "cost": 140000,
+          "maxCount": 1,
+          "ma": 6,
+          "st": 5,
+          "ag": 5,
+          "pa": 6,
+          "av": 10,
+          "normalSkillAccess": [
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General"
+          ],
+          "startingSkills": [
+            "Bone Head",
+            "Loner (4+)",
+            "Mighty Blow",
+            "Prehensile Tail",
+            "Thick Skull"
+          ],
+          "keywords": "Big Guy"
+        }
+      ]
+    },
+    {
+      "name": "Necromantics",
+      "tier": 2,
+      "rerollCost": 70,
+      "canHaveApothecary": false,
+      "leagues": "Favoured of Undead, Sylvanian Spotlight",
+      "specialRules": "Masters of Undeath",
+      "rosterPositions": [
+        {
+          "name": "Zombie Lineman",
+          "cost": 40000,
+          "maxCount": 16,
+          "ma": 4,
+          "st": 3,
+          "ag": 4,
+          "pa": 6,
+          "av": 9,
+          "normalSkillAccess": [
+            "Devious",
+            "General"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Eye Gouge",
+            "Regeneration",
+            "Unsteady"
+          ],
+          "keywords": "Lineman"
+        },
+        {
+          "name": "Ghoul Runner",
+          "cost": 75000,
+          "maxCount": 2,
+          "ma": 7,
+          "st": 3,
+          "ag": 3,
+          "pa": 3,
+          "av": 8,
+          "normalSkillAccess": [
+            "Agility",
+            "General"
+          ],
+          "doubleSkillAccess": [
+            "Devious",
+            "Passing",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Dodge",
+            "Regeneration"
+          ],
+          "keywords": "Runner"
+        },
+        {
+          "name": "Wraith",
+          "cost": 85000,
+          "maxCount": 2,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": null,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious"
+          ],
+          "startingSkills": [
+            "Block",
+            "Foul Appearance",
+            "No Ball",
+            "Regeneration",
+            "Sidestep"
+          ],
+          "keywords": "Blitzer"
+        },
+        {
+          "name": "Flesh Golem",
+          "cost": 110000,
+          "maxCount": 2,
+          "ma": 4,
+          "st": 4,
+          "ag": 4,
+          "pa": 6,
+          "av": 10,
+          "normalSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious"
+          ],
+          "startingSkills": [
+            "Regeneration",
+            "Stand Firm",
+            "Thick Skull",
+            "Unsteady"
+          ],
+          "keywords": "Blocker"
+        },
+        {
+          "name": "Werewolf",
+          "cost": 120000,
+          "maxCount": 2,
+          "ma": 8,
+          "st": 3,
+          "ag": 3,
+          "pa": 3,
+          "av": 9,
+          "normalSkillAccess": [
+            "Agility",
+            "General"
+          ],
+          "doubleSkillAccess": [
+            "Devious",
+            "Passing",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Claws",
+            "Frenzy",
+            "Regeneration"
+          ],
+          "keywords": "Blitzer"
+        }
+      ]
+    },
+    {
+      "name": "Norse",
+      "tier": 1,
+      "rerollCost": 60,
+      "canHaveApothecary": true,
+      "leagues": "Norsca Rampagers, Old World Classic",
+      "rosterPositions": [
+        {
+          "name": "Norse Raider Lineman",
+          "cost": 50000,
+          "maxCount": 16,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 8,
+          "normalSkillAccess": [
+            "General"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Passing",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Block",
+            "Drunkard",
+            "Thick Skull",
+            "Unsteady"
+          ],
+          "keywords": "Lineman"
+        },
+        {
+          "name": "Beer Boar",
+          "cost": 20000,
+          "maxCount": 2,
+          "ma": 5,
+          "st": 1,
+          "ag": 3,
+          "pa": null,
+          "av": 6,
+          "normalSkillAccess": [
+            "Agility"
+          ],
+          "doubleSkillAccess": [],
+          "startingSkills": [
+            "Dodge",
+            "No Ball",
+            "Pick-me-up",
+            "Stunty",
+            "Titchy"
+          ],
+          "keywords": "Lineman, Stunty"
+        },
+        {
+          "name": "Norse Berzerker",
+          "cost": 90000,
+          "maxCount": 2,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": 5,
+          "av": 8,
+          "normalSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Passing"
+          ],
+          "startingSkills": [
+            "Block",
+            "Frenzy",
+            "Jump Up"
+          ],
+          "keywords": "Blitzer"
+        },
+        {
+          "name": "Valkyrie",
+          "cost": 95000,
+          "maxCount": 2,
+          "ma": 7,
+          "st": 3,
+          "ag": 3,
+          "pa": 3,
+          "av": 8,
+          "normalSkillAccess": [
+            "General",
+            "Agility",
+            "Passing"
+          ],
+          "doubleSkillAccess": [
+            "Strength"
+          ],
+          "startingSkills": [
+            "Catch",
+            "Dauntless",
+            "Pass",
+            "Strip Ball"
+          ],
+          "keywords": "Thrower"
+        },
+        {
+          "name": "Ulfwerener",
+          "cost": 105000,
+          "maxCount": 2,
+          "ma": 6,
+          "st": 4,
+          "ag": 4,
+          "pa": 6,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility"
+          ],
+          "startingSkills": [
+            "Frenzy",
+            "Unsteady"
+          ],
+          "keywords": "Blitzer"
+        },
+        {
+          "name": "Yhetee",
+          "cost": 140000,
+          "maxCount": 1,
+          "ma": 5,
+          "st": 5,
+          "ag": 4,
+          "pa": 6,
+          "av": 9,
+          "normalSkillAccess": [
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "General",
+            "Agility"
+          ],
+          "startingSkills": [
+            "Claws",
+            "Disturbing Presence",
+            "Frenzy",
+            "Loner (4+)",
+            "Unchannelled Fury"
+          ],
+          "keywords": "Big Guy"
+        }
+      ]
+    },
+    {
+      "name": "Nurgle",
+      "tier": 3,
+      "rerollCost": 60,
+      "canHaveApothecary": true,
+      "leagues": "Favoured of Chaos",
+      "specialRules": "Favoured of Nurgle, Masters of Undeath",
+      "rosterPositions": [
+        {
+          "name": "Rotter Lineman",
+          "cost": 40000,
+          "maxCount": 16,
+          "ma": 5,
+          "st": 3,
+          "ag": 4,
+          "pa": 6,
+          "av": 9,
+          "normalSkillAccess": [
+            "Devious",
+            "General",
+            "Mutation"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Decay",
+            "Plague Ridden"
+          ],
+          "keywords": "Lineman"
+        },
+        {
+          "name": "Bloater",
+          "cost": 110000,
+          "maxCount": 4,
+          "ma": 4,
+          "st": 4,
+          "ag": 4,
+          "pa": 6,
+          "av": 10,
+          "normalSkillAccess": [
+            "General",
+            "Mutation",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Disturbing Presence",
+            "Foul Appearance",
+            "Plague Ridden",
+            "Regeneration",
+            "Stand Firm",
+            "Unsteady"
+          ],
+          "keywords": "Blocker"
+        },
+        {
+          "name": "Pestigor",
+          "cost": 70000,
+          "maxCount": 2,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Mutation",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious",
+            "Passing"
+          ],
+          "startingSkills": [
+            "Horns",
+            "Plague Ridden",
+            "Regeneration",
+            "Steady Footing",
+            "Thick Skull"
+          ],
+          "keywords": "Blitzer"
+        },
+        {
+          "name": "Rotspawn",
+          "cost": 140000,
+          "maxCount": 1,
+          "ma": 4,
+          "st": 5,
+          "ag": 5,
+          "pa": 6,
+          "av": 10,
+          "normalSkillAccess": [
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Devious",
+            "General",
+            "Mutation"
+          ],
+          "startingSkills": [
+            "Disturbing Presence",
+            "Foul Appearance",
+            "Loner (4+)",
+            "Mighty Blow",
+            "Pick-me-up",
+            "Plague Ridden",
+            "Really Stupid",
+            "Regeneration",
+            "Tentacles"
+          ],
+          "keywords": "Big Guy"
+        }
+      ]
+    },
+    {
+      "name": "Ogre",
+      "tier": 4,
+      "rerollCost": 70,
+      "canHaveApothecary": true,
+      "leagues": "Badlands Brawl, Old World Classic",
+      "rosterPositions": [
+        {
+          "name": "Gnoblar",
+          "cost": 15000,
+          "maxCount": 16,
+          "ma": 5,
+          "st": 1,
+          "ag": 3,
+          "pa": 4,
+          "av": 6,
+          "normalSkillAccess": [
+            "Agility",
+            "Devious"
+          ],
+          "doubleSkillAccess": [
+            "General"
+          ],
+          "startingSkills": [
+            "Dodge",
+            "Right Stuff",
+            "Sidestep",
+            "Stunty",
+            "Titchy"
+          ],
+          "keywords": "Lineman, Stunty"
+        },
+        {
+          "name": "Ogre Blocker",
+          "cost": 140000,
+          "maxCount": 5,
+          "ma": 5,
+          "st": 5,
+          "ag": 4,
+          "pa": 5,
+          "av": 10,
+          "normalSkillAccess": [
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious",
+            "General",
+            "Passing"
+          ],
+          "startingSkills": [
+            "Bone Head",
+            "Mighty Blow",
+            "Thick Skull",
+            "Throw Team-mate"
+          ],
+          "keywords": "Blocker, Big Guy"
+        },
+        {
+          "name": "Ogre Runt Punter",
+          "cost": 145000,
+          "maxCount": 1,
+          "ma": 5,
+          "st": 5,
+          "ag": 4,
+          "pa": 4,
+          "av": 10,
+          "normalSkillAccess": [
+            "Passing",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious",
+            "General"
+          ],
+          "startingSkills": [
+            "Bone Head",
+            "Kick Team-mate",
+            "Mighty Blow",
+            "Thick Skull"
+          ],
+          "keywords": "Thrower, Big Guy"
+        }
+      ]
+    },
+    {
+      "name": "Old World Alliance",
+      "tier": 1,
+      "rerollCost": 70,
+      "canHaveApothecary": true,
+      "leagues": "Old World Classic",
+      "specialRules": "Bribery and Corruption",
+      "rosterPositions": [
+        {
+          "name": "Old World Human Lineman",
+          "cost": 50000,
+          "maxCount": 16,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 9,
+          "normalSkillAccess": [
+            "General"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Strength"
+          ],
+          "startingSkills": [],
+          "keywords": "Lineman"
+        },
+        {
+          "name": "Old World Halfling Hopefuls",
+          "cost": 30000,
+          "maxCount": 3,
+          "ma": 5,
+          "st": 2,
+          "ag": 3,
+          "pa": 4,
+          "av": 7,
+          "normalSkillAccess": [
+            "Agility"
+          ],
+          "doubleSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Dodge",
+            "Right Stuff",
+            "Stunty"
+          ],
+          "keywords": "Lineman, Stunty"
+        },
+        {
+          "name": "Old World Dwarf Lineman",
+          "cost": 70000,
+          "maxCount": 3,
+          "ma": 4,
+          "st": 3,
+          "ag": 4,
+          "pa": 5,
+          "av": 10,
+          "normalSkillAccess": [
+            "Devious",
+            "General"
+          ],
+          "doubleSkillAccess": [
+            "Strength"
+          ],
+          "startingSkills": [
+            "Block",
+            "Defensive",
+            "Thick Skull"
+          ],
+          "keywords": "Lineman, Blocker"
+        },
+        {
+          "name": "Old World Human Thrower",
+          "cost": 75000,
+          "maxCount": 1,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": 3,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Passing"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Pass",
+            "Sure Hands"
+          ],
+          "keywords": "Thrower"
+        },
+        {
+          "name": "Old World Human Catcher",
+          "cost": 75000,
+          "maxCount": 1,
+          "ma": 8,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 8,
+          "normalSkillAccess": [
+            "General",
+            "Agility"
+          ],
+          "doubleSkillAccess": [
+            "Passing",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Catch",
+            "Dodge"
+          ],
+          "keywords": "Catcher"
+        },
+        {
+          "name": "Old World Dwarf Runner",
+          "cost": 80000,
+          "maxCount": 1,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Passing"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Sprint",
+            "Sure Hands",
+            "Thick Skull"
+          ],
+          "keywords": "Runner"
+        },
+        {
+          "name": "Old World Human Blitzer",
+          "cost": 85000,
+          "maxCount": 1,
+          "ma": 7,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility"
+          ],
+          "startingSkills": [
+            "Block",
+            "Tackle"
+          ],
+          "keywords": "Blitzer"
+        },
+        {
+          "name": "Old World Dwarf Troll Slayer",
+          "cost": 95000,
+          "maxCount": 1,
+          "ma": 5,
+          "st": 3,
+          "ag": 4,
+          "pa": 5,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility"
+          ],
+          "startingSkills": [
+            "Block",
+            "Dauntless",
+            "Frenzy",
+            "Hatred",
+            "Thick Skull"
+          ],
+          "keywords": "Blitzer"
+        },
+        {
+          "name": "Old World Dwarf Blitzer",
+          "cost": 100000,
+          "maxCount": 1,
+          "ma": 5,
+          "st": 3,
+          "ag": 4,
+          "pa": 4,
+          "av": 10,
+          "normalSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Passing"
+          ],
+          "startingSkills": [
+            "Block",
+            "Diving Tackle",
+            "Tackle",
+            "Thick Skull"
+          ],
+          "keywords": "Blitzer"
+        },
+        {
+          "name": "Altern Forest Treeman",
+          "cost": 120000,
+          "maxCount": 1,
+          "ma": 2,
+          "st": 6,
+          "ag": 5,
+          "pa": 5,
+          "av": 11,
+          "normalSkillAccess": [
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General",
+            "Passing"
+          ],
+          "startingSkills": [
+            "Mighty Blow",
+            "Stand Firm",
+            "Strong Arm",
+            "Take Root",
+            "Thick Skull",
+            "Throw Team-mate",
+            "Timmm-ber!"
+          ],
+          "keywords": "Big Guy"
+        },
+        {
+          "name": "Ogre",
+          "cost": 140000,
+          "maxCount": 1,
+          "ma": 5,
+          "st": 5,
+          "ag": 4,
+          "pa": 5,
+          "av": 10,
+          "normalSkillAccess": [
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General"
+          ],
+          "startingSkills": [
+            "Bone Head",
+            "Loner (3+)",
+            "Mighty Blow",
+            "Thick Skull",
+            "Throw Team-mate"
+          ],
+          "keywords": "Big Guy"
+        }
+      ]
+    },
+    {
+      "name": "Orcs",
+      "tier": 2,
+      "rerollCost": 60,
+      "canHaveApothecary": true,
+      "leagues": "Badlands Brawl, Old World Classic",
+      "rosterPositions": [
+        {
+          "name": "Orc Lineman",
+          "cost": 50000,
+          "maxCount": 16,
+          "ma": 5,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 10,
+          "normalSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious"
+          ],
+          "startingSkills": [],
+          "keywords": "Lineman"
+        },
+        {
+          "name": "Goblin",
+          "cost": 40000,
+          "maxCount": 4,
+          "ma": 6,
+          "st": 2,
+          "ag": 3,
+          "pa": 3,
+          "av": 8,
+          "normalSkillAccess": [
+            "Agility",
+            "Devious",
+            "General",
+            "Passing",
+            "Strength"
+          ],
+          "doubleSkillAccess": [],
+          "startingSkills": [
+            "Dodge",
+            "Right Stuff",
+            "Stunty"
+          ],
+          "keywords": "Lineman, Stunty"
+        },
+        {
+          "name": "Orc Thrower",
+          "cost": 75000,
+          "maxCount": 2,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": 3,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Passing"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Pass",
+            "Sure Hands"
+          ],
+          "keywords": "Thrower"
+        },
+        {
+          "name": "Orc Blitzer",
+          "cost": 85000,
+          "maxCount": 2,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 10,
+          "normalSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious"
+          ],
+          "startingSkills": [
+            "Block",
+            "Break Tackle"
+          ],
+          "keywords": "Blitzer"
+        },
+        {
+          "name": "Big Un Blocker",
+          "cost": 95000,
+          "maxCount": 2,
+          "ma": 5,
+          "st": 4,
+          "ag": 4,
+          "pa": 6,
+          "av": 10,
+          "normalSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious"
+          ],
+          "startingSkills": [
+            "Mighty Blow",
+            "Taunt",
+            "Thick Skull",
+            "Unsteady"
+          ],
+          "keywords": "Blocker"
+        },
+        {
+          "name": "Untrained Troll",
+          "cost": 115000,
+          "maxCount": 1,
+          "ma": 4,
+          "st": 5,
+          "ag": 5,
+          "pa": 5,
+          "av": 10,
+          "normalSkillAccess": [
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "General",
+            "Agility",
+            "Passing"
+          ],
+          "startingSkills": [
+            "Always Hungry",
+            "Loner (4+)",
+            "Mighty Blow",
+            "Projectile Vomit",
+            "Really Stupid",
+            "Regeneration",
+            "Throw Team-mate"
+          ],
+          "keywords": "Big Guy"
+        }
+      ]
+    },
+    {
+      "name": "Shambling Undead",
+      "tier": 2,
+      "rerollCost": 70,
+      "canHaveApothecary": true,
+      "leagues": "Favoured of Undead, Sylvanian Spotlight",
+      "specialRules": "Masters of Undeath",
+      "rosterPositions": [
+        {
+          "name": "Skeleton Lineman",
+          "cost": 40000,
+          "maxCount": 16,
+          "ma": 5,
+          "st": 3,
+          "ag": 4,
+          "pa": 6,
+          "av": 8,
+          "normalSkillAccess": [
+            "General"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Regeneration",
+            "Thick Skull"
+          ],
+          "keywords": "Lineman"
+        },
+        {
+          "name": "Zombie Lineman",
+          "cost": 40000,
+          "maxCount": 16,
+          "ma": 4,
+          "st": 3,
+          "ag": 4,
+          "pa": 6,
+          "av": 9,
+          "normalSkillAccess": [
+            "Devious",
+            "General"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Eye Gouge",
+            "Regeneration",
+            "Unsteady"
+          ],
+          "keywords": "Lineman"
+        },
+        {
+          "name": "Ghoul Runner",
+          "cost": 75000,
+          "maxCount": 2,
+          "ma": 7,
+          "st": 3,
+          "ag": 3,
+          "pa": 3,
+          "av": 8,
+          "normalSkillAccess": [
+            "Agility",
+            "General"
+          ],
+          "doubleSkillAccess": [
+            "Devious",
+            "Passing",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Dodge",
+            "Regeneration"
+          ],
+          "keywords": "Runner"
+        },
+        {
+          "name": "Wight Blitzer",
+          "cost": 95000,
+          "maxCount": 2,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": 5,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious"
+          ],
+          "startingSkills": [
+            "Block",
+            "Regeneration",
+            "Tackle",
+            "Thick Skull"
+          ],
+          "keywords": "Blitzer"
+        },
+        {
+          "name": "Mummy",
+          "cost": 125000,
+          "maxCount": 2,
+          "ma": 3,
+          "st": 5,
+          "ag": 5,
+          "pa": 6,
+          "av": 10,
+          "normalSkillAccess": [
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General"
+          ],
+          "startingSkills": [
+            "Mighty Blow",
+            "Regeneration"
+          ],
+          "keywords": "Big Guy"
+        }
+      ]
+    },
+    {
+      "name": "Skaven",
+      "tier": 2,
+      "rerollCost": 50,
+      "canHaveApothecary": true,
+      "leagues": "Old World Classic, Underworld Challenge",
+      "rosterPositions": [
+        {
+          "name": "Skaven Clanrat Lineman",
+          "cost": 50000,
+          "maxCount": 16,
+          "ma": 7,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 8,
+          "normalSkillAccess": [
+            "Devious",
+            "General"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Mutation",
+            "Strength"
+          ],
+          "startingSkills": [],
+          "keywords": "Lineman"
+        },
+        {
+          "name": "Thrower",
+          "cost": 80000,
+          "maxCount": 2,
+          "ma": 7,
+          "st": 3,
+          "ag": 3,
+          "pa": 2,
+          "av": 8,
+          "normalSkillAccess": [
+            "General",
+            "Passing"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious",
+            "Mutation",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Pass",
+            "Sure Hands"
+          ],
+          "keywords": "Thrower"
+        },
+        {
+          "name": "Gutter Runner",
+          "cost": 85000,
+          "maxCount": 2,
+          "ma": 9,
+          "st": 2,
+          "ag": 2,
+          "pa": 4,
+          "av": 8,
+          "normalSkillAccess": [
+            "Agility",
+            "Devious",
+            "General"
+          ],
+          "doubleSkillAccess": [
+            "Mutation",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Dodge",
+            "Stab"
+          ],
+          "keywords": "Runner"
+        },
+        {
+          "name": "Blitzer",
+          "cost": 90000,
+          "maxCount": 2,
+          "ma": 8,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious",
+            "Mutation"
+          ],
+          "startingSkills": [
+            "Block",
+            "Strip Ball"
+          ],
+          "keywords": "Blitzer"
+        },
+        {
+          "name": "Rat Ogre",
+          "cost": 150000,
+          "maxCount": 1,
+          "ma": 6,
+          "st": 5,
+          "ag": 4,
+          "pa": 6,
+          "av": 9,
+          "normalSkillAccess": [
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General",
+            "Mutation"
+          ],
+          "startingSkills": [
+            "Animal Savagery",
+            "Frenzy",
+            "Loner (4+)",
+            "Mighty Blow",
+            "Prehensile Tail"
+          ],
+          "keywords": "Big Guy"
+        }
+      ]
+    },
+    {
+      "name": "Slanns",
+      "tier": 3,
+      "rerollCost": 50,
+      "canHaveApothecary": true,
+      "leagues": "Favoured of Order, Lustrian Superleague",
+      "rosterPositions": [
+        {
+          "name": "Slann Lineman",
+          "cost": 60000,
+          "maxCount": 16,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 9,
+          "normalSkillAccess": [
+            "General"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Pogo Stick"
+          ],
+          "keywords": "Lineman"
+        },
+        {
+          "name": "Slann Catcher",
+          "cost": 80000,
+          "maxCount": 2,
+          "ma": 7,
+          "st": 2,
+          "ag": 2,
+          "pa": 3,
+          "av": 8,
+          "normalSkillAccess": [
+            "Agility",
+            "General"
+          ],
+          "doubleSkillAccess": [
+            "Passing",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Diving Catch",
+            "On the Ball",
+            "Pogo Stick",
+            "Very Long Legs"
+          ],
+          "keywords": "Catcher"
+        },
+        {
+          "name": "Slann Blitzer",
+          "cost": 100000,
+          "maxCount": 2,
+          "ma": 7,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 9,
+          "normalSkillAccess": [
+            "Agility",
+            "General",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Passing"
+          ],
+          "startingSkills": [
+            "Diving Tackle",
+            "Hit and Run",
+            "Jump Up",
+            "Pogo Stick"
+          ],
+          "keywords": "Blitzer"
+        },
+        {
+          "name": "Kroxigor",
+          "cost": 140000,
+          "maxCount": 1,
+          "ma": 6,
+          "st": 5,
+          "ag": 5,
+          "pa": 6,
+          "av": 10,
+          "normalSkillAccess": [
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General"
+          ],
+          "startingSkills": [
+            "Bone Head",
+            "Loner (4+)",
+            "Mighty Blow",
+            "Prehensile Tail",
+            "Thick Skull"
+          ],
+          "keywords": "Big Guy"
+        }
+      ]
+    },
+    {
+      "name": "Snotlings",
+      "tier": 4,
+      "rerollCost": 70,
+      "canHaveApothecary": true,
+      "leagues": "Badlands Brawl, Halfling Thimble Cup",
+      "specialRules": "Bribery and Corruption",
+      "rosterPositions": [
+        {
+          "name": "Snotling Lineman",
+          "cost": 15000,
+          "maxCount": 16,
+          "ma": 5,
+          "st": 1,
+          "ag": 3,
+          "pa": 4,
+          "av": 6,
+          "normalSkillAccess": [
+            "Agility",
+            "Devious"
+          ],
+          "doubleSkillAccess": [
+            "General"
+          ],
+          "startingSkills": [
+            "Dodge",
+            "Insignificant",
+            "Right Stuff",
+            "Sidestep",
+            "Stunty",
+            "Swarming",
+            "Titchy"
+          ],
+          "keywords": "Lineman, Stunty"
+        },
+        {
+          "name": "Fun-Hoppa",
+          "cost": 20000,
+          "maxCount": 2,
+          "ma": 6,
+          "st": 1,
+          "ag": 3,
+          "pa": 4,
+          "av": 6,
+          "normalSkillAccess": [
+            "Agility",
+            "Devious"
+          ],
+          "doubleSkillAccess": [
+            "General"
+          ],
+          "startingSkills": [
+            "Dodge",
+            "Right Stuff",
+            "Sidestep",
+            "Sprint",
+            "Stunty"
+          ],
+          "keywords": "Runner, Stunty"
+        },
+        {
+          "name": "Stilty Runna",
+          "cost": 20000,
+          "maxCount": 2,
+          "ma": 6,
+          "st": 1,
+          "ag": 3,
+          "pa": 4,
+          "av": 6,
+          "normalSkillAccess": [
+            "Agility",
+            "Devious"
+          ],
+          "doubleSkillAccess": [
+            "General"
+          ],
+          "startingSkills": [
+            "Dodge",
+            "Pogo Stick",
+            "Right Stuff",
+            "Sidestep",
+            "Stunty"
+          ],
+          "keywords": "Runner, Stunty"
+        },
+        {
+          "name": "Fungus Flinga",
+          "cost": 30000,
+          "maxCount": 2,
+          "ma": 5,
+          "st": 1,
+          "ag": 3,
+          "pa": 4,
+          "av": 6,
+          "normalSkillAccess": [
+            "Agility",
+            "Devious",
+            "Passing"
+          ],
+          "doubleSkillAccess": [
+            "General"
+          ],
+          "startingSkills": [
+            "Bombardier",
+            "Dodge",
+            "Right Stuff",
+            "Secret Weapon",
+            "Sidestep",
+            "Stunty",
+            "Titchy"
+          ],
+          "keywords": "Stunty, Secret Weapon"
+        },
+        {
+          "name": "Pump Wagon",
+          "cost": 100000,
+          "maxCount": 2,
+          "ma": 5,
+          "st": 5,
+          "ag": 5,
+          "pa": 6,
+          "av": 9,
+          "normalSkillAccess": [
+            "Devious",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General"
+          ],
+          "startingSkills": [
+            "Dirty Player",
+            "Juggernaut",
+            "Mighty Blow",
+            "Really Stupid",
+            "Stand Firm"
+          ],
+          "keywords": "Big Guy"
+        },
+        {
+          "name": "Trained Troll",
+          "cost": 115000,
+          "maxCount": 2,
+          "ma": 4,
+          "st": 5,
+          "ag": 5,
+          "pa": 5,
+          "av": 10,
+          "normalSkillAccess": [
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General",
+            "Passing"
+          ],
+          "startingSkills": [
+            "Always Hungry",
+            "Mighty Blow",
+            "Projectile Vomit",
+            "Really Stupid",
+            "Regeneration",
+            "Throw Team-mate"
+          ],
+          "keywords": "Big Guy"
+        }
+      ]
+    },
+    {
+      "name": "Tomb Kings",
+      "tier": 2,
+      "rerollCost": 60,
+      "canHaveApothecary": false,
+      "leagues": "Favoured of Undead, Sylvanian Spotlight",
+      "specialRules": "Masters of Undeath",
+      "rosterPositions": [
+        {
+          "name": "Skeleton Lineman",
+          "cost": 40000,
+          "maxCount": 16,
+          "ma": 5,
+          "st": 3,
+          "ag": 4,
+          "pa": null,
+          "av": 8,
+          "normalSkillAccess": [
+            "General"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Regeneration",
+            "Thick Skull"
+          ],
+          "keywords": "Lineman"
+        },
+        {
+          "name": "Anointed Thrower",
+          "cost": 65000,
+          "maxCount": 2,
+          "ma": 6,
+          "st": 3,
+          "ag": 4,
+          "pa": 3,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Passing"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Pass",
+            "Regeneration",
+            "Sure Hands",
+            "Thick Skull"
+          ],
+          "keywords": "Thrower"
+        },
+        {
+          "name": "Anointed Blitzer",
+          "cost": 85000,
+          "maxCount": 2,
+          "ma": 6,
+          "st": 3,
+          "ag": 4,
+          "pa": null,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious"
+          ],
+          "startingSkills": [
+            "Block",
+            "Regeneration",
+            "Thick Skull"
+          ],
+          "keywords": "Blitzer"
+        },
+        {
+          "name": "Tomb Guardian",
+          "cost": 115000,
+          "maxCount": 4,
+          "ma": 4,
+          "st": 5,
+          "ag": 5,
+          "pa": null,
+          "av": 10,
+          "normalSkillAccess": [
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General"
+          ],
+          "startingSkills": [
+            "Brawler",
+            "Decay",
+            "Regeneration"
+          ],
+          "keywords": "Blocker"
+        }
+      ]
+    },
+    {
+      "name": "Underworlds Denizens",
+      "tier": 1,
+      "rerollCost": 70,
+      "canHaveApothecary": true,
+      "leagues": "Favoured of Chaos, Underworld Challenge",
+      "specialRules": "Bribery and Corruption",
+      "rosterPositions": [
+        {
+          "name": "Underworld Goblin Lineman",
+          "cost": 40000,
+          "maxCount": 16,
+          "ma": 6,
+          "st": 2,
+          "ag": 3,
+          "pa": 4,
+          "av": 8,
+          "normalSkillAccess": [
+            "Agility",
+            "Devious",
+            "Mutation"
+          ],
+          "doubleSkillAccess": [
+            "General",
+            "Passing",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Dodge",
+            "Right Stuff",
+            "Stunty"
+          ],
+          "keywords": "Lineman, Stunty"
+        },
+        {
+          "name": "Underworld Snotling",
+          "cost": 15000,
+          "maxCount": 6,
+          "ma": 5,
+          "st": 1,
+          "ag": 3,
+          "pa": 4,
+          "av": 6,
+          "normalSkillAccess": [
+            "Agility",
+            "Devious",
+            "Mutation"
+          ],
+          "doubleSkillAccess": [
+            "General"
+          ],
+          "startingSkills": [
+            "Dodge",
+            "Insignificant",
+            "Right Stuff",
+            "Sidestep",
+            "Stunty",
+            "Titchy"
+          ],
+          "keywords": "Lineman, Stunty"
+        },
+        {
+          "name": "Skaven Clanrat",
+          "cost": 50000,
+          "maxCount": 3,
+          "ma": 7,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 8,
+          "normalSkillAccess": [
+            "Devious",
+            "General",
+            "Mutation"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Animosity (Underworld Goblin Linemen)"
+          ],
+          "keywords": "Lineman"
+        },
+        {
+          "name": "Skaven Thrower",
+          "cost": 80000,
+          "maxCount": 1,
+          "ma": 7,
+          "st": 3,
+          "ag": 3,
+          "pa": 2,
+          "av": 8,
+          "normalSkillAccess": [
+            "General",
+            "Mutation",
+            "Passing"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Animosity (Underworld Goblin Linemen)",
+            "Pass",
+            "Sure Hands"
+          ],
+          "keywords": "Thrower"
+        },
+        {
+          "name": "Gutter Runner",
+          "cost": 85000,
+          "maxCount": 1,
+          "ma": 9,
+          "st": 2,
+          "ag": 2,
+          "pa": 4,
+          "av": 8,
+          "normalSkillAccess": [
+            "Agility",
+            "Devious",
+            "General",
+            "Mutation"
+          ],
+          "doubleSkillAccess": [
+            "Strength"
+          ],
+          "startingSkills": [
+            "Animosity (Underworld Goblin Linemen)",
+            "Dodge",
+            "Stab"
+          ],
+          "keywords": "Runner"
+        },
+        {
+          "name": "Skaven Blitzer",
+          "cost": 90000,
+          "maxCount": 1,
+          "ma": 8,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Mutation",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Devious"
+          ],
+          "startingSkills": [
+            "Animosity (Underworld Goblin Linemen)",
+            "Block",
+            "Strip Ball"
+          ],
+          "keywords": "Blitzer"
+        },
+        {
+          "name": "Underworld Troll",
+          "cost": 115000,
+          "maxCount": 1,
+          "ma": 4,
+          "st": 5,
+          "ag": 5,
+          "pa": 5,
+          "av": 10,
+          "normalSkillAccess": [
+            "Mutation",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General",
+            "Passing"
+          ],
+          "startingSkills": [
+            "Always Hungry",
+            "Loner (4+)",
+            "Mighty Blow",
+            "Projectile Vomit",
+            "Really Stupid",
+            "Regeneration",
+            "Throw Team-mate"
+          ],
+          "keywords": "Big Guy"
+        },
+        {
+          "name": "Mutant Rat Ogre",
+          "cost": 150000,
+          "maxCount": 1,
+          "ma": 6,
+          "st": 5,
+          "ag": 4,
+          "pa": 6,
+          "av": 9,
+          "normalSkillAccess": [
+            "Mutation",
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General"
+          ],
+          "startingSkills": [
+            "Animal Savagery",
+            "Frenzy",
+            "Loner (4+)",
+            "Mighty Blow",
+            "Prehensile Tail"
+          ],
+          "keywords": "Big Guy"
+        }
+      ]
+    },
+    {
+      "name": "Vampires",
+      "tier": 2,
+      "rerollCost": 60,
+      "canHaveApothecary": true,
+      "leagues": "Favoured of Undead, Sylvanian Spotlight",
+      "specialRules": "Masters of Undeath, Vampiric",
+      "rosterPositions": [
+        {
+          "name": "Thrall Lineman",
+          "cost": 40000,
+          "maxCount": 16,
+          "ma": 6,
+          "st": 3,
+          "ag": 3,
+          "pa": 4,
+          "av": 8,
+          "normalSkillAccess": [
+            "General"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "Strength"
+          ],
+          "startingSkills": [],
+          "keywords": "Lineman"
+        },
+        {
+          "name": "Vampire Runner",
+          "cost": 100000,
+          "maxCount": 2,
+          "ma": 8,
+          "st": 3,
+          "ag": 2,
+          "pa": 3,
+          "av": 8,
+          "normalSkillAccess": [
+            "Agility",
+            "General"
+          ],
+          "doubleSkillAccess": [
+            "Passing",
+            "Strength"
+          ],
+          "startingSkills": [
+            "Bloodlust (2+)",
+            "Hypnotic Gaze",
+            "Regeneration"
+          ],
+          "keywords": "Runner"
+        },
+        {
+          "name": "Vampire Blitzer",
+          "cost": 110000,
+          "maxCount": 2,
+          "ma": 6,
+          "st": 4,
+          "ag": 2,
+          "pa": 4,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Agility",
+            "Strength"
+          ],
+          "doubleSkillAccess": [],
+          "startingSkills": [
+            "Bloodlust (3+)",
+            "Hypnotic Gaze",
+            "Juggernaut",
+            "Regeneration"
+          ],
+          "keywords": "Blitzer"
+        },
+        {
+          "name": "Vampire Thrower",
+          "cost": 110000,
+          "maxCount": 2,
+          "ma": 6,
+          "st": 4,
+          "ag": 2,
+          "pa": 2,
+          "av": 9,
+          "normalSkillAccess": [
+            "Agility",
+            "General",
+            "Passing"
+          ],
+          "doubleSkillAccess": [
+            "Strength"
+          ],
+          "startingSkills": [
+            "Bloodlust (2+)",
+            "Hypnotic Gaze",
+            "Pass",
+            "Regeneration"
+          ],
+          "keywords": "Thrower"
+        },
+        {
+          "name": "Vargheist",
+          "cost": 150000,
+          "maxCount": 1,
+          "ma": 5,
+          "st": 5,
+          "ag": 4,
+          "pa": 6,
+          "av": 10,
+          "normalSkillAccess": [
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General"
+          ],
+          "startingSkills": [
+            "Bloodlust (3+)",
+            "Claws",
+            "Frenzy",
+            "Loner (4+)",
+            "Regeneration"
+          ],
+          "keywords": "Big Guy"
+        }
+      ]
+    },
+    {
+      "name": "Wood Elves",
+      "tier": 1,
+      "rerollCost": 50,
+      "canHaveApothecary": true,
+      "leagues": "Elven Kingdoms League",
+      "rosterPositions": [
+        {
+          "name": "Wood Elf Lineman",
+          "cost": 65000,
+          "maxCount": 12,
+          "ma": 7,
+          "st": 3,
+          "ag": 2,
+          "pa": 3,
+          "av": 8,
+          "normalSkillAccess": [
+            "General",
+            "Agility"
+          ],
+          "doubleSkillAccess": [
+            "Strength"
+          ],
+          "startingSkills": [],
+          "keywords": "Lineman"
+        },
+        {
+          "name": "Wood Elf Thrower",
+          "cost": 85000,
+          "maxCount": 2,
+          "ma": 7,
+          "st": 3,
+          "ag": 2,
+          "pa": 2,
+          "av": 8,
+          "normalSkillAccess": [
+            "General",
+            "Agility",
+            "Passing"
+          ],
+          "doubleSkillAccess": [
+            "Strength"
+          ],
+          "startingSkills": [
+            "Pass",
+            "Safe Pair of Hands"
+          ],
+          "keywords": "Thrower"
+        },
+        {
+          "name": "Wood Elf Catcher",
+          "cost": 90000,
+          "maxCount": 2,
+          "ma": 8,
+          "st": 2,
+          "ag": 2,
+          "pa": 3,
+          "av": 8,
+          "normalSkillAccess": [
+            "General",
+            "Agility"
+          ],
+          "doubleSkillAccess": [
+            "Strength",
+            "Passing"
+          ],
+          "startingSkills": [
+            "Catch",
+            "Dodge",
+            "Sprint"
+          ],
+          "keywords": "Catcher"
+        },
+        {
+          "name": "Wardancer",
+          "cost": 130000,
+          "maxCount": 2,
+          "ma": 8,
+          "st": 3,
+          "ag": 2,
+          "pa": 3,
+          "av": 8,
+          "normalSkillAccess": [
+            "General",
+            "Agility"
+          ],
+          "doubleSkillAccess": [
+            "Strength",
+            "Passing"
+          ],
+          "startingSkills": [
+            "Block",
+            "Dodge",
+            "Leap"
+          ],
+          "keywords": "Blitzer"
+        },
+        {
+          "name": "Loren Forest Treeman",
+          "cost": 120000,
+          "maxCount": 1,
+          "ma": 2,
+          "st": 6,
+          "ag": 5,
+          "pa": 5,
+          "av": 11,
+          "normalSkillAccess": [
+            "Strength"
+          ],
+          "doubleSkillAccess": [
+            "Agility",
+            "General",
+            "Passing"
+          ],
+          "startingSkills": [
+            "Loner (4+)",
+            "Mighty Blow",
+            "Stand Firm",
+            "Strong Arm",
+            "Take Root",
+            "Thick Skull",
+            "Throw Team-mate"
+          ],
+          "keywords": "Big Guy"
+        }
+      ]
+    }
+  ],
+  "starPlayers": [
+    {
+      "name": "Akhorne the Squirrel",
+      "cost": 80000,
+      "ma": 7,
+      "st": 1,
+      "ag": 2,
+      "pa": null,
+      "av": 6,
+      "isActive": true,
+      "skills": [
+        "Claws",
+        "Dauntless",
+        "Dodge",
+        "Frenzy",
+        "Jump Up",
+        "Loner",
+        "No Ball",
+        "Sidestep",
+        "Stunty",
+        "Titchy",
+        "Blind Rage"
+      ],
+      "allowedTeams": [],
+      "specialRules": "May be hired by any team."
+    },
+    {
+      "name": "Anqi Panqi",
+      "cost": 190000,
+      "ma": 7,
+      "st": 4,
+      "ag": 5,
+      "pa": 6,
+      "av": 10,
+      "isActive": true,
+      "skills": [
+        "Block",
+        "Grab",
+        "Loner",
+        "Stand Firm",
+        "Unsteady",
+        "Savage Blow"
+      ],
+      "allowedTeams": [
+        "Amazons",
+        "Lizardmen",
+        "Slanns"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Barik Farblast",
+      "cost": 80000,
+      "ma": 6,
+      "st": 3,
+      "ag": 4,
+      "pa": 3,
+      "av": 9,
+      "isActive": true,
+      "skills": [
+        "Cannoneer",
+        "Hail Mary Pass",
+        "Loner",
+        "Pass",
+        "Secret Weapon",
+        "Sure Hands",
+        "Thick Skull",
+        "Blast It!"
+      ],
+      "allowedTeams": [
+        "Bretonnian",
+        "Dwarves",
+        "Humans",
+        "Imperial Nobility",
+        "Norse",
+        "Ogre",
+        "Old World Alliance"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Bilerot Vomitflesh",
+      "cost": 180000,
+      "ma": 4,
+      "st": 5,
+      "ag": 4,
+      "pa": 6,
+      "av": 10,
+      "isActive": true,
+      "skills": [
+        "Dirty Player",
+        "Disturbing Presence",
+        "Foul Appearance",
+        "Lone Fouler",
+        "Loner",
+        "Regeneration",
+        "Unsteady",
+        "Putrid Regurgitation"
+      ],
+      "allowedTeams": [
+        "Chaos Chosen",
+        "Chaos Renegades",
+        "Nurgle"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Boa Kon'ssstriktr",
+      "cost": 180000,
+      "ma": 6,
+      "st": 3,
+      "ag": 3,
+      "pa": 4,
+      "av": 9,
+      "isActive": true,
+      "skills": [
+        "Dodge",
+        "Fend",
+        "Hypnotic Gaze",
+        "Loner",
+        "Prehensile Tail",
+        "Safe Pair of Hands",
+        "Sidestep",
+        "Look into my Eyes"
+      ],
+      "allowedTeams": [
+        "Amazons",
+        "Lizardmen",
+        "Slanns"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Bomber Dribblesnot",
+      "cost": 60000,
+      "ma": 6,
+      "st": 2,
+      "ag": 3,
+      "pa": 3,
+      "av": 7,
+      "isActive": true,
+      "skills": [
+        "Accurate",
+        "Bombardier",
+        "Dodge",
+        "Loner",
+        "Secret Weapon",
+        "Stunty",
+        "Kaboom!"
+      ],
+      "allowedTeams": [
+        "Goblin",
+        "Underworld Denizens"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Boomer Eziasson",
+      "cost": 60000,
+      "ma": 6,
+      "st": 3,
+      "ag": 4,
+      "pa": null,
+      "av": 9,
+      "isActive": true,
+      "skills": [
+        "Accurate",
+        "Bombardier",
+        "Hail Mary Pass",
+        "Loner",
+        "Secret Weapon"
+      ],
+      "allowedTeams": [
+        "Norse"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Captain Karina von Riesz",
+      "cost": 230000,
+      "ma": 7,
+      "st": 4,
+      "ag": 2,
+      "pa": 3,
+      "av": 9,
+      "isActive": true,
+      "skills": [
+        "Bloodlust",
+        "Dodge",
+        "Hypnotic Gaze",
+        "Jump Up",
+        "Loner",
+        "Regeneration",
+        "Tasty Morsel"
+      ],
+      "allowedTeams": [
+        "Necromantics",
+        "Shambling Undead",
+        "Tomb Kings",
+        "Vampires"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Cindy Piewhistle",
+      "cost": 100000,
+      "ma": 5,
+      "st": 2,
+      "ag": 3,
+      "pa": 3,
+      "av": 7,
+      "isActive": true,
+      "skills": [
+        "Accurate",
+        "Bombardier",
+        "Dodge",
+        "Loner",
+        "Secret Weapon",
+        "Stunty",
+        "All You Can Eat"
+      ],
+      "allowedTeams": [
+        "Bretonnian",
+        "Gnomes",
+        "Halflings",
+        "Humans",
+        "Imperial Nobility",
+        "Norse",
+        "Old World Alliance"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Count Luthor Von Drakenborg",
+      "cost": 300000,
+      "ma": 6,
+      "st": 5,
+      "ag": 2,
+      "pa": 3,
+      "av": 10,
+      "isActive": true,
+      "skills": [
+        "Block",
+        "Hypnotic Gaze",
+        "Loner",
+        "Regeneration",
+        "Sidestep",
+        "Star of the Show"
+      ],
+      "allowedTeams": [
+        "Necromantics",
+        "Shambling Undead",
+        "Tomb Kings",
+        "Vampires"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Deeproot Strongbranch",
+      "cost": 280000,
+      "ma": 2,
+      "st": 7,
+      "ag": 5,
+      "pa": 5,
+      "av": 11,
+      "isActive": true,
+      "skills": [
+        "Loner",
+        "Mighty Blow",
+        "Stand Firm",
+        "Strong Arm",
+        "Take Root",
+        "Thick Skull",
+        "Throw Team-mate",
+        "Reliable"
+      ],
+      "allowedTeams": [
+        "Halfling",
+        "Wood Elf"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Dribl and Drull",
+      "cost": 230000,
+      "ma": 8,
+      "st": 2,
+      "ag": 3,
+      "pa": 4,
+      "av": 8,
+      "isActive": true,
+      "skills": [
+        "Dirty Player",
+        "Dodge",
+        "Loner",
+        "Quick Foul",
+        "Sidestep",
+        "Sneaky Git",
+        "Stab",
+        "Stunty",
+        "A Sneaky Pair"
+      ],
+      "allowedTeams": [
+        "Amazons",
+        "Lizardmen",
+        "Slanns"
+      ],
+      "specialRules": "Must be hired as a pair."
+    },
+    {
+      "name": "Eldril Sidewinder",
+      "cost": 190000,
+      "ma": 8,
+      "st": 3,
+      "ag": 2,
+      "pa": 4,
+      "av": 8,
+      "isActive": true,
+      "skills": [
+        "Catch",
+        "Dodge",
+        "Hypnotic Gaze",
+        "Loner",
+        "Nerves of Steel",
+        "Pass Block",
+        "Mesmerizing Gaze"
+      ],
+      "allowedTeams": [
+        "Dark Elf",
+        "Elven Union",
+        "High Elf",
+        "Wood Elf"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Estelle la Veneaux",
+      "cost": 190000,
+      "ma": 6,
+      "st": 3,
+      "ag": 3,
+      "pa": 4,
+      "av": 8,
+      "isActive": true,
+      "skills": [
+        "Disturbing Presence",
+        "Dodge",
+        "Guard",
+        "Loner",
+        "Sidestep",
+        "Baleful Hex"
+      ],
+      "allowedTeams": [
+        "Amazons",
+        "Lizardmen",
+        "Slanns"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Fungus the Loon",
+      "cost": 80000,
+      "ma": 4,
+      "st": 7,
+      "ag": 3,
+      "pa": null,
+      "av": 8,
+      "isActive": true,
+      "skills": [
+        "Ball and Chain",
+        "Loner",
+        "Mighty Blow",
+        "No Ball",
+        "Secret Weapon",
+        "Stunty",
+        "Whirling Dervish"
+      ],
+      "allowedTeams": [
+        "Black Orcs",
+        "Chaos Dwarves",
+        "Goblins",
+        "Ogre",
+        "Orcs",
+        "Skaven",
+        "Snotlings",
+        "Underworlds Denizens"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Glart Smashrip",
+      "cost": 175000,
+      "ma": 5,
+      "st": 4,
+      "ag": 4,
+      "pa": 6,
+      "av": 9,
+      "isActive": true,
+      "skills": [
+        "Block",
+        "Claws",
+        "Grab",
+        "Juggernaut",
+        "Loner",
+        "Stand Firm",
+        "Frenzied Rush"
+      ],
+      "allowedTeams": [
+        "Goblins",
+        "Skaven",
+        "Snotlings",
+        "Underworlds Denizens"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Glart Smashrip Jr.",
+      "cost": 190000,
+      "ma": 5,
+      "st": 4,
+      "ag": 4,
+      "pa": null,
+      "av": 9,
+      "isActive": true,
+      "skills": [
+        "Block",
+        "Grab",
+        "Loner",
+        "Mighty Blow",
+        "Stand Firm"
+      ],
+      "allowedTeams": [
+        "Skaven"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Gloriel Summerbloom",
+      "cost": 150000,
+      "ma": 7,
+      "st": 2,
+      "ag": 2,
+      "pa": 2,
+      "av": 8,
+      "isActive": true,
+      "skills": [
+        "Accurate",
+        "Dodge",
+        "Pass",
+        "Sidestep",
+        "Sure Hands",
+        "Shot to Nothing"
+      ],
+      "allowedTeams": [
+        "Dark Elf",
+        "Elf Union",
+        "High Elves",
+        "Wood Elves"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Glotl Stop",
+      "cost": 260000,
+      "ma": 6,
+      "st": 6,
+      "ag": 5,
+      "pa": 6,
+      "av": 10,
+      "isActive": true,
+      "skills": [
+        "Animal Savagery",
+        "Frenzy",
+        "Loner",
+        "Mighty Blow",
+        "Prehensile Tail",
+        "Stand Firm",
+        "Thick Skull",
+        "Primal Savagery"
+      ],
+      "allowedTeams": [
+        "Amazons",
+        "Lizardmen",
+        "Slanns"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Grak and Crumbleberry",
+      "cost": 250000,
+      "ma": 5,
+      "st": 5,
+      "ag": 4,
+      "pa": 4,
+      "av": 10,
+      "isActive": true,
+      "skills": [
+        "Bone Head",
+        "Kick Team-mate",
+        "Loner",
+        "Mighty Blow",
+        "Thick Skull",
+        "I'll Carry You"
+      ],
+      "allowedTeams": [],
+      "specialRules": "Must be hired as a pair (Grak MA5 ST5 AG4+ PA4+ AV10+; Crumbleberry MA5 ST2 AG3+ PA5+ AV7+)."
+    },
+    {
+      "name": "Grashnak Backhoof",
+      "cost": 240000,
+      "ma": 6,
+      "st": 6,
+      "ag": 4,
+      "pa": 6,
+      "av": 9,
+      "isActive": true,
+      "skills": [
+        "Frenzy",
+        "Horns",
+        "Loner",
+        "Mighty Blow",
+        "Thick Skull",
+        "Unchannelled Fury",
+        "Gored by the Bull"
+      ],
+      "allowedTeams": [
+        "Chaos Chosen",
+        "Chaos Dwarves",
+        "Chaos Renegades",
+        "Khorne",
+        "Norse",
+        "Nurgle"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Gretchen W\u00e4tcher",
+      "cost": 180000,
+      "ma": 7,
+      "st": 3,
+      "ag": 2,
+      "pa": null,
+      "av": 9,
+      "isActive": true,
+      "skills": [
+        "Disturbing Presence",
+        "Dodge",
+        "Foul Appearance",
+        "Jump Up",
+        "Loner",
+        "No Ball",
+        "Regeneration",
+        "Shadowing",
+        "Sidestep",
+        "Incorporeal"
+      ],
+      "allowedTeams": [
+        "Necromantics",
+        "Shambling Undead",
+        "Tomb Kings",
+        "Vampires"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Griff Oberwald",
+      "cost": 280000,
+      "ma": 9,
+      "st": 3,
+      "ag": 3,
+      "pa": 4,
+      "av": 9,
+      "isActive": true,
+      "skills": [
+        "Block",
+        "Dodge",
+        "Loner",
+        "Nerves of Steel",
+        "Sprint",
+        "Sure Feet",
+        "Consummate Professional"
+      ],
+      "allowedTeams": [
+        "Human",
+        "Elven Union"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Grim Ironjaw",
+      "cost": 200000,
+      "ma": 5,
+      "st": 4,
+      "ag": 3,
+      "pa": 6,
+      "av": 9,
+      "isActive": true,
+      "skills": [
+        "Block",
+        "Dauntless",
+        "Frenzy",
+        "Hatred",
+        "Loner",
+        "Multiple Block",
+        "Thick Skull",
+        "Slayer"
+      ],
+      "allowedTeams": [
+        "Dwarves",
+        "Ogre"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Grombrindal",
+      "cost": 170000,
+      "ma": 5,
+      "st": 3,
+      "ag": 3,
+      "pa": 4,
+      "av": 10,
+      "isActive": true,
+      "skills": [
+        "Block",
+        "Break Tackle",
+        "Dauntless",
+        "Loner",
+        "Mighty Blow",
+        "Stand Firm",
+        "Sure Feet",
+        "Thick Skull",
+        "Wisdom of the White Dwarf"
+      ],
+      "allowedTeams": [
+        "Bretonnian",
+        "Dwarves",
+        "Gnomes",
+        "Halflings",
+        "Humans",
+        "Imperial Nobility",
+        "Norse",
+        "Ogre",
+        "Old World Alliance"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Guffle Pusmaw",
+      "cost": 150000,
+      "ma": 5,
+      "st": 4,
+      "ag": 4,
+      "pa": 6,
+      "av": 10,
+      "isActive": true,
+      "skills": [
+        "Foul Appearance",
+        "Loner",
+        "Monstrous Mouth",
+        "Nerves of Steel",
+        "On the Ball",
+        "Plague Ridden",
+        "Quick Bite"
+      ],
+      "allowedTeams": [
+        "Chaos Chosen",
+        "Chaos Renegades",
+        "Nurgle"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "H'thark the Unstoppable",
+      "cost": 300000,
+      "ma": 6,
+      "st": 6,
+      "ag": 4,
+      "pa": 6,
+      "av": 10,
+      "isActive": true,
+      "skills": [
+        "Block",
+        "Break Tackle",
+        "Defensive",
+        "Juggernaut",
+        "Loner",
+        "Sprint",
+        "Sure Feet",
+        "Thick Skull",
+        "Unsteady",
+        "Unstoppable Momentum"
+      ],
+      "allowedTeams": [
+        "Black Orcs",
+        "Chaos Chosen",
+        "Chaos Dwarves",
+        "Goblins",
+        "Ogre",
+        "Orcs"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Hakflem Skuttlespike",
+      "cost": 210000,
+      "ma": 9,
+      "st": 2,
+      "ag": 2,
+      "pa": 5,
+      "av": 8,
+      "isActive": true,
+      "skills": [
+        "Dodge",
+        "Loner",
+        "Multiple Block",
+        "Shadowing",
+        "Two Heads",
+        "Weeping Dagger",
+        "Treacherous"
+      ],
+      "allowedTeams": [
+        "Skaven",
+        "Underworld Denizens"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Helmut Wulf",
+      "cost": 140000,
+      "ma": 6,
+      "st": 3,
+      "ag": 3,
+      "pa": null,
+      "av": 9,
+      "isActive": true,
+      "skills": [
+        "Chainsaw",
+        "Juggernaut",
+        "Loner",
+        "Secret Weapon",
+        "Old Pro"
+      ],
+      "allowedTeams": [],
+      "specialRules": "May be hired by any team."
+    },
+    {
+      "name": "Ivan 'The Animal' Deathshroud",
+      "cost": 210000,
+      "ma": 6,
+      "st": 4,
+      "ag": 4,
+      "pa": 5,
+      "av": 9,
+      "isActive": true,
+      "skills": [
+        "Block",
+        "Disturbing Presence",
+        "Hatred",
+        "Juggernaut",
+        "Loner",
+        "Regeneration",
+        "Strip Ball",
+        "Tackle",
+        "Dwarfen Scourge"
+      ],
+      "allowedTeams": [
+        "Necromantics",
+        "Shambling Undead",
+        "Tomb Kings",
+        "Vampires"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Ivar Eriksson",
+      "cost": 195000,
+      "ma": 6,
+      "st": 3,
+      "ag": 3,
+      "pa": 4,
+      "av": 9,
+      "isActive": true,
+      "skills": [
+        "Block",
+        "Dauntless",
+        "Frenzy",
+        "Loner",
+        "Thick Skull",
+        "Raiding Party"
+      ],
+      "allowedTeams": [
+        "Norse"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Jeremiah Kool",
+      "cost": 300000,
+      "ma": 8,
+      "st": 3,
+      "ag": 1,
+      "pa": 2,
+      "av": 9,
+      "isActive": true,
+      "skills": [
+        "Block",
+        "Diving Catch",
+        "Dodge",
+        "Dump-off",
+        "Loner",
+        "Nerves of Steel",
+        "On the Ball",
+        "Pass",
+        "Sidestep",
+        "The Flashing Blade"
+      ],
+      "allowedTeams": [
+        "Dark Elf",
+        "Elf Union",
+        "High Elves",
+        "Wood Elves"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Jordell Freshbreeze",
+      "cost": 280000,
+      "ma": 8,
+      "st": 3,
+      "ag": 1,
+      "pa": 3,
+      "av": 8,
+      "isActive": true,
+      "skills": [
+        "Block",
+        "Diving Catch",
+        "Dodge",
+        "Leap",
+        "Loner",
+        "Sidestep",
+        "Steady Footing",
+        "Swift as the Breeze"
+      ],
+      "allowedTeams": [
+        "Dark Elf",
+        "Elf Union",
+        "Gnomes",
+        "Halflings",
+        "High Elves",
+        "Wood Elves"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Josef Bugman",
+      "cost": 180000,
+      "ma": 5,
+      "st": 3,
+      "ag": 3,
+      "pa": 4,
+      "av": 9,
+      "isActive": true,
+      "skills": [
+        "Block",
+        "Drunkard",
+        "Fend",
+        "Loner",
+        "Tackle",
+        "Taunt",
+        "Thick Skull",
+        "Dwarfen Grit"
+      ],
+      "allowedTeams": [
+        "Bretonnian",
+        "Dwarves",
+        "Humans",
+        "Imperial Nobility",
+        "Norse",
+        "Ogre",
+        "Old World Alliance"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Karla Von Kill",
+      "cost": 210000,
+      "ma": 6,
+      "st": 3,
+      "ag": 3,
+      "pa": 4,
+      "av": 9,
+      "isActive": true,
+      "skills": [
+        "Block",
+        "Frenzy",
+        "Jump Up",
+        "Loner",
+        "Mighty Blow",
+        "Indomitable"
+      ],
+      "allowedTeams": [
+        "Amazon",
+        "Human",
+        "Norse"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Kiroth Krakeneye",
+      "cost": 160000,
+      "ma": 7,
+      "st": 3,
+      "ag": 2,
+      "pa": 3,
+      "av": 8,
+      "isActive": true,
+      "skills": [
+        "Disturbing Presence",
+        "Foul Appearance",
+        "Loner",
+        "On the Ball",
+        "Tackle",
+        "Tentacles",
+        "Black Ink"
+      ],
+      "allowedTeams": [
+        "Dark Elf",
+        "Elf Union",
+        "High Elves",
+        "Wood Elves"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Kreek Rustgouger",
+      "cost": 180000,
+      "ma": 4,
+      "st": 7,
+      "ag": 4,
+      "pa": null,
+      "av": 10,
+      "isActive": true,
+      "skills": [
+        "Ball and Chain",
+        "Loner",
+        "Mighty Blow",
+        "No Ball",
+        "Prehensile Tail",
+        "Secret Weapon",
+        "I'll Be Back!"
+      ],
+      "allowedTeams": [
+        "Goblins",
+        "Skaven",
+        "Snotlings",
+        "Underworlds Denizens"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Lewdgrip Whiparm",
+      "cost": 170000,
+      "ma": 6,
+      "st": 3,
+      "ag": 3,
+      "pa": 3,
+      "av": 8,
+      "isActive": true,
+      "skills": [
+        "Accurate",
+        "Dirty Player",
+        "Loner",
+        "Pass"
+      ],
+      "allowedTeams": [
+        "Chaos",
+        "Chaos Chosen",
+        "Chaos Renegades",
+        "Nurgle"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Lord Borak the Despoiler",
+      "cost": 270000,
+      "ma": 5,
+      "st": 5,
+      "ag": 3,
+      "pa": 5,
+      "av": 10,
+      "isActive": true,
+      "skills": [
+        "Block",
+        "Dirty Player",
+        "Leader",
+        "Loner",
+        "Mighty Blow",
+        "Put the Boot In",
+        "Sneaky Git",
+        "Lord of Chaos"
+      ],
+      "allowedTeams": [
+        "Chaos Chosen",
+        "Chaos Dwarves",
+        "Chaos Renegades",
+        "Khorne",
+        "Norse",
+        "Nurgle"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Maple Highgrove",
+      "cost": 210000,
+      "ma": 3,
+      "st": 5,
+      "ag": 5,
+      "pa": 5,
+      "av": 11,
+      "isActive": true,
+      "skills": [
+        "Brawler",
+        "Grab",
+        "Mighty Blow",
+        "Stand Firm",
+        "Tentacles",
+        "Thick Skull",
+        "Vicious Vines"
+      ],
+      "allowedTeams": [
+        "Gnomes",
+        "Halflings",
+        "Wood Elves"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Max Spleenripper",
+      "cost": 130000,
+      "ma": 5,
+      "st": 4,
+      "ag": 4,
+      "pa": null,
+      "av": 9,
+      "isActive": true,
+      "skills": [
+        "Chainsaw",
+        "Loner",
+        "No Ball",
+        "Secret Weapon",
+        "Maximum Carnage"
+      ],
+      "allowedTeams": [
+        "Chaos Chosen",
+        "Chaos Renegades",
+        "Khorne",
+        "Norse"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Morg 'n' Thorg",
+      "cost": 380000,
+      "ma": 6,
+      "st": 6,
+      "ag": 4,
+      "pa": 4,
+      "av": 10,
+      "isActive": true,
+      "skills": [
+        "Block",
+        "Loner",
+        "Mighty Blow",
+        "Thick Skull",
+        "Throw Team-mate",
+        "The Ballista"
+      ],
+      "allowedTeams": [],
+      "specialRules": "May be hired by any team."
+    },
+    {
+      "name": "Nobbla Blackwart",
+      "cost": 130000,
+      "ma": 6,
+      "st": 2,
+      "ag": 3,
+      "pa": null,
+      "av": 7,
+      "isActive": true,
+      "skills": [
+        "Block",
+        "Chainsaw",
+        "Dodge",
+        "Loner",
+        "Secret Weapon",
+        "Stunty",
+        "Kick 'em While They're Down!"
+      ],
+      "allowedTeams": [
+        "Goblin",
+        "Underworld Denizens"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Puggy Baconbreath",
+      "cost": 140000,
+      "ma": 5,
+      "st": 2,
+      "ag": 3,
+      "pa": null,
+      "av": 7,
+      "isActive": true,
+      "skills": [
+        "Dodge",
+        "Loner",
+        "Right Stuff",
+        "Sidestep",
+        "Stunty",
+        "Sure Hands",
+        "Titchy",
+        "Halfling Luck"
+      ],
+      "allowedTeams": [
+        "Halfling",
+        "Imperial Nobility",
+        "Human"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Rashnak Backstabber",
+      "cost": 130000,
+      "ma": 7,
+      "st": 3,
+      "ag": 3,
+      "pa": 5,
+      "av": 8,
+      "isActive": true,
+      "skills": [
+        "Loner",
+        "Shadowing",
+        "Sidestep",
+        "Sneaky Git",
+        "Stab",
+        "Toxin Connoisseur"
+      ],
+      "allowedTeams": [
+        "Black Orcs",
+        "Chaos Dwarves",
+        "Goblins",
+        "Ogre",
+        "Orcs"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Ripper Bolgrot",
+      "cost": 250000,
+      "ma": 5,
+      "st": 6,
+      "ag": 5,
+      "pa": 4,
+      "av": 10,
+      "isActive": true,
+      "skills": [
+        "Bullseye",
+        "Grab",
+        "Loner",
+        "Mighty Blow",
+        "Regeneration",
+        "Throw Team-mate",
+        "Thinking Man's Troll"
+      ],
+      "allowedTeams": [
+        "Black Orcs",
+        "Chaos Dwarves",
+        "Goblins",
+        "Ogre",
+        "Orcs",
+        "Skaven",
+        "Snotlings",
+        "Underworlds Denizens"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Rodney Roachbait",
+      "cost": 70000,
+      "ma": 6,
+      "st": 2,
+      "ag": 3,
+      "pa": 4,
+      "av": 7,
+      "isActive": true,
+      "skills": [
+        "Catch",
+        "Diving Catch",
+        "Jump Up",
+        "Loner",
+        "On the Ball",
+        "Sidestep",
+        "Stunty",
+        "Wrestle",
+        "Catch of the Day"
+      ],
+      "allowedTeams": [
+        "Gnomes",
+        "Halflings",
+        "Wood Elves"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Roxanna Draknail",
+      "cost": 270000,
+      "ma": 8,
+      "st": 3,
+      "ag": 1,
+      "pa": 3,
+      "av": 8,
+      "isActive": true,
+      "skills": [
+        "Dodge",
+        "Frenzy",
+        "Juggernaut",
+        "Jump Up",
+        "Leap",
+        "Loner",
+        "Slashing Nails"
+      ],
+      "allowedTeams": [
+        "Dark Elf",
+        "Elf Union",
+        "High Elves",
+        "Wood Elves"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Rumbelow Sheepskin",
+      "cost": 170000,
+      "ma": 6,
+      "st": 3,
+      "ag": 3,
+      "pa": 5,
+      "av": 8,
+      "isActive": true,
+      "skills": [
+        "Block",
+        "Horns",
+        "Juggernaut",
+        "Loner",
+        "Tackle",
+        "Thick Skull",
+        "Ram"
+      ],
+      "allowedTeams": [
+        "Gnomes",
+        "Halflings"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Scrappa Sorehead",
+      "cost": 130000,
+      "ma": 7,
+      "st": 2,
+      "ag": 3,
+      "pa": null,
+      "av": 7,
+      "isActive": true,
+      "skills": [
+        "Dodge",
+        "Loner",
+        "Prehensile Tail",
+        "Right Stuff",
+        "Sprint",
+        "Stunty",
+        "Sure Feet",
+        "Yoink!"
+      ],
+      "allowedTeams": [
+        "Goblin",
+        "Underworld Denizens"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Scyla Anfingrimm",
+      "cost": 200000,
+      "ma": 5,
+      "st": 5,
+      "ag": 4,
+      "pa": 6,
+      "av": 10,
+      "isActive": true,
+      "skills": [
+        "Claws",
+        "Frenzy",
+        "Loner",
+        "Mighty Blow",
+        "Prehensile Tail",
+        "Thick Skull",
+        "Unchannelled Fury",
+        "Fury of the Blood God"
+      ],
+      "allowedTeams": [
+        "Chaos Chosen",
+        "Chaos Renegades",
+        "Khorne",
+        "Norse"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Skitter Stab-Stab",
+      "cost": 160000,
+      "ma": 9,
+      "st": 2,
+      "ag": 2,
+      "pa": null,
+      "av": 7,
+      "isActive": true,
+      "skills": [
+        "Dodge",
+        "Loner",
+        "Stab",
+        "Stunty",
+        "Sure Feet",
+        "Two Heads",
+        "Master Assassin"
+      ],
+      "allowedTeams": [
+        "Skaven",
+        "Underworld Denizens"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Skrorg Snowpelt",
+      "cost": 240000,
+      "ma": 5,
+      "st": 5,
+      "ag": 4,
+      "pa": 6,
+      "av": 9,
+      "isActive": true,
+      "skills": [
+        "Block",
+        "Claws",
+        "Disturbing Presence",
+        "Juggernaut",
+        "Loner",
+        "Mighty Blow",
+        "Pump Up the Crowd"
+      ],
+      "allowedTeams": [
+        "Bretonnian",
+        "Dwarves",
+        "Humans",
+        "Imperial Nobility",
+        "Norse",
+        "Ogre",
+        "Old World Alliance"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Skrull Halfheight",
+      "cost": 150000,
+      "ma": 6,
+      "st": 3,
+      "ag": 4,
+      "pa": 3,
+      "av": 9,
+      "isActive": true,
+      "skills": [
+        "Accurate",
+        "Loner",
+        "Nerves of Steel",
+        "Pass",
+        "Regeneration",
+        "Sure Hands",
+        "Thick Skull",
+        "Strong Passing Game"
+      ],
+      "allowedTeams": [
+        "Dwarves",
+        "Necromantics",
+        "Ogre",
+        "Shambling Undead",
+        "Tomb Kings",
+        "Vampires"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Swiftvine Glimmershard",
+      "cost": 110000,
+      "ma": 7,
+      "st": 2,
+      "ag": 3,
+      "pa": 5,
+      "av": 7,
+      "isActive": true,
+      "skills": [
+        "Disturbing Presence",
+        "Fend",
+        "Loner",
+        "Sidestep",
+        "Stab",
+        "Stunty",
+        "Furious Outburst"
+      ],
+      "allowedTeams": [
+        "Gnomes",
+        "Halflings",
+        "Wood Elves"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "The Black Gobbo",
+      "cost": 210000,
+      "ma": 6,
+      "st": 2,
+      "ag": 3,
+      "pa": 3,
+      "av": 8,
+      "isActive": true,
+      "skills": [
+        "Bombardier",
+        "Disturbing Presence",
+        "Dodge",
+        "Loner",
+        "Sidestep",
+        "Sneaky Git",
+        "Stab",
+        "Stunty",
+        "Sneakiest of the Lot"
+      ],
+      "allowedTeams": [
+        "Black Orcs",
+        "Chaos Dwarves",
+        "Goblins",
+        "Ogre",
+        "Orcs",
+        "Skaven",
+        "Snotlings",
+        "Underworlds Denizens"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "The Mighty Zug",
+      "cost": 220000,
+      "ma": 5,
+      "st": 5,
+      "ag": 4,
+      "pa": 6,
+      "av": 10,
+      "isActive": true,
+      "skills": [
+        "Block",
+        "Loner",
+        "Mighty Blow",
+        "Unsteady",
+        "Crushing Blow"
+      ],
+      "allowedTeams": [
+        "Amazons",
+        "Bretonnian",
+        "Humans",
+        "Imperial Nobility",
+        "Lizardmen",
+        "Norse",
+        "Old World Alliance"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "The Swift Twins",
+      "cost": 300000,
+      "ma": 7,
+      "st": 3,
+      "ag": 2,
+      "pa": 2,
+      "av": 9,
+      "isActive": true,
+      "skills": [
+        "Accurate",
+        "Block",
+        "Diving Catch",
+        "Dump-off",
+        "Loner",
+        "Mighty Blow",
+        "Nerves of Steel",
+        "Pass",
+        "Safe Pass",
+        "Sure Hands",
+        "Tackle",
+        "Working In Tandem"
+      ],
+      "allowedTeams": [
+        "Dark Elf",
+        "Elf Union",
+        "High Elves",
+        "Wood Elves"
+      ],
+      "specialRules": "Must be hired as a pair."
+    },
+    {
+      "name": "Thorsson Stoutmead",
+      "cost": 170000,
+      "ma": 6,
+      "st": 3,
+      "ag": 4,
+      "pa": 3,
+      "av": 8,
+      "isActive": true,
+      "skills": [
+        "Block",
+        "Drunkard",
+        "Loner",
+        "Thick Skull",
+        "Beer Barrel Bash!"
+      ],
+      "allowedTeams": [
+        "Bretonnian",
+        "Dwarves",
+        "Humans",
+        "Imperial Nobility",
+        "Norse",
+        "Ogre",
+        "Old World Alliance"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Varag Ghoul-Chewer",
+      "cost": 280000,
+      "ma": 7,
+      "st": 5,
+      "ag": 3,
+      "pa": null,
+      "av": 10,
+      "isActive": true,
+      "skills": [
+        "Block",
+        "Juggernaut",
+        "Loner",
+        "Mighty Blow",
+        "Piling On",
+        "Sprint",
+        "Sure Feet",
+        "Krump and Smash"
+      ],
+      "allowedTeams": [
+        "Black Orc",
+        "Orc"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Wilhelm Chaney",
+      "cost": 220000,
+      "ma": 8,
+      "st": 4,
+      "ag": 3,
+      "pa": 5,
+      "av": 9,
+      "isActive": true,
+      "skills": [
+        "Catch",
+        "Claws",
+        "Frenzy",
+        "Loner",
+        "Regeneration",
+        "Wrestle",
+        "Savage Mauling"
+      ],
+      "allowedTeams": [
+        "Necromantics",
+        "Shambling Undead",
+        "Tomb Kings",
+        "Vampires"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Willow Rosebark",
+      "cost": 160000,
+      "ma": 8,
+      "st": 4,
+      "ag": 3,
+      "pa": 4,
+      "av": 9,
+      "isActive": true,
+      "skills": [
+        "Dauntless",
+        "Loner",
+        "Sidestep",
+        "Thick Skull",
+        "Woodland Fury"
+      ],
+      "allowedTeams": [
+        "Gnomes",
+        "Halflings",
+        "Wood Elves"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Withergrasp Doubledrool",
+      "cost": 170000,
+      "ma": 6,
+      "st": 3,
+      "ag": 3,
+      "pa": 4,
+      "av": 9,
+      "isActive": true,
+      "skills": [
+        "Foul Appearance",
+        "Loner",
+        "Prehensile Tail",
+        "Tackle",
+        "Tentacles",
+        "Two Heads",
+        "Wrestle",
+        "Watch Out!"
+      ],
+      "allowedTeams": [
+        "Chaos Chosen",
+        "Chaos Renegades",
+        "Nurgle"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Zara the Slayer",
+      "cost": 280000,
+      "ma": 7,
+      "st": 3,
+      "ag": 3,
+      "pa": 4,
+      "av": 8,
+      "isActive": true,
+      "skills": [
+        "Dauntless",
+        "Dodge",
+        "Jump Up",
+        "Loner",
+        "Stab",
+        "Stakes"
+      ],
+      "allowedTeams": [
+        "Human",
+        "Shambling Undead",
+        "Tomb Kings"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Zolcath the Zoat",
+      "cost": 220000,
+      "ma": 5,
+      "st": 5,
+      "ag": 4,
+      "pa": 5,
+      "av": 10,
+      "isActive": true,
+      "skills": [
+        "Disturbing Presence",
+        "Juggernaut",
+        "Loner",
+        "Mighty Blow",
+        "Prehensile Tail",
+        "Regeneration",
+        "Sure Feet",
+        "Excuse Me, Are You a Zoat?"
+      ],
+      "allowedTeams": [
+        "Amazons",
+        "Dark Elf",
+        "Elf Union",
+        "High Elves",
+        "Lizardmen",
+        "Slanns",
+        "Wood Elves"
+      ],
+      "specialRules": null
+    },
+    {
+      "name": "Zzharg Madeye",
+      "cost": 130000,
+      "ma": 4,
+      "st": 4,
+      "ag": 4,
+      "pa": 3,
+      "av": 10,
+      "isActive": true,
+      "skills": [
+        "Cannoneer",
+        "Hail Mary Pass",
+        "Loner",
+        "Nerves of Steel",
+        "Secret Weapon",
+        "Thick Skull",
+        "Blastin' Solves Everything"
+      ],
+      "allowedTeams": [
+        "Chaos Chosen",
+        "Chaos Dwarves"
+      ],
+      "specialRules": null
+    }
+  ]
+}

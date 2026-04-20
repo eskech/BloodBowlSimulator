@@ -1,0 +1,181 @@
+{
+  "simulations": 50000,
+  "team1": {
+    "name": "Amazon Warriors",
+    "race": "Amazons",
+    "rerolls": 3,
+    "hasApothecary": true,
+    "strategy": {
+      "wrestle": 0.9,
+      "standFirm": 0.0,
+      "divingTackle": 0.7,
+      "pro": 0.6
+    },
+    "players": [
+      {
+        "position": "Eagle Warrior Linewoman",
+        "name": "Artemis",
+        "extraSkills": [
+          "Wrestle"
+        ]
+      },
+      {
+        "position": "Eagle Warrior Linewoman",
+        "name": "Calypso",
+        "extraSkills": [
+          "Block"
+        ]
+      },
+      {
+        "position": "Eagle Warrior Linewoman",
+        "name": "Daphne"
+      },
+      {
+        "position": "Eagle Warrior Linewoman",
+        "name": "Electra"
+      },
+      {
+        "position": "Eagle Warrior Linewoman",
+        "name": "Freya"
+      },
+      {
+        "position": "Eagle Warrior Linewoman",
+        "name": "Gaia"
+      },
+      {
+        "position": "Eagle Warrior Linewoman",
+        "name": "Hera"
+      },
+      {
+        "position": "Python Warrior Thrower",
+        "name": "Iris"
+      },
+      {
+        "position": "Python Warrior Thrower",
+        "name": "Juno",
+        "extraSkills": [
+          "Accurate"
+        ],
+        "strategy": {
+          "pro": 0.9
+        }
+      },
+      {
+        "position": "Piranha Warrior Blitzer",
+        "name": "Kali",
+        "extraSkills": [
+          "Diving Tackle"
+        ],
+        "strategy": {
+          "divingTackle": 1.0
+        }
+      },
+      {
+        "position": "Piranha Warrior Blitzer",
+        "name": "Luna"
+      },
+      {
+        "position": "Eagle Warrior Linewoman",
+        "name": "Yrsa"
+      },
+      {
+        "position": "Eagle Warrior Linewoman",
+        "name": "Oskar"
+      },
+      {
+        "position": "Eagle Warrior Linewoman",
+        "name": "Gareth"
+      },
+      {
+        "position": "Eagle Warrior Linewoman",
+        "name": "Lena"
+      },
+      {
+        "position": "Eagle Warrior Linewoman",
+        "name": "Elara"
+      }
+    ]
+  },
+  "team2": {
+    "name": "Iron Hammers",
+    "race": "Dwarves",
+    "rerolls": 2,
+    "hasApothecary": true,
+    "strategy": {
+      "wrestle": 0.3,
+      "standFirm": 0.8,
+      "divingTackle": 0.0,
+      "pro": 0.5
+    },
+    "players": [
+      {
+        "position": "Dwarf Blocker Lineman",
+        "name": "Grimgor",
+        "extraSkills": [
+          "Guard"
+        ]
+      },
+      {
+        "position": "Dwarf Blocker Lineman",
+        "name": "Ironfoot",
+        "extraSkills": [
+          "Guard"
+        ]
+      },
+      {
+        "position": "Dwarf Blocker Lineman",
+        "name": "Stoneback"
+      },
+      {
+        "position": "Dwarf Blocker Lineman",
+        "name": "Keldrak"
+      },
+      {
+        "position": "Dwarf Blocker Lineman",
+        "name": "Mordin"
+      },
+      {
+        "position": "Dwarf Blocker Lineman",
+        "name": "Runehand"
+      },
+      {
+        "position": "Dwarf Blocker Lineman",
+        "name": "Thungni"
+      },
+      {
+        "position": "Dwarf Runner",
+        "name": "Quickfist",
+        "extraSkills": [
+          "Break Tackle"
+        ],
+        "strategy": {
+          "standFirm": 0.0
+        }
+      },
+      {
+        "position": "Dwarf Runner",
+        "name": "Swiftaxe"
+      },
+      {
+        "position": "Troll Slayer",
+        "name": "Golgfag",
+        "extraSkills": [
+          "Mighty Blow"
+        ],
+        "strategy": {
+          "wrestle": 0.1
+        }
+      },
+      {
+        "position": "Dwarf Blitzer",
+        "name": "Hammerfall",
+        "extraSkills": [
+          "Stand Firm"
+        ],
+        "strategy": {
+          "standFirm": 1.0
+        }
+      }
+    ]
+  }
+}

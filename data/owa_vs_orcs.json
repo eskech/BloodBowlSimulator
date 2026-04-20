@@ -1,0 +1,177 @@
+{
+  "simulations": 50000,
+  "team1": {
+    "name": "Old World Wanderers",
+    "race": "Old World Alliance",
+    "rerolls": 3,
+    "hasApothecary": true,
+    "strategy": {
+      "wrestle": 0.6,
+      "standFirm": 0.6,
+      "divingTackle": 0.5,
+      "pro": 0.5
+    },
+    "players": [
+      {
+        "position": "Old World Human Lineman",
+        "name": "Roderick"
+      },
+      {
+        "position": "Old World Human Lineman",
+        "name": "Aldhelm"
+      },
+      {
+        "position": "Old World Human Lineman",
+        "name": "Oswin"
+      },
+      {
+        "position": "Old World Halfling Hopefuls",
+        "name": "Pip",
+        "extraSkills": [
+          "Diving Tackle"
+        ],
+        "strategy": {
+          "divingTackle": 1.0
+        }
+      },
+      {
+        "position": "Old World Halfling Hopefuls",
+        "name": "Merry"
+      },
+      {
+        "position": "Old World Dwarf Lineman",
+        "name": "Gundrun",
+        "extraSkills": [
+          "Guard"
+        ],
+        "strategy": {
+          "standFirm": 0.9
+        }
+      },
+      {
+        "position": "Old World Dwarf Lineman",
+        "name": "Horgar",
+        "extraSkills": [
+          "Guard"
+        ],
+        "strategy": {
+          "standFirm": 0.9
+        }
+      },
+      {
+        "position": "Old World Human Thrower",
+        "name": "Bertram"
+      },
+      {
+        "position": "Old World Human Catcher",
+        "name": "Swiftfoot"
+      },
+      {
+        "position": "Old World Human Blitzer",
+        "name": "Sir Aldric",
+        "extraSkills": [
+          "Mighty Blow"
+        ]
+      },
+      {
+        "position": "Old World Dwarf Troll Slayer",
+        "name": "Grudgebearer",
+        "strategy": {
+          "wrestle": 0.2
+        }
+      },
+      {
+        "position": "Old World Human Lineman",
+        "name": "Zara"
+      },
+      {
+        "position": "Old World Human Lineman",
+        "name": "Ferran"
+      }
+    ]
+  },
+  "team2": {
+    "name": "Greenskin Crushers",
+    "race": "Orcs",
+    "rerolls": 2,
+    "hasApothecary": true,
+    "strategy": {
+      "wrestle": 0.2,
+      "standFirm": 0.5,
+      "divingTackle": 0.1,
+      "pro": 0.4
+    },
+    "players": [
+      {
+        "position": "Orc Lineman",
+        "name": "Grukk"
+      },
+      {
+        "position": "Orc Lineman",
+        "name": "Snarka"
+      },
+      {
+        "position": "Orc Lineman",
+        "name": "Bograt"
+      },
+      {
+        "position": "Orc Lineman",
+        "name": "Muzgash",
+        "extraSkills": [
+          "Block"
+        ]
+      },
+      {
+        "position": "Goblin",
+        "name": "Snikrot"
+      },
+      {
+        "position": "Goblin",
+        "name": "Zograt"
+      },
+      {
+        "position": "Orc Thrower",
+        "name": "Da Passer"
+      },
+      {
+        "position": "Orc Blitzer",
+        "name": "Gorfang",
+        "extraSkills": [
+          "Guard"
+        ]
+      },
+      {
+        "position": "Orc Blitzer",
+        "name": "Warboss Skrag"
+      },
+      {
+        "position": "Big Un Blocker",
+        "name": "Crusher",
+        "strategy": {
+          "wrestle": 0.05,
+          "standFirm": 0.7
+        }
+      },
+      {
+        "position": "Big Un Blocker",
+        "name": "Smasher",
+        "strategy": {
+          "wrestle": 0.05,
+          "standFirm": 0.7
+        }
+      },
+      {
+        "position": "Orc Lineman",
+        "name": "Xander"
+      },
+      {
+        "position": "Orc Lineman",
+        "name": "Cormac"
+      },
+      {
+        "position": "Goblin",
+        "name": "Lena"
+      }
+    ]
+  }
+}

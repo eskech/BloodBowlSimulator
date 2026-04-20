@@ -1,0 +1,148 @@
+{
+  "simulations": 50000,
+  "team1": {
+    "name": "Reikland Reavers",
+    "race": "Humans",
+    "rerolls": 3,
+    "hasApothecary": true,
+    "strategy": {
+      "wrestle": 0.5,
+      "standFirm": 0.3,
+      "divingTackle": 0.5,
+      "pro": 0.5
+    },
+    "players": [
+      {
+        "position": "Human Lineman",
+        "name": "Marcus"
+      },
+      {
+        "position": "Human Lineman",
+        "name": "Viktor"
+      },
+      {
+        "position": "Human Lineman",
+        "name": "Konrad"
+      },
+      {
+        "position": "Human Lineman",
+        "name": "Stefan"
+      },
+      {
+        "position": "Halfling Hopeful",
+        "name": "Billie",
+        "extraSkills": [
+          "Diving Tackle"
+        ],
+        "strategy": {
+          "divingTackle": 1.0
+        }
+      },
+      {
+        "position": "Halfling Hopeful",
+        "name": "Tolly"
+      },
+      {
+        "position": "Human Thrower",
+        "name": "Quarterback",
+        "extraSkills": [
+          "Accurate"
+        ]
+      },
+      {
+        "position": "Human Catcher",
+        "name": "Flash",
+        "extraSkills": [
+          "Sprint"
+        ]
+      },
+      {
+        "position": "Human Catcher",
+        "name": "Dash"
+      },
+      {
+        "position": "Human Blitzer",
+        "name": "Iron Fist",
+        "extraSkills": [
+          "Guard"
+        ]
+      },
+      {
+        "position": "Human Blitzer",
+        "name": "Crusher"
+      }
+    ]
+  },
+  "team2": {
+    "name": "Badlands Brawlers",
+    "race": "Orcs",
+    "rerolls": 2,
+    "hasApothecary": true,
+    "strategy": {
+      "wrestle": 0.2,
+      "standFirm": 0.5,
+      "divingTackle": 0.1,
+      "pro": 0.4
+    },
+    "players": [
+      {
+        "position": "Orc Lineman",
+        "name": "Grukk"
+      },
+      {
+        "position": "Orc Lineman",
+        "name": "Snarka"
+      },
+      {
+        "position": "Orc Lineman",
+        "name": "Bograt"
+      },
+      {
+        "position": "Orc Lineman",
+        "name": "Muzgash",
+        "extraSkills": [
+          "Block"
+        ]
+      },
+      {
+        "position": "Goblin",
+        "name": "Snikrot"
+      },
+      {
+        "position": "Goblin",
+        "name": "Zograt"
+      },
+      {
+        "position": "Orc Thrower",
+        "name": "Da Passer"
+      },
+      {
+        "position": "Orc Blitzer",
+        "name": "Gorfang",
+        "extraSkills": [
+          "Guard"
+        ]
+      },
+      {
+        "position": "Orc Blitzer",
+        "name": "Warboss Skrag"
+      },
+      {
+        "position": "Big Un Blocker",
+        "name": "Crusher",
+        "strategy": {
+          "wrestle": 0.05,
+          "standFirm": 0.7
+        }
+      },
+      {
+        "position": "Untrained Troll",
+        "name": "Grotsmasha",
+        "strategy": {
+          "wrestle": 0.1,
+          "standFirm": 0.8
+        }
+      }
+    ]
+  }
+}

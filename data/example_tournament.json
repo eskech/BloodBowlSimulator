@@ -1,0 +1,201 @@
+{
+  "tournaments":    1000,
+  "rounds":         5,
+  "matchGames":     1,
+  "pairingSystem":  "dutch",
+
+  "teams": [
+    {
+      "name": "Old World Wanderers",
+      "race": "Old World Alliance",
+      "rerolls": 3,
+      "hasApothecary": true,
+      "strategy": { "wrestle": 0.6, "standFirm": 0.6 },
+      "players": [
+        { "position": "Old World Human Lineman",      "name": "Roderick" },
+        { "position": "Old World Human Lineman",      "name": "Aldhelm" },
+        { "position": "Old World Human Lineman",      "name": "Oswin" },
+        { "position": "Old World Halfling Hopefuls",  "name": "Pip" },
+        { "position": "Old World Halfling Hopefuls",  "name": "Merry" },
+        { "position": "Old World Dwarf Lineman",      "name": "Gundrun",
+          "extraSkills": ["Guard"], "strategy": { "standFirm": 0.9 } },
+        { "position": "Old World Dwarf Lineman",      "name": "Horgar",
+          "extraSkills": ["Guard"], "strategy": { "standFirm": 0.9 } },
+        { "position": "Old World Human Thrower",      "name": "Bertram" },
+        { "position": "Old World Human Catcher",      "name": "Swiftfoot" },
+        { "position": "Old World Human Blitzer",      "name": "Sir Aldric",
+          "extraSkills": ["Mighty Blow"] },
+        { "position": "Old World Dwarf Troll Slayer", "name": "Grudgebearer" }
+      ]
+    },
+
+    {
+      "name": "Druchii Blades",
+      "race": "Dark Elf",
+      "rerolls": 3,
+      "hasApothecary": true,
+      "strategy": { "wrestle": 0.5, "divingTackle": 0.7 },
+      "players": [
+        { "position": "Dark Elf Lineman", "name": "Naerith" },
+        { "position": "Dark Elf Lineman", "name": "Xalvrath" },
+        { "position": "Dark Elf Lineman", "name": "Draevin" },
+        { "position": "Dark Elf Lineman", "name": "Kelvras",
+          "extraSkills": ["Wrestle"], "strategy": { "wrestle": 1.0 } },
+        { "position": "Runner",    "name": "Shadowstep" },
+        { "position": "Assassin",  "name": "Nightblade" },
+        { "position": "Assassin",  "name": "Silentfang",
+          "extraSkills": ["Dodge"] },
+        { "position": "Blitzer",   "name": "Darkmane",
+          "extraSkills": ["Mighty Blow"] },
+        { "position": "Blitzer",   "name": "Corvath" },
+        { "position": "Witch Elf", "name": "Malara",
+          "extraSkills": ["Tackle"] },
+        { "position": "Witch Elf", "name": "Sythara" }
+      ]
+    },
+
+    {
+      "name": "Loren Falcons",
+      "race": "Wood Elves",
+      "rerolls": 3,
+      "hasApothecary": true,
+      "strategy": { "wrestle": 0.3, "divingTackle": 0.7 },
+      "players": [
+        { "position": "Wood Elf Lineman",      "name": "Leafwhisper" },
+        { "position": "Wood Elf Lineman",      "name": "Barkrunner" },
+        { "position": "Wood Elf Lineman",      "name": "Ferndale" },
+        { "position": "Wood Elf Lineman",      "name": "Mosshide" },
+        { "position": "Wood Elf Lineman",      "name": "Branchborn" },
+        { "position": "Wood Elf Catcher",      "name": "Windfoot" },
+        { "position": "Wood Elf Catcher",      "name": "Dawnleap",
+          "extraSkills": ["Diving Catch"] },
+        { "position": "Wood Elf Thrower",      "name": "Aelindra",
+          "extraSkills": ["Accurate"] },
+        { "position": "Wardancer",             "name": "Sylvara" },
+        { "position": "Wardancer",             "name": "Thornweave" },
+        { "position": "Loren Forest Treeman",  "name": "Old Rowan" }
+      ]
+    },
+
+    {
+      "name": "Plague Bearers",
+      "race": "Nurgle",
+      "rerolls": 3,
+      "hasApothecary": false,
+      "strategy": { "standFirm": 0.7, "wrestle": 0.4 },
+      "players": [
+        { "position": "Rotter Lineman",    "name": "Pustule" },
+        { "position": "Rotter Lineman",    "name": "Blight" },
+        { "position": "Rotter Lineman",    "name": "Scab" },
+        { "position": "Rotter Lineman",    "name": "Wart" },
+        { "position": "Pestigor",          "name": "Foetid",
+          "extraSkills": ["Block"] },
+        { "position": "Pestigor",          "name": "Gangrene" },
+        { "position": "Pestigor",          "name": "Necrosis" },
+        { "position": "Bloater",           "name": "Bilious",
+          "extraSkills": ["Guard"] },
+        { "position": "Bloater",           "name": "Tumorous" },
+        { "position": "Bloater",           "name": "Vomitus" },
+        { "position": "Rotspawn",            "name": "Slimelord" }
+      ]
+    },
+
+    {
+      "name": "Hashut's Hammers",
+      "race": "Chaos Dwarves",
+      "rerolls": 3,
+      "hasApothecary": true,
+      "strategy": { "standFirm": 0.7, "wrestle": 0.2 },
+      "players": [
+        { "position": "Hobgoblin Lineman",     "name": "Skrag" },
+        { "position": "Hobgoblin Lineman",     "name": "Gashnak" },
+        { "position": "Chaos Dwarf Blocker",   "name": "Grudgeborn",
+          "extraSkills": ["Guard"], "strategy": { "standFirm": 1.0 } },
+        { "position": "Chaos Dwarf Blocker",   "name": "Ironhelm",
+          "extraSkills": ["Guard"], "strategy": { "standFirm": 1.0 } },
+        { "position": "Chaos Dwarf Blocker",   "name": "Ashforge",
+          "strategy": { "standFirm": 1.0 } },
+        { "position": "Chaos Dwarf Blocker",   "name": "Cinder",
+          "strategy": { "standFirm": 1.0 } },
+        { "position": "Chaos Dwarf Flamesmith","name": "Pyrax" },
+        { "position": "Chaos Dwarf Flamesmith","name": "Scorchfist" },
+        { "position": "Bull Centaur Blitzer",  "name": "Ironhoof",
+          "extraSkills": ["Block"] },
+        { "position": "Bull Centaur Blitzer",  "name": "Bronzeback" },
+        { "position": "Minotaur",              "name": "Bulfrak the Rager" }
+      ]
+    },
+
+    {
+      "name": "Da Little Munsters",
+      "race": "Snotlings",
+      "rerolls": 3,
+      "hasApothecary": false,
+      "strategy": { "wrestle": 0.4, "divingTackle": 0.8 },
+      "players": [
+        { "position": "Snotling Lineman", "name": "Squig" },
+        { "position": "Snotling Lineman", "name": "Nit" },
+        { "position": "Snotling Lineman", "name": "Grub" },
+        { "position": "Snotling Lineman", "name": "Mite" },
+        { "position": "Fun-Hoppa",        "name": "Boing",
+          "extraSkills": ["Diving Tackle"], "strategy": { "divingTackle": 1.0 } },
+        { "position": "Fun-Hoppa",        "name": "Sproing",
+          "extraSkills": ["Diving Tackle"], "strategy": { "divingTackle": 1.0 } },
+        { "position": "Stilty Runna",     "name": "Legit" },
+        { "position": "Stilty Runna",     "name": "Skippit" },
+        { "position": "Pump Wagon",       "name": "Da Crusher",
+          "strategy": { "standFirm": 1.0 } },
+        { "position": "Pump Wagon",       "name": "Da Smasher",
+          "strategy": { "standFirm": 1.0 } },
+        { "position": "Trained Troll",    "name": "Belcha" }
+      ]
+    },
+
+    {
+      "name": "Iron Bears",
+      "race": "Dwarves",
+      "rerolls": 3,
+      "hasApothecary": true,
+      "strategy": { "standFirm": 0.8, "wrestle": 0.3 },
+      "players": [
+        { "position": "Dwarf Blocker Lineman", "name": "Boldr" },
+        { "position": "Dwarf Blocker Lineman", "name": "Stormr" },
+        { "position": "Dwarf Blocker Lineman", "name": "Kragr" },
+        { "position": "Dwarf Blocker Lineman", "name": "Hamfist" },
+        { "position": "Dwarf Blocker Lineman", "name": "Runestone" },
+        { "position": "Dwarf Blocker Lineman", "name": "Gravel" },
+        { "position": "Dwarf Blitzer",         "name": "Ironjaw",
+          "extraSkills": ["Guard"] },
+        { "position": "Dwarf Blitzer",         "name": "Crackhammer",
+          "extraSkills": ["Mighty Blow"] },
+        { "position": "Dwarf Runner",          "name": "Swiftaxe" },
+        { "position": "Troll Slayer",          "name": "Deathwish" },
+        { "position": "Troll Slayer",          "name": "Ragnarr" }
+      ]
+    },
+
+    {
+      "name": "Skaven Scramblers",
+      "race": "Skaven",
+      "rerolls": 3,
+      "hasApothecary": true,
+      "strategy": { "wrestle": 0.3, "divingTackle": 0.6 },
+      "players": [
+        { "position": "Skaven Clanrat Lineman", "name": "Skarl" },
+        { "position": "Skaven Clanrat Lineman", "name": "Gnawbit" },
+        { "position": "Skaven Clanrat Lineman", "name": "Squeaker" },
+        { "position": "Skaven Clanrat Lineman", "name": "Scritch" },
+        { "position": "Skaven Clanrat Lineman", "name": "Nibble" },
+        { "position": "Thrower",                "name": "Ratfling",
+          "extraSkills": ["Pass"] },
+        { "position": "Gutter Runner",          "name": "Flashclaw",
+          "extraSkills": ["Dodge"] },
+        { "position": "Gutter Runner",          "name": "Quickpaw" },
+        { "position": "Gutter Runner",          "name": "Scurry" },
+        { "position": "Blitzer",                "name": "Hackfur",
+          "extraSkills": ["Mighty Blow"] },
+        { "position": "Rat Ogre",               "name": "Bonegnasher" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,185 @@
+{
+  "simulations": 50000,
+  "team1": {
+    "name": "Da Little Munsters",
+    "race": "Snotlings",
+    "rerolls": 3,
+    "hasApothecary": false,
+    "riotousRookies": true,
+    "strategy": {
+      "wrestle": 0.4,
+      "standFirm": 0.3,
+      "divingTackle": 0.8,
+      "pro": 0.4
+    },
+    "players": [
+      {
+        "position": "Snotling Lineman",
+        "name": "Squig"
+      },
+      {
+        "position": "Snotling Lineman",
+        "name": "Nit"
+      },
+      {
+        "position": "Snotling Lineman",
+        "name": "Grub"
+      },
+      {
+        "position": "Snotling Lineman",
+        "name": "Mite"
+      },
+      {
+        "position": "Fun-Hoppa",
+        "name": "Boing",
+        "extraSkills": [
+          "Diving Tackle"
+        ],
+        "strategy": {
+          "divingTackle": 1.0
+        }
+      },
+      {
+        "position": "Fun-Hoppa",
+        "name": "Sproing",
+        "extraSkills": [
+          "Diving Tackle"
+        ],
+        "strategy": {
+          "divingTackle": 1.0
+        }
+      },
+      {
+        "position": "Stilty Runna",
+        "name": "Legit"
+      },
+      {
+        "position": "Stilty Runna",
+        "name": "Skippit"
+      },
+      {
+        "position": "Pump Wagon",
+        "name": "Da Crusher",
+        "strategy": {
+          "standFirm": 1.0,
+          "wrestle": 0.0
+        }
+      },
+      {
+        "position": "Pump Wagon",
+        "name": "Da Smasher",
+        "strategy": {
+          "standFirm": 1.0,
+          "wrestle": 0.0
+        }
+      },
+      {
+        "position": "Trained Troll",
+        "name": "Belcha"
+      }
+    ]
+  },
+  "team2": {
+    "name": "Hashut's Hammers",
+    "race": "Chaos Dwarves",
+    "rerolls": 3,
+    "hasApothecary": true,
+    "strategy": {
+      "wrestle": 0.2,
+      "standFirm": 0.7,
+      "divingTackle": 0.1,
+      "pro": 0.3
+    },
+    "players": [
+      {
+        "position": "Hobgoblin Lineman",
+        "name": "Skrag"
+      },
+      {
+        "position": "Hobgoblin Lineman",
+        "name": "Gashnak"
+      },
+      {
+        "position": "Chaos Dwarf Blocker",
+        "name": "Grudgeborn",
+        "extraSkills": [
+          "Guard"
+        ],
+        "strategy": {
+          "standFirm": 1.0
+        }
+      },
+      {
+        "position": "Chaos Dwarf Blocker",
+        "name": "Ironhelm",
+        "extraSkills": [
+          "Guard"
+        ],
+        "strategy": {
+          "standFirm": 1.0
+        }
+      },
+      {
+        "position": "Chaos Dwarf Blocker",
+        "name": "Ashforge",
+        "strategy": {
+          "standFirm": 1.0
+        }
+      },
+      {
+        "position": "Chaos Dwarf Blocker",
+        "name": "Cinder",
+        "strategy": {
+          "standFirm": 1.0
+        }
+      },
+      {
+        "position": "Chaos Dwarf Flamesmith",
+        "name": "Pyrax",
+        "strategy": {
+          "standFirm": 0.8
+        }
+      },
+      {
+        "position": "Chaos Dwarf Flamesmith",
+        "name": "Scorchfist",
+        "strategy": {
+          "standFirm": 0.8
+        }
+      },
+      {
+        "position": "Bull Centaur Blitzer",
+        "name": "Ironhoof",
+        "extraSkills": [
+          "Block"
+        ],
+        "strategy": {
+          "standFirm": 0.6
+        }
+      },
+      {
+        "position": "Bull Centaur Blitzer",
+        "name": "Bronzeback",
+        "strategy": {
+          "standFirm": 0.6
+        }
+      },
+      {
+        "position": "Minotaur",
+        "name": "Bulfrak the Rager"
+      },
+      {
+        "position": "Hobgoblin Lineman",
+        "name": "Tomas"
+      },
+      {
+        "position": "Hobgoblin Lineman",
+        "name": "Petra"
+      },
+      {
+        "position": "Hobgoblin Sneaky Stabba",
+        "name": "Zoran"
+      }
+    ]
+  }
+}

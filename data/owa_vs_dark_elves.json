@@ -1,0 +1,171 @@
+{
+  "simulations": 50000,
+  "team1": {
+    "name": "Old World Wanderers",
+    "race": "Old World Alliance",
+    "rerolls": 3,
+    "hasApothecary": true,
+    "strategy": {
+      "wrestle": 0.6,
+      "standFirm": 0.6,
+      "divingTackle": 0.5,
+      "pro": 0.5
+    },
+    "players": [
+      {
+        "position": "Old World Human Lineman",
+        "name": "Roderick"
+      },
+      {
+        "position": "Old World Human Lineman",
+        "name": "Aldhelm"
+      },
+      {
+        "position": "Old World Human Lineman",
+        "name": "Oswin"
+      },
+      {
+        "position": "Old World Halfling Hopefuls",
+        "name": "Pip",
+        "extraSkills": [
+          "Diving Tackle"
+        ],
+        "strategy": {
+          "divingTackle": 1.0
+        }
+      },
+      {
+        "position": "Old World Halfling Hopefuls",
+        "name": "Merry"
+      },
+      {
+        "position": "Old World Dwarf Lineman",
+        "name": "Gundrun",
+        "extraSkills": [
+          "Guard"
+        ],
+        "strategy": {
+          "standFirm": 0.9
+        }
+      },
+      {
+        "position": "Old World Dwarf Lineman",
+        "name": "Horgar",
+        "extraSkills": [
+          "Guard"
+        ],
+        "strategy": {
+          "standFirm": 0.9
+        }
+      },
+      {
+        "position": "Old World Human Thrower",
+        "name": "Bertram"
+      },
+      {
+        "position": "Old World Human Catcher",
+        "name": "Swiftfoot"
+      },
+      {
+        "position": "Old World Human Blitzer",
+        "name": "Sir Aldric",
+        "extraSkills": [
+          "Mighty Blow"
+        ]
+      },
+      {
+        "position": "Old World Dwarf Troll Slayer",
+        "name": "Grudgebearer",
+        "strategy": {
+          "wrestle": 0.2
+        }
+      },
+      {
+        "position": "Old World Human Lineman",
+        "name": "Nessa"
+      }
+    ]
+  },
+  "team2": {
+    "name": "Druchii Blades",
+    "race": "Dark Elf",
+    "rerolls": 3,
+    "hasApothecary": true,
+    "strategy": {
+      "wrestle": 0.5,
+      "standFirm": 0.2,
+      "divingTackle": 0.7,
+      "pro": 0.5
+    },
+    "players": [
+      {
+        "position": "Dark Elf Lineman",
+        "name": "Naerith"
+      },
+      {
+        "position": "Dark Elf Lineman",
+        "name": "Xalvrath"
+      },
+      {
+        "position": "Dark Elf Lineman",
+        "name": "Draevin"
+      },
+      {
+        "position": "Dark Elf Lineman",
+        "name": "Kelvras",
+        "extraSkills": [
+          "Wrestle"
+        ],
+        "strategy": {
+          "wrestle": 1.0
+        }
+      },
+      {
+        "position": "Runner",
+        "name": "Shadowstep"
+      },
+      {
+        "position": "Assassin",
+        "name": "Nightblade",
+        "strategy": {
+          "divingTackle": 0.0
+        }
+      },
+      {
+        "position": "Assassin",
+        "name": "Silentfang",
+        "extraSkills": [
+          "Dodge"
+        ],
+        "strategy": {
+          "divingTackle": 0.0
+        }
+      },
+      {
+        "position": "Blitzer",
+        "name": "Darkmane",
+        "extraSkills": [
+          "Mighty Blow"
+        ]
+      },
+      {
+        "position": "Blitzer",
+        "name": "Corvath"
+      },
+      {
+        "position": "Witch Elf",
+        "name": "Malara",
+        "extraSkills": [
+          "Tackle"
+        ],
+        "strategy": {
+          "divingTackle": 0.0
+        }
+      },
+      {
+        "position": "Witch Elf",
+        "name": "Sythara"
+      }
+    ]
+  }
+}
