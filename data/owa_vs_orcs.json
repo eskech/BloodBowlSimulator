@@ -138,7 +138,8 @@
         "name": "Gorfang",
         "extraSkills": [
           "Guard"
-        ]
+        ],
+        "isTeamCaptain": true
       },
       {
         "position": "Orc Blitzer",

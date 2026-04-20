@@ -91,11 +91,13 @@ static void printTeamRoster(const TeamConfig& cfg, const SeedData& seed) {
         std::string skills;
         if (pos) for (const auto& s : pos->startingSkills) skills += s + ", ";
         for (const auto& s : p.extraSkills) skills += "[" + s + "], ";
+        if (p.isTeamCaptain) skills += "[Pro (C)], ";
         if (skills.size() >= 2) skills.resize(skills.size() - 2);
 
         if (pos) {
             std::println("    {:32s}  MA:{} ST:{} AG:{} AV:{:2d}  {}",
-                         std::format("{} ({})", p.name, p.position),
+                         std::format("{}{} ({})", p.isTeamCaptain ? "★ " : "",
+                                     p.name, p.position),
                          pos->ma, pos->st, pos->ag, pos->av, skills);
         } else {
             std::println("    {} ({})", p.name, p.position);

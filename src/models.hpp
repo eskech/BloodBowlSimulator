@@ -462,6 +462,7 @@ struct Race {
     int tier{};
     int rerollCost{};
     bool canHaveApothecary{};
+    bool canHaveTeamCaptain{};
     std::vector<RosterPosition> positions;
 
     const RosterPosition* findPosition(std::string_view posName) const {
@@ -529,6 +530,7 @@ struct PlayerConfig {
     std::string position;
     Skills extraSkills;           // skills added beyond position starting skills
     StrategyOverride strategy;    // per-player strategy overrides (optional)
+    bool isTeamCaptain{false};    // gains Pro; free team re-roll on natural 6
 };
 
 struct TeamConfig {
@@ -588,6 +590,7 @@ struct PlayerState {
     bool hasBall{false};
     bool activated{false};        // already took an action this turn — prevents double-activation
     bool inReserves{false};       // waiting in reserves/bench (Riotous Rookies, etc.)
+    bool isTeamCaptain{false};    // gains Pro; free team re-roll on natural 6 while on pitch
     int  stunTimer{0};
 
     bool isActive()   const { return !ko && !casualty && !inReserves; }
@@ -622,6 +625,12 @@ struct TeamState {
     int touchdowns{0};
     int passesAttempted{0};
     int passesCompleted{0};
+
+    bool captainActive() const {
+        for (const auto& p : allPlayers())
+            if (p.isTeamCaptain && p.isActive() && !p.stunned) return true;
+        return false;
+    }
 
     PlayerState* ballCarrier() {
         for (auto& p : allPlayers())

@@ -67,22 +67,27 @@ Usage: bloodbowl <match.json> [match2.json ...] [options]
 {
   "simulations": 50000,
   "team1": {
-    "name": "Amazon Warriors",
-    "race": "Amazons",
+    "name": "Reikland Reavers",
+    "race": "Humans",
     "rerolls": 3,
     "hasApothecary": true,
     "riotousRookies": false,
     "strategy": {
-      "wrestle": 0.9,
-      "standFirm": 0.0,
-      "divingTackle": 0.7,
-      "pro": 0.6
+      "wrestle": 0.5,
+      "standFirm": 0.4,
+      "divingTackle": 0.5,
+      "pro": 0.5
     },
     "players": [
       {
-        "position": "Eagle Warrior Linewoman",
-        "name": "Artemis",
-        "extraSkills": ["Wrestle"],
+        "position": "Human Blitzer",
+        "name": "Iron Fist",
+        "extraSkills": ["Guard"],
+        "isTeamCaptain": true
+      },
+      {
+        "position": "Human Lineman",
+        "name": "Aldric",
         "strategy": { "wrestle": 1.0 }
       }
     ]
@@ -115,14 +120,28 @@ Strategy can be set at team level and overridden per player. Each player also in
 
 **Player fields**
 
-| Field | Description |
-|---|---|
-| `position` | Must match a roster position in the seed data for the team's race |
-| `name` | Display name |
-| `extraSkills` | Additional skills beyond starting skills (validated against allowed categories) |
-| `strategy` | Per-player strategy overrides (merged with team defaults) |
+| Field | Type | Description |
+|---|---|---|
+| `position` | string | Must match a roster position in the seed data for the team's race |
+| `name` | string | Display name |
+| `extraSkills` | array | Additional skills beyond starting skills (validated against allowed categories) |
+| `strategy` | object | Per-player strategy overrides (merged with team defaults) |
+| `isTeamCaptain` | bool | Designate this player as Team Captain (see below) |
 
-Rosters can have 11–16 players. Positional limits from the seed data are enforced at load time.
+Rosters can have 11–16 players. Positional limits from the seed data are enforced at load time. At most 11 players are fielded per drive; extras sit in the Reserves box and return at the next kickoff.
+
+### Team Captain
+
+The Team Captain special rule is available to **Humans** and **Orcs** only. The loader rejects `isTeamCaptain: true` on any other race.
+
+Rules enforced:
+- Exactly one captain per team
+- Big Guys cannot be captain
+- Captain automatically gains **Pro** (free, bypasses normal skill access checks)
+- While the captain is active on the pitch: before spending a team re-roll, roll a D6 — on a **natural 6** the re-roll is free and the count is not decremented
+- Captain is always fielded if able (never benched by the 11-player cap)
+
+The captain is marked with `★` and `[Pro (C)]` in the roster display.
 
 ### Tournament file
 
@@ -162,10 +181,10 @@ Rosters can have 11–16 players. Positional limits from the seed data are enfor
 | File | Description |
 |---|---|
 | `example_match.json` | Amazons vs Dwarves |
-| `humans_vs_orcs.json` | Humans vs Orcs |
+| `humans_vs_orcs.json` | Humans (with captain) vs Orcs (with captain) |
 | `owa_vs_dark_elves.json` | Old World Alliance vs Dark Elves |
 | `owa_vs_imperial.json` | Old World Alliance vs Imperial Nobility |
-| `owa_vs_orcs.json` | Old World Alliance vs Orcs |
+| `owa_vs_orcs.json` | Old World Alliance vs Orcs (with captain) |
 | `snotlings_vs_chaos_dwarves.json` | Snotlings (with Riotous Rookies) vs Chaos Dwarves |
 | `wood_elves_vs_nurgle.json` | Wood Elves vs Nurgle |
 | `example_tournament.json` | 8-team Swiss tournament, Dutch pairing |
@@ -204,10 +223,22 @@ All zones are expressed from the **offense's perspective** — the ball carrier 
 **What the zone model does not capture:**
 
 - Individual square positions, formation geometry, or exact player coordinates.
+- Wide Zone column restrictions (max 2 players per wide zone) — not representable in a 5-zone model.
 - Cage corners, sideline pressure, or exact tackle zone coverage counts per square.
-- The difference between a player standing in the middle of a zone versus on its edge.
 
 The tradeoff is speed: the zone model runs over 70,000 games per second on a 16-core machine, enabling statistically reliable estimates from tens of thousands of simulations.
+
+### Drive setup
+
+At the start of each drive the following rules are applied in order:
+
+1. **Return benched players** — players that sat out last drive due to the 11-player cap return to the available pool
+2. **KO recovery** — each KO'd player rolls 4+ to return
+3. **Swarming** — Swarming-trait players in Reserves may enter (see Swarming below)
+4. **11-player cap** — at most 11 players per team may be fielded per drive; excess are placed in the Reserves box and return automatically at the next kickoff. The Team Captain is always fielded first and is never benched by this cap. Benching priority: from the end of the roster (typically reserve linemen)
+5. **Zone placement** — at least 3 players per team placed on the Line of Scrimmage (`Midfield`); remaining active players fill `OwnHalf` (offense) or `OppHalf` (defense)
+
+The Wide Zone restriction (maximum 2 players per wide zone) is a lateral constraint that does not map to the zone model and is not enforced.
 
 ### Movement
 
@@ -238,7 +269,7 @@ effective  = clamp(raw − screened, 0, 4)
 
 **Cage effect**: offensive players in the same zone as the ball carrier reduce the effective tackle zones. A player with the Guard skill cancels one tackle zone outright; regular blockers cancel at two-for-one. A well-formed cage of four blockers can reduce four tackle zones to zero, making the carrier nearly impossible to reach without a Blitz action.
 
-**Cap of 4**: being surrounded by four or more defenders is now meaningfully worse than facing two. With four tackle zones, even an AG 2 carrier (normally 83% dodge success) succeeds only 17% of the time on each crossing attempt.
+**Cap of 4**: being surrounded by four or more defenders is meaningfully worse than facing two. With four tackle zones, even an AG 2 carrier (normally 83% dodge success) succeeds only 17% of the time on each crossing attempt.
 
 This makes zone control a genuine strategic factor. Bash teams that mass players in one zone protect their carrier effectively; teams that spread thin lose the cage benefit.
 
@@ -246,8 +277,7 @@ This makes zone control a genuine strategic factor. Bash teams that mass players
 
 - **Two halves** of 8 turns each, both teams alternating turns per half
 - **Coin toss** determines which team receives first
-- **Kickoff** at the start of each half and after every touchdown
-- **KO recovery** at every kickoff: each KO'd player rolls 4+ to return; Swarming players in reserves may also enter
+- **Kickoff** at the start of each half and after every touchdown, following the drive setup sequence above
 - **Touchdown** ends the current drive and resets positions
 
 ### Turn structure
@@ -256,7 +286,7 @@ Each turn proceeds in this order:
 
 1. **Stand-up phase**: stunned players recover; prone players stand (simplified — no MA cost)
 2. **Blocking phase**: up to 3 offensive blocks (each blocker activates once)
-   - A successful push causes the blocker to follow up one zone forward, creating a lane
+   - A successful push causes the blocker to follow up one zone forward, opening a lane for the carrier
 3. **Defense blitz**: one defender may move into the carrier's zone and attempt a block
    - Probability varies with turns remaining: 67% early (turns 6–8), 50% mid (3–5), 33% late (1–2), reflecting fresh vs depleted defenses
 4. **Ball carrier action**: carrier either passes (if a receiver is open ahead) or runs
@@ -283,7 +313,7 @@ Each turn proceeds in this order:
 | **Stand Firm** | Resist being pushed back when blocked |
 | **Mighty Blow** | +1 to armour/injury rolls |
 | **Claws** | Armour rolls of 8+ break armour regardless of AV |
-| **Guard** | Cancels one tackle zone on the ball carrier when in the same zone (cage effect) |
+| **Guard** | Cancels one effective tackle zone on the ball carrier when in the same zone (cage effect) |
 | **Sprint** | One extra zone-crossing attempt per activation |
 | **Sure Feet** | Re-roll a failed Sprint roll |
 | **Nerves of Steel** | Ignore tackle zone penalties on pass and catch rolls |
@@ -300,6 +330,12 @@ All 175 skills from the 2025 rulebook are stored in a bitmask for O(1) lookup. S
 - **Apothecary**: once per game, on a Casualty result — opponent re-rolls, coach takes the better outcome
 - **Regeneration**: after apothecary, 4+ converts Casualty to Reserves (modelled as KO)
 - **KO recovery**: 4+ roll at every drive kickoff
+
+### Special rules
+
+| Rule | Teams | Effect |
+|---|---|---|
+| **Team Captain** | Humans, Orcs | One non-Big-Guy player gains Pro for free; natural 6 before a team re-roll makes it free; captain always fielded if able |
 
 ### Inducements
 

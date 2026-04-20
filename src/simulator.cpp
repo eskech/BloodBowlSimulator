@@ -45,13 +45,17 @@ TeamState buildTeamState(const TeamConfig& cfg, const SeedData& seed) {
         }
         for (const auto& sk : pc.extraSkills) setBit(sk);
 
+        // Team Captain: gains Pro regardless of position skill access (BB2020 special rule).
+        if (pc.isTeamCaptain) setBit("Pro");
+
         // Resolve effective strategy: player override merged into team default
         PlayerStrategy strategy = pc.strategy.mergedWith(cfg.defaultStrategy);
 
         PlayerState ps;
-        ps.stats    = std::move(stats);
-        ps.strategy = strategy;
-        ps.zone     = Zone::OwnHalf;
+        ps.stats         = std::move(stats);
+        ps.strategy      = strategy;
+        ps.zone          = Zone::OwnHalf;
+        ps.isTeamCaptain = pc.isTeamCaptain;
         ts.players[ts.playerCount++] = std::move(ps);
     }
 
@@ -91,6 +95,12 @@ namespace {
 // Assign starting positions on kickoff
 // offenseTeam receives the ball.
 void setupKickoff(TeamState& offense, TeamState& defense, Dice& dice) {
+    // Return players that were benched last drive by the 11-player cap.
+    // Swarming-trait players stay in reserves — they enter only via Swarming.
+    for (TeamState* team : {&offense, &defense})
+        for (auto& p : team->allPlayers())
+            if (p.inReserves && !p.stats.has(SK::Swarming)) p.inReserves = false;
+
     // KO recovery: each KO'd player rolls 4+ to return at every new drive (BB2020 §4.2)
     for (auto& p : offense.allPlayers()) {
         if (p.ko && !p.casualty && dice.d6() >= 4) {
@@ -118,6 +128,23 @@ void setupKickoff(TeamState& offense, TeamState& defense, Dice& dice) {
                 p.inReserves = false;
                 --canEnter;
             }
+        }
+    }
+
+    // 11-player cap: at most 11 players per team per drive (BB2020 setup rules).
+    // Team Captain must be fielded if able — exempt from benching.
+    // Bench from the end of the roster (typically reserve linemen/extras).
+    for (TeamState* team : {&offense, &defense}) {
+        int active = 0;
+        for (const auto& p : team->allPlayers())
+            if (!p.ko && !p.casualty && !p.inReserves) ++active;
+
+        int toBench = active - 11;
+        for (int i = team->playerCount - 1; i >= 0 && toBench > 0; --i) {
+            auto& p = team->players[static_cast<size_t>(i)];
+            if (p.ko || p.casualty || p.inReserves || p.isTeamCaptain) continue;
+            p.inReserves = true;
+            --toBench;
         }
     }
 
@@ -300,7 +327,7 @@ bool advanceBallCarrier(TeamState& offense, TeamState& defense, Dice& dice) {
                     anyRerollUsed = true;
                 }
                 if (!dodged && !anyRerollUsed && offense.rerollsRemaining > 0) {
-                    --offense.rerollsRemaining;
+                    if (!offense.captainActive() || dice.d6() != 6) --offense.rerollsRemaining;
                     dodged = dice.successRoll(std::clamp(ag + zones, 2, 6));
                 }
                 return dodged;
@@ -314,7 +341,7 @@ bool advanceBallCarrier(TeamState& offense, TeamState& defense, Dice& dice) {
                     bool picked = dice.pickupRoll(p.stats.ag, 0, sureHands);
                     bool skillUsed = p.stats.has(SK::SureHands) && !sureHands;
                     if (!picked && !skillUsed && defense.rerollsRemaining > 0) {
-                        --defense.rerollsRemaining;
+                        if (!defense.captainActive() || dice.d6() != 6) --defense.rerollsRemaining;
                         picked = dice.successRoll(std::clamp(p.stats.ag, 2, 6));
                     }
                     if (picked) p.hasBall = true;
@@ -389,7 +416,7 @@ bool attemptPass(TeamState& offense, const TeamState& defense, Dice& dice) {
     bool thrown = dice.passRoll(effectivePa, rangeMod, passReroll);
     bool passSkillUsed = carrier->stats.has(SK::Pass) && !passReroll;
     if (!thrown && !passSkillUsed && offense.rerollsRemaining > 0) {
-        --offense.rerollsRemaining;
+        if (!offense.captainActive() || dice.d6() != 6) --offense.rerollsRemaining;
         thrown = dice.successRoll(std::clamp(effectivePa + rangeMod, 2, 6));
     }
     if (!thrown) return false;
@@ -406,7 +433,7 @@ bool attemptPass(TeamState& offense, const TeamState& defense, Dice& dice) {
     bool caught = dice.catchRoll(effectiveCatchAg, catchReroll);
     bool catchSkillUsed = receiver->stats.has(SK::Catch) && !catchReroll;
     if (!caught && !catchSkillUsed && offense.rerollsRemaining > 0) {
-        --offense.rerollsRemaining;
+        if (!offense.captainActive() || dice.d6() != 6) --offense.rerollsRemaining;
         caught = dice.successRoll(std::clamp(effectiveCatchAg, 2, 6));
     }
     if (caught) {
@@ -541,7 +568,7 @@ bool simulateTurn(TeamState& offense, TeamState& defense, Dice& dice,
                                     bool picked = dice.pickupRoll(p2.stats.ag, 0, sureHands);
                                     bool skillUsed = p2.stats.has(SK::SureHands) && !sureHands;
                                     if (!picked && !skillUsed && defense.rerollsRemaining > 0) {
-                                        --defense.rerollsRemaining;
+                                        if (!defense.captainActive() || dice.d6() != 6) --defense.rerollsRemaining;
                                         picked = dice.successRoll(std::clamp(p2.stats.ag, 2, 6));
                                     }
                                     if (picked) p2.hasBall = true;

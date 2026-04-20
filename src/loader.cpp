@@ -63,10 +63,11 @@ std::expected<SeedData, std::string> loadSeedData(std::string_view path) {
 
     for (const auto& rj : j["teamNames"]) {
         Race race;
-        race.name              = rj.value("name", "");
-        race.tier              = rj.value("tier", 1);
-        race.rerollCost        = rj.value("rerollCost", 60);
-        race.canHaveApothecary = rj.value("canHaveApothecary", false);
+        race.name               = rj.value("name", "");
+        race.tier               = rj.value("tier", 1);
+        race.rerollCost         = rj.value("rerollCost", 60);
+        race.canHaveApothecary  = rj.value("canHaveApothecary", false);
+        race.canHaveTeamCaptain = rj.value("canHaveTeamCaptain", false);
 
         if (rj.contains("rosterPositions")) {
             for (const auto& pj : rj["rosterPositions"]) {
@@ -127,8 +128,9 @@ parseTeamConfig(const json& tj, const SeedData& seed) {
 
     for (const auto& pj : tj["players"]) {
         PlayerConfig pc;
-        pc.name     = pj.value("name", "Player");
-        pc.position = pj.value("position", "");
+        pc.name          = pj.value("name", "Player");
+        pc.position      = pj.value("position", "");
+        pc.isTeamCaptain = pj.value("isTeamCaptain", false);
 
         const RosterPosition* rpos = race ? race->findPosition(pc.position) : nullptr;
         if (!rpos)
@@ -160,6 +162,33 @@ parseTeamConfig(const json& tj, const SeedData& seed) {
 
     if (cfg.players.empty())
         return std::unexpected(std::format("Team '{}' has no players", cfg.name));
+
+    // ── Team Captain validation ──────────────────────────────────────────────
+    const Race* captainRace = seed.findRace(cfg.race);
+    int captainCount = 0;
+    for (const auto& pc : cfg.players) {
+        if (!pc.isTeamCaptain) continue;
+        ++captainCount;
+        if (captainRace && !captainRace->canHaveTeamCaptain)
+            return std::unexpected(
+                std::format("Team '{}' (race '{}') does not have the Team Captain special rule",
+                            cfg.name, cfg.race));
+        // Big Guy check: look up the position's keywords
+        if (captainRace) {
+            const RosterPosition* pos = captainRace->findPosition(pc.position);
+            if (pos) {
+                bool isBigGuy = pos->keywords.find("Big Guy") != std::string::npos;
+                if (isBigGuy)
+                    return std::unexpected(
+                        std::format("Player '{}' ({}) is a Big Guy and cannot be Team Captain",
+                                    pc.name, pc.position));
+            }
+        }
+    }
+    if (captainCount > 1)
+        return std::unexpected(
+            std::format("Team '{}' has {} Team Captains — only one is allowed",
+                        cfg.name, captainCount));
 
     return cfg;
 }

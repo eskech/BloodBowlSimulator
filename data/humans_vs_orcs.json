@@ -65,7 +65,8 @@
         "name": "Iron Fist",
         "extraSkills": [
           "Guard"
-        ]
+        ],
+        "isTeamCaptain": true
       },
       {
         "position": "Human Blitzer",
@@ -121,7 +122,8 @@
         "name": "Gorfang",
         "extraSkills": [
           "Guard"
-        ]
+        ],
+        "isTeamCaptain": true
       },
       {
         "position": "Orc Blitzer",
