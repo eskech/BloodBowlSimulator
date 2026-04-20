@@ -148,7 +148,7 @@ Rosters can have 11–16 players. Positional limits from the seed data are enfor
 |---|---|
 | `tournaments` | Number of full bracket simulations to run |
 | `rounds` | Swiss rounds per tournament |
-| `matchGames` | Games per head-to-head match (majority wins the match) |
+| `matchGames` | Games per head-to-head match (majority wins the match). Use 1 for realistic variance; higher values converge to expected win rate |
 | `pairingSystem` | `"dutch"` (top half vs bottom half) or `"monrad"` (consecutive pairs) |
 
 **Scoring:** Win = 3 pts, Draw = 1 pt, Loss = 0 pt. Tiebreakers: net score → net casualties → random.
@@ -170,36 +170,101 @@ Rosters can have 11–16 players. Positional limits from the seed data are enfor
 | `wood_elves_vs_nurgle.json` | Wood Elves vs Nurgle |
 | `example_tournament.json` | 8-team Swiss tournament, Dutch pairing |
 | `league_16teams.json` | 16-team Swiss tournament, Monrad pairing |
+| `grand_tournament_32teams.json` | 32-team grand tournament covering all 31 races, Monrad pairing |
 
 ---
 
 ## What is simulated
 
-### Pitch model
+### Zone system
 
-The game is modelled as **5 abstract zones** rather than the full 26×15 grid:
+The real Blood Bowl pitch is a 26×15 grid of squares (390 squares total). The simulator abstracts this into **5 linear zones**, each representing a band of columns across the full width of the pitch:
 
 ```
-OwnEndZone → OwnHalf → Midfield → OppHalf → OppEndZone
+   Defense                                              Offense
+   end zone                                             end zone
+      │                                                    │
+      ▼                                                    ▼
+┌──────────┬──────────────┬──────────┬──────────────┬──────────┐
+│OwnEndZone│   OwnHalf    │ Midfield │   OppHalf    │OppEndZone│
+│ cols 1-2 │  cols 3-13   │ cols13-14│  cols 14-24  │ cols25-26│
+└──────────┴──────────────┴──────────┴──────────────┴──────────┘
+     0             1            2             3            4
 ```
 
-Player positions, tackle zones, and movement are all zone-based. Individual square coordinates are not tracked.
+All zones are expressed from the **offense's perspective** — the ball carrier scores by reaching `OppEndZone` (zone 4). Zones flip at every new drive so each team always attacks toward zone 4.
+
+**What the zone model captures:**
+
+- **Player distribution**: how many players each team has in each band of the pitch. Three players start on the Line of Scrimmage (Midfield), the rest in OwnHalf or OppHalf.
+- **Tackle zones**: the number of active defenders in the same zone as the ball carrier, which determines how hard it is to dodge through that area.
+- **Blocking range**: a player can block any opponent in the same zone or an adjacent zone (±1).
+- **Pass range**: a pass to the next zone ahead is a short pass; a pass directly to OppEndZone incurs a range modifier.
+
+**What the zone model does not capture:**
+
+- Individual square positions, formation geometry, or exact player coordinates.
+- Cage corners, sideline pressure, or exact tackle zone coverage counts per square.
+- The difference between a player standing in the middle of a zone versus on its edge.
+
+The tradeoff is speed: the zone model runs over 70,000 games per second on a 16-core machine, enabling statistically reliable estimates from tens of thousands of simulations.
+
+### Movement
+
+Ball carrier movement each turn is gated by **MA (Movement Allowance)**, which determines how many zone-crossing attempts the carrier gets per activation:
+
+| MA | Zone attempts | Typical positions |
+|----|--------------|-------------------|
+| 4  | 1 | Dwarves, Tomb King skeletons, Nurgle Rotspawn |
+| 5  | 1 | Chaos Warriors, Orcs, most Pestigors |
+| 6  | 2 | Humans, Elf linemen, most standard positions |
+| 7  | 2 | Blitzers |
+| 8  | 2 | Elf Catchers, Wardancers, Gutter Runners |
+| 9+ | 3 | Very rare (certain big guys and special players) |
+
+Sprint adds +1 attempt on a 2+ roll (with Sure Feet as a re-roll). This means a Dwarf ball carrier grinds one zone per turn while an Elf Catcher covers two — matching the real game's pace difference.
+
+Each zone-crossing attempt requires the carrier to dodge through any tackle zones present in their current zone. Failing a dodge drops the ball and may trigger a turnover.
+
+### Tackle zones and screening
+
+The effective number of tackle zones on a player in a given zone is calculated as:
+
+```
+raw        = number of active, non-prone defenders in the zone
+screened   = (Guards in zone × 1) + (other active offensive blockers in zone ÷ 2)
+effective  = clamp(raw − screened, 0, 4)
+```
+
+**Cage effect**: offensive players in the same zone as the ball carrier reduce the effective tackle zones. A player with the Guard skill cancels one tackle zone outright; regular blockers cancel at two-for-one. A well-formed cage of four blockers can reduce four tackle zones to zero, making the carrier nearly impossible to reach without a Blitz action.
+
+**Cap of 4**: being surrounded by four or more defenders is now meaningfully worse than facing two. With four tackle zones, even an AG 2 carrier (normally 83% dodge success) succeeds only 17% of the time on each crossing attempt.
+
+This makes zone control a genuine strategic factor. Bash teams that mass players in one zone protect their carrier effectively; teams that spread thin lose the cage benefit.
 
 ### Game flow
 
 - **Two halves** of 8 turns each, both teams alternating turns per half
 - **Coin toss** determines which team receives first
 - **Kickoff** at the start of each half and after every touchdown
-- **KO recovery** at every kickoff: each KO'd player rolls 4+ to return
+- **KO recovery** at every kickoff: each KO'd player rolls 4+ to return; Swarming players in reserves may also enter
 - **Touchdown** ends the current drive and resets positions
 
-### Turn actions (per-turn limits enforced)
+### Turn structure
 
-Each turn the following BB2020 action limits are enforced:
-- One **Blitz** action per team per turn (defence may also blitz the ball carrier)
-- One **Pass** action per team per turn
-- Blocking phase: up to 3 Block actions per turn (simplified)
-- Each player may only **activate once** per turn
+Each turn proceeds in this order:
+
+1. **Stand-up phase**: stunned players recover; prone players stand (simplified — no MA cost)
+2. **Blocking phase**: up to 3 offensive blocks (each blocker activates once)
+   - A successful push causes the blocker to follow up one zone forward, creating a lane
+3. **Defense blitz**: one defender may move into the carrier's zone and attempt a block
+   - Probability varies with turns remaining: 67% early (turns 6–8), 50% mid (3–5), 33% late (1–2), reflecting fresh vs depleted defenses
+4. **Ball carrier action**: carrier either passes (if a receiver is open ahead) or runs
+
+**Per-turn action limits enforced (BB2020 §8):**
+- One Blitz action per team per turn
+- One Pass action per team per turn
+- Each player activates at most once per turn
 
 ### Skills simulated
 
@@ -218,10 +283,10 @@ Each turn the following BB2020 action limits are enforced:
 | **Stand Firm** | Resist being pushed back when blocked |
 | **Mighty Blow** | +1 to armour/injury rolls |
 | **Claws** | Armour rolls of 8+ break armour regardless of AV |
-| **Guard** | Counts as an assist even when in a tackle zone |
+| **Guard** | Cancels one tackle zone on the ball carrier when in the same zone (cage effect) |
 | **Sprint** | One extra zone-crossing attempt per activation |
 | **Sure Feet** | Re-roll a failed Sprint roll |
-| **Nerves of Steel** | Ignore tackle zone penalties on pass and catch |
+| **Nerves of Steel** | Ignore tackle zone penalties on pass and catch rolls |
 | **Pro** | Once per activation: re-roll any failed roll on 3+ |
 | **Regeneration** | On a Casualty result: roll 4+ to place in Reserves instead (after apothecary) |
 | **Swarming** | Snotling Linemen only — D3 enter the pitch from Reserves each drive, capped by on-pitch Swarming count |
@@ -232,7 +297,7 @@ All 175 skills from the 2025 rulebook are stored in a bitmask for O(1) lookup. S
 
 - **Armour roll** (2d6 > AV): determines if the player is injured after being knocked down
 - **Injury roll** (2d6): Stunned (2–7), KO (8–9), Casualty (10–12)
-- **Apothecary**: once per game, on a Casualty result — re-roll and take the better outcome
+- **Apothecary**: once per game, on a Casualty result — opponent re-rolls, coach takes the better outcome
 - **Regeneration**: after apothecary, 4+ converts Casualty to Reserves (modelled as KO)
 - **KO recovery**: 4+ roll at every drive kickoff
 
@@ -240,14 +305,14 @@ All 175 skills from the 2025 rulebook are stored in a bitmask for O(1) lookup. S
 
 | Inducement | Teams | Effect |
 |---|---|---|
-| **Riotous Rookies** | Snotlings | Adds 2D3+1 Snotling Lineman Journeymen before the game; they enter via Swarming each drive |
+| **Riotous Rookies** | Snotlings | Adds 2D3+1 Snotling Lineman Journeymen before the game; they start in Reserves and enter via Swarming each drive |
 
 ### Swiss tournament
 
 - **Dutch pairing**: sort standings, split into top and bottom halves, pair across
+- **Monrad pairing**: sort standings, pair consecutive (1st vs 2nd, 3rd vs 4th, …)
 - **Bye**: lowest-ranked team without a previous bye gets a free win (3 pts, +1 net score)
 - **Rematch avoidance**: one-pass adjacent swap when pairing would create a rematch
-- **Monrad pairing**: sort standings, pair consecutive (1st vs 2nd, 3rd vs 4th, …)
 
 ### Parallelism
 
