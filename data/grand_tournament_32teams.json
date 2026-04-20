@@ -1,7 +1,7 @@
 {
   "tournaments": 10000,
   "rounds": 4,
-  "matchGames": 10000,
+  "matchGames": 1,
   "pairingSystem": "monrad",
   "teams": [
     {
@@ -10,15 +10,18 @@
       "rerolls": 3,
       "hasApothecary": true,
       "strategy": {
-        "wrestle": 0.3,
-        "standFirm": 0.3,
-        "divingTackle": 0.3,
-        "pro": 0.5
+        "wrestle": 0.8,
+        "standFirm": 0.2,
+        "divingTackle": 0.7,
+        "pro": 0.6
       },
       "players": [
         {
           "position": "Python Warrior Thrower",
-          "name": "Selene"
+          "name": "Selene",
+          "extraSkills": [
+            "Accurate"
+          ]
         },
         {
           "position": "Python Warrior Thrower",
@@ -26,7 +29,10 @@
         },
         {
           "position": "Piranha Warrior Blitzer",
-          "name": "Yana"
+          "name": "Yana",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "Piranha Warrior Blitzer",
@@ -34,7 +40,10 @@
         },
         {
           "position": "Jaguar Warrior Blocker",
-          "name": "Gaia"
+          "name": "Gaia",
+          "extraSkills": [
+            "Guard"
+          ]
         },
         {
           "position": "Jaguar Warrior Blocker",
@@ -42,7 +51,10 @@
         },
         {
           "position": "Eagle Warrior Linewoman",
-          "name": "Nike"
+          "name": "Nike",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "Eagle Warrior Linewoman",
@@ -76,43 +88,42 @@
       "rerolls": 3,
       "hasApothecary": true,
       "strategy": {
-        "wrestle": 0.5,
-        "standFirm": 0.2,
-        "divingTackle": 0.3,
+        "wrestle": 0.3,
+        "standFirm": 0.7,
+        "divingTackle": 0.1,
         "pro": 0.4
       },
       "players": [
         {
           "position": "Trained Troll",
-          "name": "Gazz"
+          "name": "Stomper"
         },
         {
           "position": "Goblin Bruiser Lineman",
-          "name": "Gashnak"
+          "name": "Gorz",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "Goblin Bruiser Lineman",
-          "name": "Grak"
+          "name": "Skarnak"
         },
         {
           "position": "Goblin Bruiser Lineman",
-          "name": "Zarg"
+          "name": "Kruk"
         },
         {
           "position": "Goblin Bruiser Lineman",
-          "name": "Wrog"
+          "name": "Skarr"
         },
         {
           "position": "Goblin Bruiser Lineman",
-          "name": "Gorz"
+          "name": "Brak"
         },
         {
           "position": "Goblin Bruiser Lineman",
-          "name": "Drak"
-        },
-        {
-          "position": "Goblin Bruiser Lineman",
-          "name": "Blorg"
+          "name": "Vrak"
         },
         {
           "position": "Goblin Bruiser Lineman",
@@ -120,11 +131,11 @@
         },
         {
           "position": "Goblin Bruiser Lineman",
-          "name": "Muzg"
+          "name": "Drakk"
         },
         {
           "position": "Goblin Bruiser Lineman",
-          "name": "Nazgul"
+          "name": "Grak"
         },
         {
           "position": "Goblin Bruiser Lineman",
@@ -132,7 +143,11 @@
         },
         {
           "position": "Goblin Bruiser Lineman",
-          "name": "Skrag"
+          "name": "Bolgut"
+        },
+        {
+          "position": "Goblin Bruiser Lineman",
+          "name": "Wurg"
         }
       ]
     },
@@ -143,70 +158,79 @@
       "hasApothecary": true,
       "strategy": {
         "wrestle": 0.5,
-        "standFirm": 0.7,
-        "divingTackle": 0.4,
-        "pro": 0.6
+        "standFirm": 0.4,
+        "divingTackle": 0.5,
+        "pro": 0.5
       },
       "players": [
         {
           "position": "Knight Thrower",
-          "name": "Heinrich"
+          "name": "Manfred",
+          "extraSkills": [
+            "Accurate"
+          ]
         },
         {
           "position": "Knight Thrower",
-          "name": "Quentin"
+          "name": "Norbert"
         },
         {
           "position": "Knight Catcher",
-          "name": "Ottilie"
+          "name": "Bertram",
+          "extraSkills": [
+            "Dodge"
+          ]
         },
         {
           "position": "Knight Catcher",
-          "name": "Conrad"
-        },
-        {
-          "position": "Grail Knight",
-          "name": "J\u00fcrgen"
-        },
-        {
-          "position": "Grail Knight",
-          "name": "Ludwig"
-        },
-        {
-          "position": "Squire",
-          "name": "Gareth"
-        },
-        {
-          "position": "Squire",
-          "name": "Johanna"
-        },
-        {
-          "position": "Squire",
-          "name": "Xander"
-        },
-        {
-          "position": "Squire",
-          "name": "Katrin"
-        },
-        {
-          "position": "Squire",
           "name": "Rudolf"
         },
         {
-          "position": "Squire",
+          "position": "Grail Knight",
+          "name": "Dagmar"
+        },
+        {
+          "position": "Grail Knight",
           "name": "Ingrid"
         },
         {
           "position": "Squire",
-          "name": "Frieda"
+          "name": "Nora",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "Squire",
-          "name": "Pieter"
+          "name": "Conrad"
         },
         {
           "position": "Squire",
-          "name": "Zbigniew"
+          "name": "J\u00fcrgen"
+        },
+        {
+          "position": "Squire",
+          "name": "Siegbert"
+        },
+        {
+          "position": "Squire",
+          "name": "Ulrich"
+        },
+        {
+          "position": "Squire",
+          "name": "Frederick"
+        },
+        {
+          "position": "Squire",
+          "name": "Ludwig"
+        },
+        {
+          "position": "Squire",
+          "name": "Elfriede"
+        },
+        {
+          "position": "Squire",
+          "name": "Dietrich"
         }
       ]
     },
@@ -216,23 +240,26 @@
       "rerolls": 3,
       "hasApothecary": false,
       "strategy": {
-        "wrestle": 0.4,
-        "standFirm": 0.2,
-        "divingTackle": 0.3,
-        "pro": 0.6
+        "wrestle": 0.5,
+        "standFirm": 0.7,
+        "divingTackle": 0.1,
+        "pro": 0.4
       },
       "players": [
         {
           "position": "Chosen Blocker",
-          "name": "Zarnax"
+          "name": "Demonax",
+          "extraSkills": [
+            "Guard"
+          ]
         },
         {
           "position": "Chosen Blocker",
-          "name": "Xorrath"
+          "name": "Fyrgast"
         },
         {
           "position": "Chosen Blocker",
-          "name": "Skarnak"
+          "name": "Tyrax"
         },
         {
           "position": "Chosen Blocker",
@@ -240,19 +267,30 @@
         },
         {
           "position": "Chaos Troll",
-          "name": "Boulder"
+          "name": "Grinder"
         },
         {
           "position": "Chaos Ogre",
-          "name": "Hexar"
+          "name": "Skarnak"
         },
         {
           "position": "Minotaur",
-          "name": "Belfegore"
+          "name": "Exorath"
         },
         {
           "position": "Beastman Runner Lineman",
-          "name": "Jharnak"
+          "name": "Zarnax",
+          "extraSkills": [
+            "Block"
+          ]
+        },
+        {
+          "position": "Beastman Runner Lineman",
+          "name": "Izalgor"
+        },
+        {
+          "position": "Beastman Runner Lineman",
+          "name": "Perdrak"
         },
         {
           "position": "Beastman Runner Lineman",
@@ -260,23 +298,19 @@
         },
         {
           "position": "Beastman Runner Lineman",
-          "name": "Voldar"
-        },
-        {
-          "position": "Beastman Runner Lineman",
           "name": "Malthrax"
         },
         {
           "position": "Beastman Runner Lineman",
-          "name": "Demonax"
+          "name": "Voldar"
         },
         {
           "position": "Beastman Runner Lineman",
-          "name": "Umbrax"
+          "name": "Xorrath"
         },
         {
           "position": "Beastman Runner Lineman",
-          "name": "Gorath"
+          "name": "Lorgar"
         },
         {
           "position": "Beastman Runner Lineman",
@@ -290,55 +324,68 @@
       "rerolls": 3,
       "hasApothecary": true,
       "strategy": {
-        "wrestle": 0.5,
-        "standFirm": 0.5,
-        "divingTackle": 0.5,
+        "wrestle": 0.2,
+        "standFirm": 0.8,
+        "divingTackle": 0.0,
         "pro": 0.4
       },
       "players": [
         {
           "position": "Hobgoblin Sneaky Stabba",
-          "name": "Sk\u00fali"
+          "name": "V\u00e1li",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "Hobgoblin Sneaky Stabba",
-          "name": "Hamfist"
+          "name": "Drengr"
         },
         {
           "position": "Chaos Dwarf Blocker",
-          "name": "Thorin"
+          "name": "Dolgrin",
+          "extraSkills": [
+            "Guard"
+          ]
         },
         {
           "position": "Chaos Dwarf Blocker",
-          "name": "Yngvar"
+          "name": "Bragr"
         },
         {
           "position": "Chaos Dwarf Blocker",
-          "name": "Fjalar"
+          "name": "Thrain"
         },
         {
           "position": "Chaos Dwarf Blocker",
-          "name": "Boldr"
-        },
-        {
-          "position": "Chaos Dwarf Flamesmith",
           "name": "Ragnar"
         },
         {
           "position": "Chaos Dwarf Flamesmith",
-          "name": "Dolgrin"
-        },
-        {
-          "position": "Bull Centaur Blitzer",
           "name": "Zalin"
         },
         {
+          "position": "Chaos Dwarf Flamesmith",
+          "name": "Ugni"
+        },
+        {
           "position": "Bull Centaur Blitzer",
-          "name": "Bragr"
+          "name": "Boldr"
+        },
+        {
+          "position": "Bull Centaur Blitzer",
+          "name": "Morin"
         },
         {
           "position": "Minotaur",
-          "name": "Wrecker"
+          "name": "Bragni"
+        },
+        {
+          "position": "Hobgoblin Lineman",
+          "name": "Ironhelm",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "Hobgoblin Lineman",
@@ -346,19 +393,11 @@
         },
         {
           "position": "Hobgoblin Lineman",
-          "name": "Ironhelm"
+          "name": "Runestone"
         },
         {
           "position": "Hobgoblin Lineman",
-          "name": "Gordin"
-        },
-        {
-          "position": "Hobgoblin Lineman",
-          "name": "Sigvid"
-        },
-        {
-          "position": "Hobgoblin Lineman",
-          "name": "Bragni"
+          "name": "Sk\u00fali"
         }
       ]
     },
@@ -368,63 +407,77 @@
       "rerolls": 3,
       "hasApothecary": false,
       "strategy": {
-        "wrestle": 0.7,
-        "standFirm": 0.3,
-        "divingTackle": 0.4,
-        "pro": 0.6
+        "wrestle": 0.5,
+        "standFirm": 0.6,
+        "divingTackle": 0.2,
+        "pro": 0.4
       },
       "players": [
         {
           "position": "Renegade Goblin",
-          "name": "Gorath"
+          "name": "Jharnak",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "Renegade Orc",
-          "name": "Hexar"
+          "name": "Fyrgast"
         },
         {
           "position": "Renegade Skaven",
-          "name": "Exorath"
+          "name": "Keldrak"
         },
         {
           "position": "Renegade Dark Elf",
-          "name": "Xorrath"
+          "name": "Nathrek"
         },
         {
           "position": "Renegade Human Thrower",
-          "name": "Rothar"
+          "name": "Malthrax",
+          "extraSkills": [
+            "Accurate"
+          ]
         },
         {
           "position": "Renegade Troll",
-          "name": "Wrecker"
+          "name": "Lorgar"
         },
         {
           "position": "Renegade Ogre",
-          "name": "Cthrak"
+          "name": "Crusher"
         },
         {
           "position": "Renegade Minotaur",
-          "name": "Zarnax"
+          "name": "Pulper"
         },
         {
           "position": "Renegade Rat Ogre",
-          "name": "Granite"
+          "name": "Exorath"
+        },
+        {
+          "position": "Renegade Human Lineman",
+          "name": "Gorath"
+        },
+        {
+          "position": "Renegade Human Lineman",
+          "name": "Abraxas"
+        },
+        {
+          "position": "Renegade Human Lineman",
+          "name": "Umbrax"
+        },
+        {
+          "position": "Renegade Human Lineman",
+          "name": "Zarnax"
+        },
+        {
+          "position": "Renegade Human Lineman",
+          "name": "Voldar"
         },
         {
           "position": "Renegade Human Lineman",
           "name": "Skarnak"
-        },
-        {
-          "position": "Renegade Human Lineman",
-          "name": "Keldrak"
-        },
-        {
-          "position": "Renegade Human Lineman",
-          "name": "Izalgor"
-        },
-        {
-          "position": "Renegade Human Lineman",
-          "name": "Demonax"
         }
       ]
     },
@@ -434,67 +487,84 @@
       "rerolls": 3,
       "hasApothecary": true,
       "strategy": {
-        "wrestle": 0.3,
-        "standFirm": 0.5,
-        "divingTackle": 0.6,
-        "pro": 0.6
+        "wrestle": 0.5,
+        "standFirm": 0.3,
+        "divingTackle": 0.7,
+        "pro": 0.5
       },
       "players": [
         {
           "position": "Runner",
-          "name": "Galadrel"
+          "name": "Ulanis",
+          "extraSkills": [
+            "Sure Hands"
+          ]
         },
         {
           "position": "Runner",
-          "name": "Sylvara"
-        },
-        {
-          "position": "Assassin",
-          "name": "Yandrel"
-        },
-        {
-          "position": "Assassin",
-          "name": "Naerith"
-        },
-        {
-          "position": "Blitzer",
-          "name": "Windfoot"
-        },
-        {
-          "position": "Blitzer",
-          "name": "Paeris"
-        },
-        {
-          "position": "Witch Elf",
-          "name": "Haemir"
-        },
-        {
-          "position": "Witch Elf",
-          "name": "Taelar"
-        },
-        {
-          "position": "Dark Elf Lineman",
           "name": "Leafwhisper"
         },
         {
-          "position": "Dark Elf Lineman",
-          "name": "Waelmir"
+          "position": "Assassin",
+          "name": "Waelmir",
+          "extraSkills": [
+            "Block"
+          ]
+        },
+        {
+          "position": "Assassin",
+          "name": "Vaelindor"
+        },
+        {
+          "position": "Blitzer",
+          "name": "Xalvrath"
+        },
+        {
+          "position": "Blitzer",
+          "name": "Zariel"
+        },
+        {
+          "position": "Witch Elf",
+          "name": "Galadrel"
+        },
+        {
+          "position": "Witch Elf",
+          "name": "Yandrel"
         },
         {
           "position": "Dark Elf Lineman",
-          "name": "Jaraniel"
+          "name": "Naerith",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "Dark Elf Lineman",
-          "name": "Elarion"
-        },
-        {
-          "position": "Dark Elf Lineman",
-          "name": "Dawnleap"
+          "name": "Sylvara"
         },
         {
           "position": "Dark Elf Lineman",
           "name": "Kaladrel"
+        },
+        {
+          "position": "Dark Elf Lineman",
+          "name": "Olorin"
+        },
+        {
+          "position": "Dark Elf Lineman",
+          "name": "Starfall"
+        },
+        {
+          "position": "Dark Elf Lineman",
+          "name": "Aelindra"
+        },
+        {
+          "position": "Dark Elf Lineman",
+          "name": "Moonshade"
+        },
+        {
+          "position": "Dark Elf Lineman",
+          "name": "Thornweave"
         }
       ]
     },
@@ -504,9 +574,9 @@
       "rerolls": 3,
       "hasApothecary": true,
       "strategy": {
-        "wrestle": 0.6,
-        "standFirm": 0.5,
-        "divingTackle": 0.4,
+        "wrestle": 0.2,
+        "standFirm": 0.9,
+        "divingTackle": 0.0,
         "pro": 0.5
       },
       "players": [
@@ -516,27 +586,38 @@
         },
         {
           "position": "Dwarf Runner",
-          "name": "Thorin"
+          "name": "Bragni"
         },
         {
           "position": "Troll Slayer",
-          "name": "Stormr"
-        },
-        {
-          "position": "Troll Slayer",
-          "name": "Sk\u00fali"
-        },
-        {
-          "position": "Dwarf Blitzer",
           "name": "Gr\u00edmr"
         },
         {
+          "position": "Troll Slayer",
+          "name": "Hamfist"
+        },
+        {
           "position": "Dwarf Blitzer",
-          "name": "Boldr"
+          "name": "Hr\u00f3kr"
+        },
+        {
+          "position": "Dwarf Blitzer",
+          "name": "Ironhelm"
         },
         {
           "position": "Deathroller",
-          "name": "Hr\u00f3kr"
+          "name": "Wrecker"
+        },
+        {
+          "position": "Dwarf Blocker Lineman",
+          "name": "Zalin",
+          "extraSkills": [
+            "Guard"
+          ]
+        },
+        {
+          "position": "Dwarf Blocker Lineman",
+          "name": "Gimri"
         },
         {
           "position": "Dwarf Blocker Lineman",
@@ -544,31 +625,27 @@
         },
         {
           "position": "Dwarf Blocker Lineman",
-          "name": "Zalin"
+          "name": "Bragr"
         },
         {
           "position": "Dwarf Blocker Lineman",
-          "name": "Yngvar"
+          "name": "Boldr"
         },
         {
           "position": "Dwarf Blocker Lineman",
-          "name": "\u00d3inn"
+          "name": "Gordin"
+        },
+        {
+          "position": "Dwarf Blocker Lineman",
+          "name": "Stormr"
+        },
+        {
+          "position": "Dwarf Blocker Lineman",
+          "name": "Runestone"
         },
         {
           "position": "Dwarf Blocker Lineman",
           "name": "Kragr"
-        },
-        {
-          "position": "Dwarf Blocker Lineman",
-          "name": "Drengr"
-        },
-        {
-          "position": "Dwarf Blocker Lineman",
-          "name": "Fjalar"
-        },
-        {
-          "position": "Dwarf Blocker Lineman",
-          "name": "Hamfist"
         }
       ]
     },
@@ -578,27 +655,33 @@
       "rerolls": 3,
       "hasApothecary": true,
       "strategy": {
-        "wrestle": 0.6,
-        "standFirm": 0.3,
-        "divingTackle": 0.3,
-        "pro": 0.6
+        "wrestle": 0.3,
+        "standFirm": 0.2,
+        "divingTackle": 0.7,
+        "pro": 0.5
       },
       "players": [
         {
           "position": "Elven Union Thrower",
-          "name": "Maelar"
+          "name": "Moonshade",
+          "extraSkills": [
+            "Accurate"
+          ]
         },
         {
           "position": "Elven Union Thrower",
-          "name": "Naerith"
+          "name": "Galadrel"
         },
         {
           "position": "Elven Union Catcher",
-          "name": "Farandir"
+          "name": "Iolanis",
+          "extraSkills": [
+            "Dodge"
+          ]
         },
         {
           "position": "Elven Union Catcher",
-          "name": "Windfoot"
+          "name": "Starfall"
         },
         {
           "position": "Elven Union Blitzer",
@@ -606,39 +689,46 @@
         },
         {
           "position": "Elven Union Blitzer",
-          "name": "Kaladrel"
-        },
-        {
-          "position": "Elven Union Lineman",
-          "name": "Olorin"
-        },
-        {
-          "position": "Elven Union Lineman",
-          "name": "Galadrel"
-        },
-        {
-          "position": "Elven Union Lineman",
-          "name": "Taelar"
-        },
-        {
-          "position": "Elven Union Lineman",
-          "name": "Paeris"
-        },
-        {
-          "position": "Elven Union Lineman",
-          "name": "Iolanis"
-        },
-        {
-          "position": "Elven Union Lineman",
-          "name": "Thornweave"
-        },
-        {
-          "position": "Elven Union Lineman",
           "name": "Liriel"
         },
         {
           "position": "Elven Union Lineman",
-          "name": "Moonshade"
+          "name": "Naerith",
+          "extraSkills": [
+            "Block"
+          ]
+        },
+        {
+          "position": "Elven Union Lineman",
+          "name": "Leafwhisper"
+        },
+        {
+          "position": "Elven Union Lineman",
+          "name": "Haemir"
+        },
+        {
+          "position": "Elven Union Lineman",
+          "name": "Windfoot"
+        },
+        {
+          "position": "Elven Union Lineman",
+          "name": "Seladrel"
+        },
+        {
+          "position": "Elven Union Lineman",
+          "name": "Ulanis"
+        },
+        {
+          "position": "Elven Union Lineman",
+          "name": "Jaraniel"
+        },
+        {
+          "position": "Elven Union Lineman",
+          "name": "Xalvrath"
+        },
+        {
+          "position": "Elven Union Lineman",
+          "name": "Paeris"
         }
       ]
     },
@@ -648,43 +738,53 @@
       "rerolls": 4,
       "hasApothecary": true,
       "strategy": {
-        "wrestle": 0.6,
-        "standFirm": 0.5,
-        "divingTackle": 0.4,
-        "pro": 0.6
+        "wrestle": 0.5,
+        "standFirm": 0.3,
+        "divingTackle": 0.6,
+        "pro": 0.5
       },
       "players": [
         {
           "position": "Gnome Illusionist",
-          "name": "Boddynock"
+          "name": "Orryn",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "Gnome Illusionist",
-          "name": "Orryn"
+          "name": "Murnig"
         },
         {
           "position": "Woodland Fox",
-          "name": "Percival"
+          "name": "Dabbledob"
         },
         {
           "position": "Woodland Fox",
-          "name": "Alston"
+          "name": "Boddynock"
         },
         {
           "position": "Gnome BeastMaster",
-          "name": "Lix"
+          "name": "Kellen"
         },
         {
           "position": "Gnome BeastMaster",
-          "name": "Ellywick"
+          "name": "Frug"
         },
         {
           "position": "Altern Forest Treeman",
-          "name": "Jabber"
+          "name": "Basher"
         },
         {
           "position": "Gnome Lineman",
-          "name": "Glim"
+          "name": "Igden",
+          "extraSkills": [
+            "Block"
+          ]
+        },
+        {
+          "position": "Gnome Lineman",
+          "name": "Percival"
         },
         {
           "position": "Gnome Lineman",
@@ -692,11 +792,11 @@
         },
         {
           "position": "Gnome Lineman",
-          "name": "Murnig"
+          "name": "Alston"
         },
         {
           "position": "Gnome Lineman",
-          "name": "Gerbo"
+          "name": "Glim"
         },
         {
           "position": "Gnome Lineman",
@@ -704,15 +804,15 @@
         },
         {
           "position": "Gnome Lineman",
-          "name": "Igden"
+          "name": "Jabber"
         },
         {
           "position": "Gnome Lineman",
-          "name": "Dabbledob"
+          "name": "Gerbo"
         },
         {
           "position": "Gnome Lineman",
-          "name": "Frug"
+          "name": "Lix"
         }
       ]
     },
@@ -722,27 +822,27 @@
       "rerolls": 3,
       "hasApothecary": false,
       "strategy": {
-        "wrestle": 0.6,
-        "standFirm": 0.6,
-        "divingTackle": 0.2,
-        "pro": 0.6
+        "wrestle": 0.5,
+        "standFirm": 0.2,
+        "divingTackle": 0.6,
+        "pro": 0.5
       },
       "players": [
         {
           "position": "Looney",
-          "name": "Grik"
+          "name": "Wazzock"
         },
         {
           "position": "Bomma",
-          "name": "Zipp"
+          "name": "Gitz"
         },
         {
           "position": "Ooligan",
-          "name": "Skab"
+          "name": "Krak"
         },
         {
           "position": "Doom Diver",
-          "name": "Naf"
+          "name": "Snurr"
         },
         {
           "position": "Fanatic",
@@ -750,15 +850,26 @@
         },
         {
           "position": "Pogoer",
-          "name": "Grak"
+          "name": "Skabble"
         },
         {
           "position": "Trained Troll",
-          "name": "Wazzock"
+          "name": "Ironfist"
         },
         {
           "position": "Goblin Lineman",
-          "name": "Blag"
+          "name": "Grik",
+          "extraSkills": [
+            "Block"
+          ]
+        },
+        {
+          "position": "Goblin Lineman",
+          "name": "Wik"
+        },
+        {
+          "position": "Goblin Lineman",
+          "name": "Naf"
         },
         {
           "position": "Goblin Lineman",
@@ -766,19 +877,23 @@
         },
         {
           "position": "Goblin Lineman",
+          "name": "Zipp"
+        },
+        {
+          "position": "Goblin Lineman",
+          "name": "Skab"
+        },
+        {
+          "position": "Goblin Lineman",
           "name": "Wub"
         },
         {
           "position": "Goblin Lineman",
-          "name": "Nit"
+          "name": "Blag"
         },
         {
           "position": "Goblin Lineman",
-          "name": "Frug"
-        },
-        {
-          "position": "Goblin Lineman",
-          "name": "Snurr"
+          "name": "Gritz"
         }
       ]
     },
@@ -788,31 +903,45 @@
       "rerolls": 4,
       "hasApothecary": true,
       "strategy": {
-        "wrestle": 0.4,
+        "wrestle": 0.6,
         "standFirm": 0.3,
-        "divingTackle": 0.3,
-        "pro": 0.6
+        "divingTackle": 0.5,
+        "pro": 0.5
       },
       "players": [
         {
           "position": "Halfling Hefty",
-          "name": "Odo"
+          "name": "Falco",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "Halfling Hefty",
-          "name": "Peregrin"
+          "name": "Bilbo"
         },
         {
           "position": "Halfling Catcher",
-          "name": "Mungo"
+          "name": "Sago"
         },
         {
           "position": "Halfling Catcher",
-          "name": "Rufus"
+          "name": "Bingo"
         },
         {
           "position": "Altern Forest Treeman",
-          "name": "Boulder"
+          "name": "Milo"
+        },
+        {
+          "position": "Halfling Hopeful Lineman",
+          "name": "Merry",
+          "extraSkills": [
+            "Block"
+          ]
+        },
+        {
+          "position": "Halfling Hopeful Lineman",
+          "name": "Frodo"
         },
         {
           "position": "Halfling Hopeful Lineman",
@@ -820,7 +949,7 @@
         },
         {
           "position": "Halfling Hopeful Lineman",
-          "name": "Merry"
+          "name": "Odo"
         },
         {
           "position": "Halfling Hopeful Lineman",
@@ -828,23 +957,15 @@
         },
         {
           "position": "Halfling Hopeful Lineman",
+          "name": "Pip"
+        },
+        {
+          "position": "Halfling Hopeful Lineman",
           "name": "Sam"
         },
         {
           "position": "Halfling Hopeful Lineman",
-          "name": "Polo"
-        },
-        {
-          "position": "Halfling Hopeful Lineman",
           "name": "Largo"
-        },
-        {
-          "position": "Halfling Hopeful Lineman",
-          "name": "Posco"
-        },
-        {
-          "position": "Halfling Hopeful Lineman",
-          "name": "Wilibald"
         }
       ]
     },
@@ -854,43 +975,56 @@
       "rerolls": 3,
       "hasApothecary": true,
       "strategy": {
-        "wrestle": 0.6,
-        "standFirm": 0.7,
-        "divingTackle": 0.3,
-        "pro": 0.4
+        "wrestle": 0.3,
+        "standFirm": 0.3,
+        "divingTackle": 0.6,
+        "pro": 0.6
       },
       "players": [
         {
           "position": "Catcher",
-          "name": "Moonshade"
+          "name": "Thornweave",
+          "extraSkills": [
+            "Dodge"
+          ]
         },
         {
           "position": "Catcher",
-          "name": "Sylvara"
+          "name": "Yandrel"
         },
         {
           "position": "Catcher",
-          "name": "Taelar"
+          "name": "Vaelindor"
         },
         {
           "position": "Catcher",
-          "name": "Aelindra"
-        },
-        {
-          "position": "Thrower",
-          "name": "Starfall"
-        },
-        {
-          "position": "Thrower",
-          "name": "Haemir"
-        },
-        {
-          "position": "Blitzer",
           "name": "Xalvrath"
         },
         {
+          "position": "Thrower",
+          "name": "Maelar",
+          "extraSkills": [
+            "Accurate"
+          ]
+        },
+        {
+          "position": "Thrower",
+          "name": "Moonshade"
+        },
+        {
           "position": "Blitzer",
-          "name": "Windfoot"
+          "name": "Liriel"
+        },
+        {
+          "position": "Blitzer",
+          "name": "Jaraniel"
+        },
+        {
+          "position": "High Elf Lineman",
+          "name": "Leafwhisper",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "High Elf Lineman",
@@ -898,31 +1032,23 @@
         },
         {
           "position": "High Elf Lineman",
-          "name": "Galadrel"
-        },
-        {
-          "position": "High Elf Lineman",
-          "name": "Seladrel"
-        },
-        {
-          "position": "High Elf Lineman",
-          "name": "Olorin"
-        },
-        {
-          "position": "High Elf Lineman",
-          "name": "Paeris"
-        },
-        {
-          "position": "High Elf Lineman",
           "name": "Iolanis"
         },
         {
           "position": "High Elf Lineman",
-          "name": "Leafwhisper"
+          "name": "Caladrel"
         },
         {
           "position": "High Elf Lineman",
-          "name": "Caladrel"
+          "name": "Waelmir"
+        },
+        {
+          "position": "High Elf Lineman",
+          "name": "Starfall"
+        },
+        {
+          "position": "High Elf Lineman",
+          "name": "Arannis"
         }
       ]
     },
@@ -932,59 +1058,61 @@
       "rerolls": 4,
       "hasApothecary": true,
       "strategy": {
-        "wrestle": 0.7,
+        "wrestle": 0.5,
         "standFirm": 0.4,
         "divingTackle": 0.5,
-        "pro": 0.7
+        "pro": 0.5
       },
       "players": [
         {
           "position": "Halfling Hopeful",
-          "name": "Aldric"
+          "name": "Siegbert",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "Halfling Hopeful",
-          "name": "Bertram"
+          "name": "Katrin"
         },
         {
           "position": "Halfling Hopeful",
-          "name": "Volkmar"
+          "name": "Rudolf"
         },
         {
           "position": "Human Thrower",
-          "name": "Werner"
+          "name": "Werner",
+          "extraSkills": [
+            "Accurate"
+          ]
         },
         {
           "position": "Human Thrower",
-          "name": "Frieda"
+          "name": "Manfred"
         },
         {
           "position": "Human Catcher",
-          "name": "Edmund"
+          "name": "Ulrich"
         },
         {
           "position": "Human Catcher",
-          "name": "Norbert"
+          "name": "Ingrid"
         },
         {
           "position": "Human Blitzer",
-          "name": "Dagmar"
+          "name": "Dietrich"
         },
         {
           "position": "Human Blitzer",
-          "name": "Brunhilde"
+          "name": "Carlotta"
         },
         {
           "position": "Ogre",
-          "name": "Greta"
+          "name": "Boulder"
         },
         {
           "position": "Human Lineman",
-          "name": "Ludwig"
-        },
-        {
-          "position": "Human Lineman",
-          "name": "Magdalena"
+          "name": "Klaus"
         },
         {
           "position": "Human Lineman",
@@ -992,11 +1120,19 @@
         },
         {
           "position": "Human Lineman",
-          "name": "Ingvar"
+          "name": "Liesel"
         },
         {
           "position": "Human Lineman",
           "name": "Elfriede"
+        },
+        {
+          "position": "Human Lineman",
+          "name": "Nora"
+        },
+        {
+          "position": "Human Lineman",
+          "name": "Quentin"
         }
       ]
     },
@@ -1006,63 +1142,64 @@
       "rerolls": 3,
       "hasApothecary": true,
       "strategy": {
-        "wrestle": 0.5,
-        "standFirm": 0.4,
-        "divingTackle": 0.5,
-        "pro": 0.4
+        "wrestle": 0.4,
+        "standFirm": 0.5,
+        "divingTackle": 0.4,
+        "pro": 0.5
       },
       "players": [
         {
           "position": "Bodyguard",
-          "name": "Elfriede"
+          "name": "Zbigniew",
+          "extraSkills": [
+            "Guard"
+          ]
         },
         {
           "position": "Bodyguard",
-          "name": "Ludwig"
+          "name": "Werner"
         },
         {
           "position": "Bodyguard",
-          "name": "Norbert"
+          "name": "Carlotta"
         },
         {
           "position": "Bodyguard",
-          "name": "Rudolf"
-        },
-        {
-          "position": "Imperial Thrower",
-          "name": "Gareth"
-        },
-        {
-          "position": "Imperial Thrower",
-          "name": "Frieda"
-        },
-        {
-          "position": "Noble Blitzer",
-          "name": "Volkmar"
-        },
-        {
-          "position": "Noble Blitzer",
-          "name": "Klaus"
-        },
-        {
-          "position": "Ogre",
-          "name": "Basher"
-        },
-        {
-          "position": "Imperial Retainer Lineman",
-          "name": "Xander"
-        },
-        {
-          "position": "Imperial Retainer Lineman",
-          "name": "Ulrich"
-        },
-        {
-          "position": "Imperial Retainer Lineman",
           "name": "Dietrich"
         },
         {
+          "position": "Imperial Thrower",
+          "name": "Gareth",
+          "extraSkills": [
+            "Accurate"
+          ]
+        },
+        {
+          "position": "Imperial Thrower",
+          "name": "Ulrich"
+        },
+        {
+          "position": "Noble Blitzer",
+          "name": "Heinrich"
+        },
+        {
+          "position": "Noble Blitzer",
+          "name": "J\u00fcrgen"
+        },
+        {
+          "position": "Ogre",
+          "name": "Yannick"
+        },
+        {
           "position": "Imperial Retainer Lineman",
-          "name": "Theodor"
+          "name": "Ottilie",
+          "extraSkills": [
+            "Block"
+          ]
+        },
+        {
+          "position": "Imperial Retainer Lineman",
+          "name": "Greta"
         },
         {
           "position": "Imperial Retainer Lineman",
@@ -1070,7 +1207,19 @@
         },
         {
           "position": "Imperial Retainer Lineman",
-          "name": "Adela"
+          "name": "Conrad"
+        },
+        {
+          "position": "Imperial Retainer Lineman",
+          "name": "Norbert"
+        },
+        {
+          "position": "Imperial Retainer Lineman",
+          "name": "Frederick"
+        },
+        {
+          "position": "Imperial Retainer Lineman",
+          "name": "Rudolf"
         }
       ]
     },
@@ -1080,31 +1229,34 @@
       "rerolls": 3,
       "hasApothecary": false,
       "strategy": {
-        "wrestle": 0.4,
-        "standFirm": 0.7,
-        "divingTackle": 0.2,
-        "pro": 0.7
+        "wrestle": 0.5,
+        "standFirm": 0.6,
+        "divingTackle": 0.1,
+        "pro": 0.3
       },
       "players": [
         {
           "position": "Bloodseeker",
-          "name": "Skullcrush"
+          "name": "Gorethane",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "Bloodseeker",
-          "name": "Slaughterfist"
+          "name": "Bloodrage"
         },
         {
           "position": "Bloodseeker",
-          "name": "Gorefist"
+          "name": "Cavernax"
         },
         {
           "position": "Bloodseeker",
-          "name": "Carnax"
+          "name": "Doomhowl"
         },
         {
           "position": "Khorngor",
-          "name": "Doomhowl"
+          "name": "Slaughtrix"
         },
         {
           "position": "Khorngor",
@@ -1112,11 +1264,14 @@
         },
         {
           "position": "Bloodspawn",
-          "name": "Wrecker"
+          "name": "Bloodmaw"
         },
         {
           "position": "Bloodborn Marauder Lineman",
-          "name": "Bloodrage"
+          "name": "Wrathspawn",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "Bloodborn Marauder Lineman",
@@ -1124,31 +1279,31 @@
         },
         {
           "position": "Bloodborn Marauder Lineman",
-          "name": "Bloodmaw"
-        },
-        {
-          "position": "Bloodborn Marauder Lineman",
-          "name": "Wrathspawn"
-        },
-        {
-          "position": "Bloodborn Marauder Lineman",
-          "name": "Slaughtrix"
-        },
-        {
-          "position": "Bloodborn Marauder Lineman",
-          "name": "Skullfang"
-        },
-        {
-          "position": "Bloodborn Marauder Lineman",
           "name": "Skulltaker"
         },
         {
           "position": "Bloodborn Marauder Lineman",
-          "name": "Gorethane"
+          "name": "Rageborn"
+        },
+        {
+          "position": "Bloodborn Marauder Lineman",
+          "name": "Carnax"
+        },
+        {
+          "position": "Bloodborn Marauder Lineman",
+          "name": "Skullcrush"
         },
         {
           "position": "Bloodborn Marauder Lineman",
           "name": "Wrathkill"
+        },
+        {
+          "position": "Bloodborn Marauder Lineman",
+          "name": "Gorefist"
+        },
+        {
+          "position": "Bloodborn Marauder Lineman",
+          "name": "Bloodhunger"
         }
       ]
     },
@@ -1158,55 +1313,41 @@
       "rerolls": 3,
       "hasApothecary": true,
       "strategy": {
-        "wrestle": 0.2,
-        "standFirm": 0.4,
-        "divingTackle": 0.5,
-        "pro": 0.4
+        "wrestle": 0.4,
+        "standFirm": 0.5,
+        "divingTackle": 0.4,
+        "pro": 0.5
       },
       "players": [
         {
           "position": "Chameleon Skink",
-          "name": "Chalco"
+          "name": "Nezahual",
+          "extraSkills": [
+            "Sure Hands"
+          ]
         },
         {
           "position": "Chameleon Skink",
-          "name": "Tezcatl"
+          "name": "Moctezul"
         },
         {
           "position": "Kroxigor",
-          "name": "Mauler"
+          "name": "Rubble"
         },
         {
           "position": "Skink Runner Lineman",
-          "name": "Itzamna"
+          "name": "Tezcatl",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "Skink Runner Lineman",
-          "name": "Warchanter"
+          "name": "Quilaztli"
         },
         {
           "position": "Skink Runner Lineman",
-          "name": "Kukulcan"
-        },
-        {
-          "position": "Skink Runner Lineman",
-          "name": "Cipactli"
-        },
-        {
-          "position": "Skink Runner Lineman",
-          "name": "Huitzilo"
-        },
-        {
-          "position": "Skink Runner Lineman",
-          "name": "Nezahual"
-        },
-        {
-          "position": "Skink Runner Lineman",
-          "name": "Yaotl"
-        },
-        {
-          "position": "Skink Runner Lineman",
-          "name": "Vizcoch"
+          "name": "Rainscale"
         },
         {
           "position": "Skink Runner Lineman",
@@ -1214,11 +1355,27 @@
         },
         {
           "position": "Skink Runner Lineman",
-          "name": "Moctezul"
+          "name": "Kukulcan"
         },
         {
           "position": "Skink Runner Lineman",
-          "name": "Quetzal"
+          "name": "Tlacaelel"
+        },
+        {
+          "position": "Skink Runner Lineman",
+          "name": "Chalco"
+        },
+        {
+          "position": "Skink Runner Lineman",
+          "name": "Painal"
+        },
+        {
+          "position": "Skink Runner Lineman",
+          "name": "Yaotl"
+        },
+        {
+          "position": "Skink Runner Lineman",
+          "name": "Sunwalker"
         }
       ]
     },
@@ -1228,67 +1385,75 @@
       "rerolls": 3,
       "hasApothecary": true,
       "strategy": {
-        "wrestle": 0.6,
+        "wrestle": 0.5,
         "standFirm": 0.5,
-        "divingTackle": 0.7,
+        "divingTackle": 0.3,
         "pro": 0.5
       },
       "players": [
         {
           "position": "Ghoul Runner",
-          "name": "Shadowmere"
+          "name": "Tombward",
+          "extraSkills": [
+            "Sure Hands"
+          ]
         },
         {
           "position": "Ghoul Runner",
-          "name": "Xander"
+          "name": "Lichebone"
         },
         {
           "position": "Wraith",
-          "name": "Nightfall"
+          "name": "Wraithbone"
         },
         {
           "position": "Wraith",
-          "name": "Quietus"
-        },
-        {
-          "position": "Flesh Golem",
-          "name": "Hexdread"
-        },
-        {
-          "position": "Flesh Golem",
-          "name": "Fevergrave"
-        },
-        {
-          "position": "Werewolf",
-          "name": "Morgrave"
-        },
-        {
-          "position": "Werewolf",
-          "name": "Yellmaw"
-        },
-        {
-          "position": "Zombie Lineman",
-          "name": "Jadecurse"
-        },
-        {
-          "position": "Zombie Lineman",
-          "name": "Obsidian"
-        },
-        {
-          "position": "Zombie Lineman",
-          "name": "Ironblight"
-        },
-        {
-          "position": "Zombie Lineman",
           "name": "Emberwraith"
         },
         {
+          "position": "Flesh Golem",
+          "name": "Fevergrave",
+          "extraSkills": [
+            "Guard"
+          ]
+        },
+        {
+          "position": "Flesh Golem",
+          "name": "Grimhallow"
+        },
+        {
+          "position": "Werewolf",
+          "name": "Knellborn",
+          "extraSkills": [
+            "Block"
+          ]
+        },
+        {
+          "position": "Werewolf",
+          "name": "Nightfall"
+        },
+        {
           "position": "Zombie Lineman",
-          "name": "Knellborn"
+          "name": "Yellmaw",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "Zombie Lineman",
           "name": "Zombane"
+        },
+        {
+          "position": "Zombie Lineman",
+          "name": "Morgrave"
+        },
+        {
+          "position": "Zombie Lineman",
+          "name": "Cryptus"
+        },
+        {
+          "position": "Zombie Lineman",
+          "name": "Hexdread"
         }
       ]
     },
@@ -1298,39 +1463,45 @@
       "rerolls": 3,
       "hasApothecary": true,
       "strategy": {
-        "wrestle": 0.4,
-        "standFirm": 0.8,
-        "divingTackle": 0.5,
+        "wrestle": 0.6,
+        "standFirm": 0.4,
+        "divingTackle": 0.4,
         "pro": 0.5
       },
       "players": [
         {
           "position": "Beer Boar",
-          "name": "Gunnar"
+          "name": "Sven"
         },
         {
           "position": "Beer Boar",
-          "name": "Ragnar"
-        },
-        {
-          "position": "Norse Berzerker",
           "name": "Erik"
         },
         {
           "position": "Norse Berzerker",
-          "name": "Olaf"
+          "name": "Magn\u00fas"
+        },
+        {
+          "position": "Norse Berzerker",
+          "name": "Ulf"
+        },
+        {
+          "position": "Valkyrie",
+          "name": "Gunnar",
+          "extraSkills": [
+            "Accurate"
+          ]
         },
         {
           "position": "Valkyrie",
           "name": "Bj\u00f6rn"
         },
         {
-          "position": "Valkyrie",
-          "name": "P\u00e1ll"
-        },
-        {
           "position": "Ulfwerener",
-          "name": "Ulf"
+          "name": "Njall",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "Ulfwerener",
@@ -1338,27 +1509,31 @@
         },
         {
           "position": "Yhetee",
-          "name": "Haakon"
-        },
-        {
-          "position": "Norse Raider Lineman",
-          "name": "Ormr"
-        },
-        {
-          "position": "Norse Raider Lineman",
-          "name": "Njall"
-        },
-        {
-          "position": "Norse Raider Lineman",
-          "name": "Sven"
-        },
-        {
-          "position": "Norse Raider Lineman",
           "name": "Refr"
         },
         {
           "position": "Norse Raider Lineman",
-          "name": "Halfdan"
+          "name": "Ivar"
+        },
+        {
+          "position": "Norse Raider Lineman",
+          "name": "Sigurd"
+        },
+        {
+          "position": "Norse Raider Lineman",
+          "name": "Kn\u00fatr"
+        },
+        {
+          "position": "Norse Raider Lineman",
+          "name": "Olaf"
+        },
+        {
+          "position": "Norse Raider Lineman",
+          "name": "Haakon"
+        },
+        {
+          "position": "Norse Raider Lineman",
+          "name": "P\u00e1ll"
         }
       ]
     },
@@ -1369,42 +1544,55 @@
       "hasApothecary": false,
       "strategy": {
         "wrestle": 0.4,
-        "standFirm": 0.8,
-        "divingTackle": 0.4,
-        "pro": 0.7
+        "standFirm": 0.7,
+        "divingTackle": 0.1,
+        "pro": 0.4
       },
       "players": [
         {
           "position": "Bloater",
-          "name": "Slimelord"
+          "name": "Ichor",
+          "extraSkills": [
+            "Guard"
+          ]
         },
         {
           "position": "Bloater",
-          "name": "Suppurate"
+          "name": "Necrosis"
         },
         {
           "position": "Bloater",
-          "name": "Foetid"
-        },
-        {
-          "position": "Bloater",
-          "name": "Wart"
-        },
-        {
-          "position": "Pestigor",
-          "name": "Foulsmell"
-        },
-        {
-          "position": "Pestigor",
           "name": "Bilious"
         },
         {
+          "position": "Bloater",
+          "name": "Blight"
+        },
+        {
+          "position": "Pestigor",
+          "name": "Drool",
+          "extraSkills": [
+            "Block"
+          ]
+        },
+        {
+          "position": "Pestigor",
+          "name": "Foetid"
+        },
+        {
           "position": "Rotspawn",
-          "name": "Basher"
+          "name": "Pulper"
         },
         {
           "position": "Rotter Lineman",
-          "name": "Gangrene"
+          "name": "Plaguis",
+          "extraSkills": [
+            "Block"
+          ]
+        },
+        {
+          "position": "Rotter Lineman",
+          "name": "Slimelord"
         },
         {
           "position": "Rotter Lineman",
@@ -1412,11 +1600,7 @@
         },
         {
           "position": "Rotter Lineman",
-          "name": "Phlegm"
-        },
-        {
-          "position": "Rotter Lineman",
-          "name": "Blight"
+          "name": "Scab"
         },
         {
           "position": "Rotter Lineman",
@@ -1424,15 +1608,19 @@
         },
         {
           "position": "Rotter Lineman",
-          "name": "Necrosis"
+          "name": "Tumorous"
         },
         {
           "position": "Rotter Lineman",
-          "name": "Plaguis"
+          "name": "Wart"
         },
         {
           "position": "Rotter Lineman",
-          "name": "Fester"
+          "name": "Foulsmell"
+        },
+        {
+          "position": "Rotter Lineman",
+          "name": "Bloat"
         }
       ]
     },
@@ -1442,23 +1630,30 @@
       "rerolls": 3,
       "hasApothecary": false,
       "strategy": {
-        "wrestle": 0.3,
-        "standFirm": 0.5,
-        "divingTackle": 0.3,
-        "pro": 0.7
+        "wrestle": 0.2,
+        "standFirm": 0.8,
+        "divingTackle": 0.0,
+        "pro": 0.4
       },
       "players": [
         {
           "position": "Ogre Blocker",
-          "name": "Stoneback"
+          "name": "Crusher"
         },
         {
           "position": "Ogre Runt Punter",
-          "name": "Rubble"
+          "name": "Wrecker"
         },
         {
           "position": "Gnoblar",
-          "name": "Skraggnoth"
+          "name": "Stoneback",
+          "extraSkills": [
+            "Block"
+          ]
+        },
+        {
+          "position": "Gnoblar",
+          "name": "Thunderguts"
         },
         {
           "position": "Gnoblar",
@@ -1466,11 +1661,35 @@
         },
         {
           "position": "Gnoblar",
+          "name": "Krugg"
+        },
+        {
+          "position": "Gnoblar",
+          "name": "Ghark"
+        },
+        {
+          "position": "Gnoblar",
+          "name": "Slugtongue"
+        },
+        {
+          "position": "Gnoblar",
+          "name": "Skraggnoth"
+        },
+        {
+          "position": "Gnoblar",
+          "name": "Bragg"
+        },
+        {
+          "position": "Gnoblar",
           "name": "Whitefang"
         },
         {
           "position": "Gnoblar",
-          "name": "Krugg"
+          "name": "Bonehead"
+        },
+        {
+          "position": "Gnoblar",
+          "name": "Rugg"
         },
         {
           "position": "Gnoblar",
@@ -1479,30 +1698,6 @@
         {
           "position": "Gnoblar",
           "name": "Gristlegut"
-        },
-        {
-          "position": "Gnoblar",
-          "name": "Thunderguts"
-        },
-        {
-          "position": "Gnoblar",
-          "name": "Longstrider"
-        },
-        {
-          "position": "Gnoblar",
-          "name": "Rugg"
-        },
-        {
-          "position": "Gnoblar",
-          "name": "Slugtongue"
-        },
-        {
-          "position": "Gnoblar",
-          "name": "Bragg"
-        },
-        {
-          "position": "Gnoblar",
-          "name": "Ghark"
         }
       ]
     },
@@ -1512,71 +1707,84 @@
       "rerolls": 3,
       "hasApothecary": true,
       "strategy": {
-        "wrestle": 0.8,
-        "standFirm": 0.3,
-        "divingTackle": 0.6,
-        "pro": 0.6
+        "wrestle": 0.5,
+        "standFirm": 0.6,
+        "divingTackle": 0.3,
+        "pro": 0.5
       },
       "players": [
         {
           "position": "Old World Halfling Hopefuls",
-          "name": "Zalin"
+          "name": "Manfred",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "Old World Halfling Hopefuls",
-          "name": "Nora"
+          "name": "Sam"
         },
         {
           "position": "Old World Halfling Hopefuls",
-          "name": "Posco"
+          "name": "Gareth"
         },
         {
           "position": "Old World Dwarf Lineman",
-          "name": "Manfred"
+          "name": "Carlotta",
+          "extraSkills": [
+            "Guard"
+          ]
         },
         {
           "position": "Old World Dwarf Lineman",
-          "name": "Theodor"
+          "name": "Wilibald"
         },
         {
           "position": "Old World Dwarf Lineman",
-          "name": "Dagmar"
+          "name": "Bingo"
         },
         {
           "position": "Old World Human Thrower",
-          "name": "Drengr"
+          "name": "Volkmar",
+          "extraSkills": [
+            "Accurate"
+          ]
         },
         {
           "position": "Old World Human Catcher",
-          "name": "Zbigniew"
+          "name": "Quentin"
         },
         {
           "position": "Old World Dwarf Runner",
-          "name": "Frodo"
+          "name": "J\u00fcrgen"
         },
         {
           "position": "Old World Human Blitzer",
-          "name": "Thrain"
+          "name": "Gimri"
         },
         {
           "position": "Old World Dwarf Troll Slayer",
-          "name": "Adela"
+          "name": "Greta"
         },
         {
           "position": "Old World Dwarf Blitzer",
-          "name": "Runestone"
-        },
-        {
-          "position": "Altern Forest Treeman",
           "name": "Morin"
         },
         {
+          "position": "Altern Forest Treeman",
+          "name": "Bertram"
+        },
+        {
           "position": "Ogre",
-          "name": "Aldric"
+          "name": "Hilde"
         },
         {
           "position": "Old World Human Lineman",
-          "name": "Elfriede"
+          "name": "Falco"
+        },
+        {
+          "position": "Old World Human Lineman",
+          "name": "Ottilie"
         }
       ]
     },
@@ -1586,67 +1794,68 @@
       "rerolls": 3,
       "hasApothecary": true,
       "strategy": {
-        "wrestle": 0.3,
-        "standFirm": 0.4,
+        "wrestle": 0.4,
+        "standFirm": 0.5,
         "divingTackle": 0.2,
-        "pro": 0.5
+        "pro": 0.4
       },
       "players": [
         {
           "position": "Goblin",
-          "name": "Muzg"
+          "name": "Snarg",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "Goblin",
-          "name": "Morg"
-        },
-        {
-          "position": "Goblin",
-          "name": "Bolgut"
-        },
-        {
-          "position": "Goblin",
-          "name": "Snarg"
-        },
-        {
-          "position": "Orc Thrower",
-          "name": "Ugrak"
-        },
-        {
-          "position": "Orc Thrower",
           "name": "Gazz"
         },
         {
-          "position": "Orc Blitzer",
-          "name": "Wurg"
+          "position": "Goblin",
+          "name": "Zarg"
         },
         {
-          "position": "Orc Blitzer",
-          "name": "Brak"
-        },
-        {
-          "position": "Big Un Blocker",
+          "position": "Goblin",
           "name": "Kruk"
         },
         {
-          "position": "Big Un Blocker",
-          "name": "Gashnak"
+          "position": "Orc Thrower",
+          "name": "Bolgut",
+          "extraSkills": [
+            "Accurate"
+          ]
         },
         {
-          "position": "Untrained Troll",
-          "name": "Skarnak"
-        },
-        {
-          "position": "Orc Lineman",
-          "name": "Morguk"
-        },
-        {
-          "position": "Orc Lineman",
+          "position": "Orc Thrower",
           "name": "Blorg"
         },
         {
+          "position": "Orc Blitzer",
+          "name": "Muzg"
+        },
+        {
+          "position": "Orc Blitzer",
+          "name": "Morguk"
+        },
+        {
+          "position": "Big Un Blocker",
+          "name": "Drak",
+          "extraSkills": [
+            "Guard"
+          ]
+        },
+        {
+          "position": "Big Un Blocker",
+          "name": "Ruk"
+        },
+        {
+          "position": "Untrained Troll",
+          "name": "Wurg"
+        },
+        {
           "position": "Orc Lineman",
-          "name": "Skrag"
+          "name": "Skarnak"
         },
         {
           "position": "Orc Lineman",
@@ -1654,7 +1863,7 @@
         },
         {
           "position": "Orc Lineman",
-          "name": "Kraz"
+          "name": "Skarr"
         }
       ]
     },
@@ -1664,75 +1873,76 @@
       "rerolls": 3,
       "hasApothecary": true,
       "strategy": {
-        "wrestle": 0.7,
-        "standFirm": 0.7,
+        "wrestle": 0.4,
+        "standFirm": 0.5,
         "divingTackle": 0.2,
-        "pro": 0.6
+        "pro": 0.4
       },
       "players": [
         {
           "position": "Goblin",
-          "name": "Wrog"
+          "name": "Morg",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "Goblin",
-          "name": "Thrak"
+          "name": "Skrag"
         },
         {
           "position": "Goblin",
-          "name": "Kraz"
-        },
-        {
-          "position": "Goblin",
-          "name": "Urgh"
-        },
-        {
-          "position": "Orc Thrower",
-          "name": "Drak"
-        },
-        {
-          "position": "Orc Thrower",
-          "name": "Zarg"
-        },
-        {
-          "position": "Orc Blitzer",
-          "name": "Gashnak"
-        },
-        {
-          "position": "Orc Blitzer",
-          "name": "Muzg"
-        },
-        {
-          "position": "Big Un Blocker",
-          "name": "Morguk"
-        },
-        {
-          "position": "Big Un Blocker",
-          "name": "Blorg"
-        },
-        {
-          "position": "Untrained Troll",
-          "name": "Pulper"
-        },
-        {
-          "position": "Orc Lineman",
-          "name": "Gazz"
-        },
-        {
-          "position": "Orc Lineman",
-          "name": "Kruk"
-        },
-        {
-          "position": "Orc Lineman",
           "name": "Wurg"
         },
         {
-          "position": "Orc Lineman",
-          "name": "Snarg"
+          "position": "Goblin",
+          "name": "Morguk"
+        },
+        {
+          "position": "Orc Thrower",
+          "name": "Snarg",
+          "extraSkills": [
+            "Accurate"
+          ]
+        },
+        {
+          "position": "Orc Thrower",
+          "name": "Brak"
+        },
+        {
+          "position": "Orc Blitzer",
+          "name": "Drakk"
+        },
+        {
+          "position": "Orc Blitzer",
+          "name": "Urgh"
+        },
+        {
+          "position": "Big Un Blocker",
+          "name": "Thrak",
+          "extraSkills": [
+            "Guard"
+          ]
+        },
+        {
+          "position": "Big Un Blocker",
+          "name": "Thag"
+        },
+        {
+          "position": "Untrained Troll",
+          "name": "Blorg"
         },
         {
           "position": "Orc Lineman",
-          "name": "Grak"
+          "name": "Muzg"
+        },
+        {
+          "position": "Orc Lineman",
+          "name": "Ruk"
+        },
+        {
+          "position": "Orc Lineman",
+          "name": "Wrog"
         }
       ]
     },
@@ -1742,39 +1952,41 @@
       "rerolls": 3,
       "hasApothecary": false,
       "strategy": {
-        "wrestle": 0.7,
-        "standFirm": 0.5,
-        "divingTackle": 0.3,
+        "wrestle": 0.5,
+        "standFirm": 0.6,
+        "divingTackle": 0.2,
         "pro": 0.4
       },
       "players": [
         {
           "position": "Ghoul Runner",
-          "name": "Jadecurse"
+          "name": "Nightfall",
+          "extraSkills": [
+            "Sure Hands"
+          ]
         },
         {
           "position": "Ghoul Runner",
-          "name": "Obsidian"
+          "name": "Pallor"
         },
         {
           "position": "Wight Blitzer",
-          "name": "Emberwraith"
+          "name": "Veilshroud"
         },
         {
           "position": "Wight Blitzer",
-          "name": "Bonechill"
+          "name": "Yellmaw"
         },
         {
           "position": "Mummy",
-          "name": "Grimhallow"
+          "name": "Basher"
         },
         {
           "position": "Skeleton Lineman",
-          "name": "Morgrave"
-        },
-        {
-          "position": "Skeleton Lineman",
-          "name": "Pallor"
+          "name": "Knellborn",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "Skeleton Lineman",
@@ -1782,23 +1994,39 @@
         },
         {
           "position": "Skeleton Lineman",
-          "name": "Tombward"
+          "name": "Emberwraith"
         },
         {
           "position": "Skeleton Lineman",
-          "name": "Xander"
+          "name": "Deathmarch"
         },
         {
           "position": "Skeleton Lineman",
-          "name": "Fevergrave"
+          "name": "Quietus"
         },
         {
           "position": "Skeleton Lineman",
-          "name": "Wraithbone"
+          "name": "Hexdread"
+        },
+        {
+          "position": "Skeleton Lineman",
+          "name": "Zombane"
         },
         {
           "position": "Skeleton Lineman",
           "name": "Urnhex"
+        },
+        {
+          "position": "Skeleton Lineman",
+          "name": "Bonechill"
+        },
+        {
+          "position": "Skeleton Lineman",
+          "name": "Tombward"
+        },
+        {
+          "position": "Skeleton Lineman",
+          "name": "Wraithbone"
         }
       ]
     },
@@ -1808,51 +2036,57 @@
       "rerolls": 3,
       "hasApothecary": true,
       "strategy": {
-        "wrestle": 0.7,
-        "standFirm": 0.6,
-        "divingTackle": 0.2,
+        "wrestle": 0.3,
+        "standFirm": 0.1,
+        "divingTackle": 0.6,
         "pro": 0.5
       },
       "players": [
         {
           "position": "Thrower",
-          "name": "Squeaker"
+          "name": "Sharpfang",
+          "extraSkills": [
+            "Accurate"
+          ]
         },
         {
           "position": "Thrower",
-          "name": "Ratfling"
-        },
-        {
-          "position": "Gutter Runner",
-          "name": "Clawsnap"
-        },
-        {
-          "position": "Gutter Runner",
-          "name": "Twitch"
-        },
-        {
-          "position": "Blitzer",
-          "name": "Skitters"
-        },
-        {
-          "position": "Blitzer",
-          "name": "Nibble"
-        },
-        {
-          "position": "Rat Ogre",
-          "name": "Hackfur"
-        },
-        {
-          "position": "Skaven Clanrat Lineman",
           "name": "Skrittle"
         },
         {
-          "position": "Skaven Clanrat Lineman",
-          "name": "Scabpelt"
+          "position": "Gutter Runner",
+          "name": "Scritch"
+        },
+        {
+          "position": "Gutter Runner",
+          "name": "Skarl"
+        },
+        {
+          "position": "Blitzer",
+          "name": "Gnawbit"
+        },
+        {
+          "position": "Blitzer",
+          "name": "Quickpaw"
+        },
+        {
+          "position": "Rat Ogre",
+          "name": "Rubble"
         },
         {
           "position": "Skaven Clanrat Lineman",
-          "name": "Squeakmore"
+          "name": "Clawsnap",
+          "extraSkills": [
+            "Block"
+          ]
+        },
+        {
+          "position": "Skaven Clanrat Lineman",
+          "name": "Gnarlclaw"
+        },
+        {
+          "position": "Skaven Clanrat Lineman",
+          "name": "Ratgut"
         },
         {
           "position": "Skaven Clanrat Lineman",
@@ -1860,19 +2094,19 @@
         },
         {
           "position": "Skaven Clanrat Lineman",
-          "name": "Scritch"
+          "name": "Gnashfang"
         },
         {
           "position": "Skaven Clanrat Lineman",
-          "name": "Warpwhisker"
+          "name": "Ratfling"
         },
         {
           "position": "Skaven Clanrat Lineman",
-          "name": "Sharpfang"
+          "name": "Squeaker"
         },
         {
           "position": "Skaven Clanrat Lineman",
-          "name": "Quickpaw"
+          "name": "Twitch"
         }
       ]
     },
@@ -1883,46 +2117,43 @@
       "hasApothecary": true,
       "strategy": {
         "wrestle": 0.3,
-        "standFirm": 0.2,
-        "divingTackle": 0.2,
-        "pro": 0.6
+        "standFirm": 0.3,
+        "divingTackle": 0.7,
+        "pro": 0.5
       },
       "players": [
         {
           "position": "Slann Catcher",
-          "name": "Patecatl"
+          "name": "Yacatecuhtli",
+          "extraSkills": [
+            "Dodge"
+          ]
         },
         {
           "position": "Slann Catcher",
-          "name": "Tlaloc"
+          "name": "Coatlicue"
         },
         {
           "position": "Slann Blitzer",
-          "name": "Teotihuacan"
+          "name": "Omecihuatl",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "Slann Blitzer",
-          "name": "Ehecatl"
-        },
-        {
-          "position": "Kroxigor",
           "name": "Metztli"
         },
         {
-          "position": "Slann Lineman",
-          "name": "Quiahuitl"
+          "position": "Kroxigor",
+          "name": "Stomper"
         },
         {
           "position": "Slann Lineman",
-          "name": "Itzpapalotl"
-        },
-        {
-          "position": "Slann Lineman",
-          "name": "Yacatecuhtli"
-        },
-        {
-          "position": "Slann Lineman",
-          "name": "Nanahuatzin"
+          "name": "Atlahua",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "Slann Lineman",
@@ -1930,23 +2161,27 @@
         },
         {
           "position": "Slann Lineman",
+          "name": "Huitzilopochtli"
+        },
+        {
+          "position": "Slann Lineman",
+          "name": "Patecatl"
+        },
+        {
+          "position": "Slann Lineman",
           "name": "Xochiquetzal"
         },
         {
           "position": "Slann Lineman",
-          "name": "Atlahua"
+          "name": "Ehecatl"
         },
         {
           "position": "Slann Lineman",
-          "name": "Coatlicue"
+          "name": "Itzpapalotl"
         },
         {
           "position": "Slann Lineman",
-          "name": "Xiuhtecuhtli"
-        },
-        {
-          "position": "Slann Lineman",
-          "name": "Cinteotl"
+          "name": "Nanahuatzin"
         }
       ]
     },
@@ -1957,26 +2192,26 @@
       "hasApothecary": false,
       "strategy": {
         "wrestle": 0.4,
-        "standFirm": 0.8,
-        "divingTackle": 0.4,
+        "standFirm": 0.3,
+        "divingTackle": 0.8,
         "pro": 0.5
       },
       "players": [
         {
           "position": "Fun-Hoppa",
-          "name": "Wart"
+          "name": "Nub"
         },
         {
           "position": "Fun-Hoppa",
-          "name": "Nit"
+          "name": "Wart"
         },
         {
           "position": "Stilty Runna",
-          "name": "Blob"
+          "name": "Gunk"
         },
         {
           "position": "Stilty Runna",
-          "name": "Muck"
+          "name": "Flop"
         },
         {
           "position": "Fungus Flinga",
@@ -1984,19 +2219,22 @@
         },
         {
           "position": "Fungus Flinga",
-          "name": "Pus"
+          "name": "Nit"
         },
         {
           "position": "Pump Wagon",
-          "name": "Mauler"
+          "name": "Ironfist"
         },
         {
           "position": "Trained Troll",
-          "name": "Mangles"
+          "name": "Scab"
         },
         {
           "position": "Snotling Lineman",
-          "name": "Ooze"
+          "name": "Smear",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "Snotling Lineman",
@@ -2004,27 +2242,19 @@
         },
         {
           "position": "Snotling Lineman",
-          "name": "Nub"
-        },
-        {
-          "position": "Snotling Lineman",
-          "name": "Smear"
-        },
-        {
-          "position": "Snotling Lineman",
-          "name": "Flop"
-        },
-        {
-          "position": "Snotling Lineman",
           "name": "Snot"
         },
         {
           "position": "Snotling Lineman",
-          "name": "Gunk"
+          "name": "Muck"
         },
         {
           "position": "Snotling Lineman",
-          "name": "Drip"
+          "name": "Blob"
+        },
+        {
+          "position": "Snotling Lineman",
+          "name": "Glob"
         }
       ]
     },
@@ -2035,34 +2265,40 @@
       "hasApothecary": false,
       "strategy": {
         "wrestle": 0.4,
-        "standFirm": 0.5,
-        "divingTackle": 0.5,
-        "pro": 0.5
+        "standFirm": 0.6,
+        "divingTackle": 0.2,
+        "pro": 0.4
       },
       "players": [
         {
           "position": "Anointed Thrower",
-          "name": "Ramesses"
+          "name": "Thutmose",
+          "extraSkills": [
+            "Accurate"
+          ]
         },
         {
           "position": "Anointed Thrower",
-          "name": "Mahu"
-        },
-        {
-          "position": "Anointed Blitzer",
-          "name": "Ay"
-        },
-        {
-          "position": "Anointed Blitzer",
-          "name": "Sennefer"
-        },
-        {
-          "position": "Tomb Guardian",
-          "name": "Kha"
-        },
-        {
-          "position": "Tomb Guardian",
           "name": "Rekhmire"
+        },
+        {
+          "position": "Anointed Blitzer",
+          "name": "Amenhotep"
+        },
+        {
+          "position": "Anointed Blitzer",
+          "name": "Useramon"
+        },
+        {
+          "position": "Tomb Guardian",
+          "name": "Horemheb",
+          "extraSkills": [
+            "Guard"
+          ]
+        },
+        {
+          "position": "Tomb Guardian",
+          "name": "Ramesses"
         },
         {
           "position": "Tomb Guardian",
@@ -2070,15 +2306,14 @@
         },
         {
           "position": "Tomb Guardian",
-          "name": "Khnumhotep"
+          "name": "Sennedjem"
         },
         {
           "position": "Skeleton Lineman",
-          "name": "Useramon"
-        },
-        {
-          "position": "Skeleton Lineman",
-          "name": "Nebamun"
+          "name": "Sennefer",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "Skeleton Lineman",
@@ -2086,19 +2321,15 @@
         },
         {
           "position": "Skeleton Lineman",
-          "name": "Horemheb"
-        },
-        {
-          "position": "Skeleton Lineman",
-          "name": "Amenhotep"
-        },
-        {
-          "position": "Skeleton Lineman",
-          "name": "Thutmose"
-        },
-        {
-          "position": "Skeleton Lineman",
           "name": "Tutankhamun"
+        },
+        {
+          "position": "Skeleton Lineman",
+          "name": "Ineni"
+        },
+        {
+          "position": "Skeleton Lineman",
+          "name": "Kha"
         }
       ]
     },
@@ -2111,12 +2342,15 @@
         "wrestle": 0.4,
         "standFirm": 0.3,
         "divingTackle": 0.5,
-        "pro": 0.6
+        "pro": 0.5
       },
       "players": [
         {
           "position": "Skaven Clanrat",
-          "name": "Fang"
+          "name": "Fang",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "Skaven Clanrat",
@@ -2124,27 +2358,38 @@
         },
         {
           "position": "Skaven Clanrat",
-          "name": "Gloam"
-        },
-        {
-          "position": "Skaven Thrower",
-          "name": "Scratch"
-        },
-        {
-          "position": "Gutter Runner",
           "name": "Claw"
         },
         {
+          "position": "Skaven Thrower",
+          "name": "Tenebre",
+          "extraSkills": [
+            "Accurate"
+          ]
+        },
+        {
+          "position": "Gutter Runner",
+          "name": "Bite"
+        },
+        {
           "position": "Skaven Blitzer",
-          "name": "Darkling"
+          "name": "Shadowclaw"
         },
         {
           "position": "Underworld Troll",
-          "name": "Grinder"
+          "name": "Wrecker"
         },
         {
           "position": "Mutant Rat Ogre",
-          "name": "Tunnel"
+          "name": "Crusher"
+        },
+        {
+          "position": "Underworld Goblin Lineman",
+          "name": "Scratch"
+        },
+        {
+          "position": "Underworld Goblin Lineman",
+          "name": "Darkling"
         },
         {
           "position": "Underworld Goblin Lineman",
@@ -2152,31 +2397,11 @@
         },
         {
           "position": "Underworld Goblin Lineman",
-          "name": "Gnaw"
-        },
-        {
-          "position": "Underworld Goblin Lineman",
-          "name": "Skitter"
-        },
-        {
-          "position": "Underworld Goblin Lineman",
-          "name": "Bite"
-        },
-        {
-          "position": "Underworld Goblin Lineman",
-          "name": "Shadowclaw"
-        },
-        {
-          "position": "Underworld Goblin Lineman",
-          "name": "Scurry"
+          "name": "Tunnel"
         },
         {
           "position": "Underworld Goblin Lineman",
           "name": "Sewer"
-        },
-        {
-          "position": "Underworld Goblin Lineman",
-          "name": "Tenebre"
         }
       ]
     },
@@ -2186,51 +2411,59 @@
       "rerolls": 3,
       "hasApothecary": true,
       "strategy": {
-        "wrestle": 0.3,
-        "standFirm": 0.5,
+        "wrestle": 0.4,
+        "standFirm": 0.4,
         "divingTackle": 0.4,
-        "pro": 0.4
+        "pro": 0.6
       },
       "players": [
         {
           "position": "Vampire Runner",
-          "name": "Mortlach"
+          "name": "Janos",
+          "extraSkills": [
+            "Sure Hands"
+          ]
         },
         {
           "position": "Vampire Runner",
-          "name": "Dieter"
-        },
-        {
-          "position": "Vampire Blitzer",
-          "name": "Dracul"
-        },
-        {
-          "position": "Vampire Blitzer",
-          "name": "Belloch"
-        },
-        {
-          "position": "Vampire Thrower",
-          "name": "Fyodor"
-        },
-        {
-          "position": "Vampire Thrower",
-          "name": "Ashford"
-        },
-        {
-          "position": "Vargheist",
           "name": "Carstein"
         },
         {
-          "position": "Thrall Lineman",
-          "name": "Janos"
+          "position": "Vampire Blitzer",
+          "name": "Noctis",
+          "extraSkills": [
+            "Block"
+          ]
+        },
+        {
+          "position": "Vampire Blitzer",
+          "name": "Isadora"
+        },
+        {
+          "position": "Vampire Thrower",
+          "name": "Ashford",
+          "extraSkills": [
+            "Accurate"
+          ]
+        },
+        {
+          "position": "Vampire Thrower",
+          "name": "Mortlach"
+        },
+        {
+          "position": "Vargheist",
+          "name": "Grinder"
         },
         {
           "position": "Thrall Lineman",
-          "name": "Malachar"
+          "name": "Belloch",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "Thrall Lineman",
-          "name": "Gharst"
+          "name": "Vladek"
         },
         {
           "position": "Thrall Lineman",
@@ -2238,7 +2471,7 @@
         },
         {
           "position": "Thrall Lineman",
-          "name": "Hieronymus"
+          "name": "Dieter"
         },
         {
           "position": "Thrall Lineman",
@@ -2246,11 +2479,15 @@
         },
         {
           "position": "Thrall Lineman",
-          "name": "Isadora"
+          "name": "Dracul"
         },
         {
           "position": "Thrall Lineman",
-          "name": "Noctis"
+          "name": "Hieronymus"
+        },
+        {
+          "position": "Thrall Lineman",
+          "name": "Fyodor"
         }
       ]
     },
@@ -2260,47 +2497,53 @@
       "rerolls": 3,
       "hasApothecary": true,
       "strategy": {
-        "wrestle": 0.8,
-        "standFirm": 0.8,
-        "divingTackle": 0.4,
-        "pro": 0.4
+        "wrestle": 0.3,
+        "standFirm": 0.2,
+        "divingTackle": 0.7,
+        "pro": 0.5
       },
       "players": [
         {
           "position": "Wood Elf Thrower",
-          "name": "Thornweave"
+          "name": "Liriel",
+          "extraSkills": [
+            "Accurate"
+          ]
         },
         {
           "position": "Wood Elf Thrower",
-          "name": "Yandrel"
+          "name": "Vaelindor"
         },
         {
           "position": "Wood Elf Catcher",
-          "name": "Zariel"
-        },
-        {
-          "position": "Wood Elf Catcher",
-          "name": "Maelar"
-        },
-        {
-          "position": "Wardancer",
-          "name": "Seladrel"
-        },
-        {
-          "position": "Wardancer",
           "name": "Arannis"
         },
         {
+          "position": "Wood Elf Catcher",
+          "name": "Jaraniel"
+        },
+        {
+          "position": "Wardancer",
+          "name": "Haemir"
+        },
+        {
+          "position": "Wardancer",
+          "name": "Ulanis"
+        },
+        {
           "position": "Loren Forest Treeman",
-          "name": "Crusher"
+          "name": "Aelindra"
         },
         {
           "position": "Wood Elf Lineman",
-          "name": "Elarion"
+          "name": "Dawnleap",
+          "extraSkills": [
+            "Block"
+          ]
         },
         {
           "position": "Wood Elf Lineman",
-          "name": "Vaelindor"
+          "name": "Kaladrel"
         },
         {
           "position": "Wood Elf Lineman",
@@ -2308,19 +2551,15 @@
         },
         {
           "position": "Wood Elf Lineman",
-          "name": "Iolanis"
+          "name": "Elarion"
         },
         {
           "position": "Wood Elf Lineman",
-          "name": "Haemir"
+          "name": "Seladrel"
         },
         {
           "position": "Wood Elf Lineman",
-          "name": "Ulanis"
-        },
-        {
-          "position": "Wood Elf Lineman",
-          "name": "Starfall"
+          "name": "Taelar"
         },
         {
           "position": "Wood Elf Lineman",
