@@ -173,11 +173,19 @@ int defendersInZone(const TeamState& defense, Zone z) {
     return n;
 }
 
-// Count tackle zones on the ball carrier's path.
-// Only a fraction of defenders in the zone are directly on the carrier's path –
-// cap at 2 to reflect that blockers screen most defenders.
-int countTackleZones(const TeamState& defense, Zone ballZone) {
-    return std::min(2, defendersInZone(defense, ballZone));
+// Count effective tackle zones on a player in ballZone.
+// Raw count capped at 4. Offensive players in the same zone screen defenders:
+// Guards cancel 1:1, other non-prone blockers cancel at 2:1 (cage effect).
+int countTackleZones(const TeamState& defense, const TeamState& offense, Zone ballZone) {
+    int raw = defendersInZone(defense, ballZone);
+    int guards = 0, blockers = 0;
+    for (const auto& p : offense.allPlayers()) {
+        if (!p.isActive() || p.prone || p.hasBall || p.zone != ballZone) continue;
+        if (p.stats.has(SK::Guard)) ++guards;
+        else                        ++blockers;
+    }
+    int screened = guards + blockers / 2;
+    return std::max(0, std::min(4, raw - screened));
 }
 
 // Attempt a block: attacker vs nearest opponent in same/adjacent zone
@@ -230,7 +238,17 @@ bool attemptBlock(PlayerState& attacker, TeamState& defenseTeam,
         else if (target->ko)  ++attackerTeam.knockouts;
     }
 
-    return result.turnover;  // true = turnover (attacker fell)
+    // Follow-up: non-ball-carrier blocker advances one zone after a successful push.
+    // Models the blocker stepping into the vacated space, opening a lane for the carrier.
+    if (!attackerHasBall &&
+        (result.outcome == BlockOutcome::DefenderPushed ||
+         result.outcome == BlockOutcome::DefenderStumbles) &&
+        attacker.zone < Zone::OppEndZone)
+    {
+        attacker.zone = attacker.zone + 1;
+    }
+
+    return result.turnover;
 }
 
 // Simulate the ball carrier advancing toward the opponent's end zone.
@@ -243,10 +261,8 @@ bool advanceBallCarrier(TeamState& offense, TeamState& defense, Dice& dice) {
     // We only verify the carrier exists and is physically on the pitch.
     if (!carrier || !carrier->isActive() || carrier->stunned || carrier->prone) return false;
 
-    // All players get 2 base zone-crossing attempts per turn.
-    // MA does not affect rush count in this zone model.
-    [[maybe_unused]] int ma = carrier->stats.ma;
-    int maxZoneAttempts = 2;
+    // Zone-crossing attempts scale with MA: MA4→1, MA5→1, MA6-8→2, MA9+→3.
+    int maxZoneAttempts = std::max(1, carrier->stats.ma / 3);
     // Sprint: one extra rush at 2+ (d6 >= 2). Sure Feet re-rolls one failed sprint attempt.
     if (carrier->stats.has(SK::Sprint)) {
         bool sprintOk = dice.d6() >= 2;
@@ -266,7 +282,7 @@ bool advanceBallCarrier(TeamState& offense, TeamState& defense, Dice& dice) {
             return true;
         }
 
-        int tz = countTackleZones(defense, current);
+        int tz = countTackleZones(defense, offense, current);
         if (tz > 0) {
             // Helper: attempt one dodge, enforcing exactly one re-roll of any kind.
             // Priority: Dodge skill → Pro → team re-roll (mutually exclusive).
@@ -366,7 +382,7 @@ bool attemptPass(TeamState& offense, const TeamState& defense, Dice& dice) {
     int effectivePa = *carrier->stats.pa;
     if (carrier->stats.has(SK::Accurate)) --effectivePa;
     if (!carrier->stats.has(SK::NervesOfSteel))
-        effectivePa += countTackleZones(defense, carrier->zone);
+        effectivePa += countTackleZones(defense, offense, carrier->zone);
 
     // Pass: Pass skill re-roll OR team re-roll — not both.
     bool passReroll = carrier->stats.has(SK::Pass);
@@ -383,7 +399,7 @@ bool attemptPass(TeamState& offense, const TeamState& defense, Dice& dice) {
     int effectiveCatchAg = receiver->stats.ag;
     if (receiver->stats.has(SK::DivingCatch)) --effectiveCatchAg;
     if (!receiver->stats.has(SK::NervesOfSteel))
-        effectiveCatchAg += countTackleZones(defense, receiver->zone);
+        effectiveCatchAg += countTackleZones(defense, offense, receiver->zone);
 
     // Catch: Catch skill re-roll OR team re-roll — not both.
     bool catchReroll = receiver->stats.has(SK::Catch);
@@ -475,7 +491,10 @@ bool simulateTurn(TeamState& offense, TeamState& defense, Dice& dice,
     // the carrier (reflecting path obstructions and actual board distance).
     {
         PlayerState* carrier = offense.ballCarrier();
-        if (carrier && !defenseBlitzUsed && dice.d6() >= 4) {
+        // Defense blitzes more aggressively early in the drive when fresh;
+        // less so late when players are depleted. turnsLeft 6-8→67%, 3-5→50%, 1-2→33%.
+        int blitzThreshold = (turnsLeft >= 6) ? 3 : (turnsLeft >= 3) ? 4 : 5;
+        if (carrier && !defenseBlitzUsed && dice.d6() >= blitzThreshold) {
             for (auto& d : defense.allPlayers()) {
                 if (!d.canAct()) continue;
                 if (std::abs(d.zone - carrier->zone) <= 1) {
