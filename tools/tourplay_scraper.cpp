@@ -69,7 +69,7 @@ static void killChrome() {
     if (g_chromePid > 0) { kill(g_chromePid, SIGTERM); waitpid(g_chromePid, nullptr, 0); g_chromePid = 0; }
 }
 
-static bool spawnChrome(const std::string& chromeBin, int port) {
+static bool spawnChrome(const std::string& chromeBin, int port, bool headless) {
     pid_t pid = fork();
     if (pid < 0) return false;
     if (pid == 0) {
@@ -78,22 +78,25 @@ static bool spawnChrome(const std::string& chromeBin, int port) {
         dup2(devnull, STDOUT_FILENO);
         dup2(devnull, STDERR_FILENO);
         close(devnull);
-        std::string portArg   = std::format("--remote-debugging-port={}", port);
+        std::string portArg    = std::format("--remote-debugging-port={}", port);
         std::string profileArg = std::format("--user-data-dir=/tmp/tp_scraper_{}", (long)getpid());
-        const char* argv[] = {
-            chromeBin.c_str(),
-            "--headless=new",
-            "--no-sandbox",
-            "--disable-gpu",
-            "--disable-dev-shm-usage",
-            "--disable-extensions",
-            "--disable-background-networking",
-            portArg.c_str(),
-            profileArg.c_str(),
-            "about:blank",
-            nullptr
-        };
-        execvp(argv[0], const_cast<char* const*>(argv));
+        // Build args vector so we can conditionally add --headless=new
+        std::vector<const char*> argv;
+        argv.push_back(chromeBin.c_str());
+        if (headless) {
+            argv.push_back("--headless=new");
+            argv.push_back("--disable-gpu");
+            argv.push_back("--disable-dev-shm-usage");
+        }
+        argv.push_back("--no-sandbox");
+        argv.push_back("--disable-extensions");
+        argv.push_back("--disable-background-networking");
+        argv.push_back(portArg.c_str());
+        argv.push_back(profileArg.c_str());
+        argv.push_back("about:blank");
+        argv.push_back(nullptr);
+        const char* const* argvArr = argv.data();
+        execvp(argvArr[0], const_cast<char* const*>(argvArr));
         _exit(1);
     }
     g_chromePid = pid;
@@ -689,6 +692,8 @@ struct Args {
     int tournaments  = 10000;
     int waitMs       = 8000;
     int debugPort    = 9222;
+    bool headless    = true;   // false → visible browser window
+    bool connectOnly = false;  // true  → don't spawn, connect to running browser
     bool verbose     = false;
 };
 
@@ -697,6 +702,16 @@ static void printUsage(const char* prog) {
     std::println("");
     std::println("  --url URL          TourPlay tournament URL");
     std::println("                     e.g. https://tourplay.net/en/blood-bowl/punchbowl-2");
+    std::println("");
+    std::println("Browser modes (pick one):");
+    std::println("  (default)          Launch Chrome headless — no visible window");
+    std::println("  --no-headless      Launch Chrome as a visible window");
+    std::println("  --connect          Connect to an already-running browser on --port");
+    std::println("                     Start your browser first with:");
+    std::println("                       google-chrome --remote-debugging-port=9222");
+    std::println("                     Then run this tool with --connect");
+    std::println("");
+    std::println("Options:");
     std::println("  --chrome PATH      Path to Chrome/Chromium (auto-detected if omitted)");
     std::println("  --seed FILE        Seed data file (default: bloodbowl-2025-seed.json)");
     std::println("  --output FILE      Output JSON file (default: tournament_scraped.json)");
@@ -706,11 +721,6 @@ static void printUsage(const char* prog) {
     std::println("  --port N           Chrome remote debugging port (default: 9222)");
     std::println("  --verbose          Print detailed progress");
     std::println("  --help");
-    std::println("");
-    std::println("Requires: google-chrome, chromium-browser, or chromium in PATH.");
-    std::println("The page is an Angular SPA — Chrome renders the JavaScript so the");
-    std::println("scraper can read the actual DOM content (no auth required for public");
-    std::println("tournament pages).");
 }
 
 static std::optional<Args> parseArgs(int argc, char* argv[]) {
@@ -721,15 +731,17 @@ static std::optional<Args> parseArgs(int argc, char* argv[]) {
             if (++i >= argc) { std::println(std::cerr, "Missing value for {}", arg); std::exit(1); }
             return argv[i];
         };
-        if      (arg == "--url")         a.url        = next();
-        else if (arg == "--chrome")      a.chromeBin  = next();
-        else if (arg == "--seed")        a.seedPath   = next();
-        else if (arg == "--output")      a.outputPath = next();
-        else if (arg == "--rounds")      a.rounds     = std::stoi(next());
-        else if (arg == "--tournaments") a.tournaments = std::stoi(next());
-        else if (arg == "--wait")        a.waitMs     = std::stoi(next());
-        else if (arg == "--port")        a.debugPort  = std::stoi(next());
-        else if (arg == "--verbose")     a.verbose    = true;
+        if      (arg == "--url")         a.url         = next();
+        else if (arg == "--chrome")      a.chromeBin   = next();
+        else if (arg == "--seed")        a.seedPath    = next();
+        else if (arg == "--output")      a.outputPath  = next();
+        else if (arg == "--rounds")      a.rounds      = std::stoi(next());
+        else if (arg == "--tournaments") a.tournaments  = std::stoi(next());
+        else if (arg == "--wait")        a.waitMs      = std::stoi(next());
+        else if (arg == "--port")        a.debugPort   = std::stoi(next());
+        else if (arg == "--no-headless") a.headless    = false;
+        else if (arg == "--connect")     a.connectOnly = true;
+        else if (arg == "--verbose")     a.verbose     = true;
         else if (arg == "--help")        { printUsage(argv[0]); std::exit(0); }
         else { std::println(std::cerr, "Unknown argument: {}", arg); return std::nullopt; }
     }
@@ -763,19 +775,12 @@ int main(int argc, char* argv[]) {
     if (!argsOpt) return 1;
     const auto& args = *argsOpt;
 
-    std::string chrome = findChrome(args.chromeBin);
-    if (chrome.empty()) {
-        std::println(std::cerr, "Error: Chrome/Chromium not found. Install google-chrome or chromium-browser.");
-        return 1;
-    }
-
-    std::string tournId   = extractTournamentId(args.url);
-    std::string baseUrl   = tournamentBase(args.url);
+    std::string tournId    = extractTournamentId(args.url);
+    std::string baseUrl    = tournamentBase(args.url);
     std::string playersUrl = baseUrl + "/players";
 
     std::println("Tournament   : {}", tournId);
     std::println("Players page : {}", playersUrl);
-    std::println("Chrome       : {}", chrome);
     std::println("Output       : {}", args.outputPath);
     std::println("");
 
@@ -784,14 +789,28 @@ int main(int argc, char* argv[]) {
     SeedSkills seed = loadSeed(args.seedPath);
     if (!seed.empty()) std::println("Loaded seed: {} races", seed.size());
 
-    // Spawn Chrome
-    std::println("Launching Chrome headless (port {}) ...", args.debugPort);
-    if (!spawnChrome(chrome, args.debugPort)) {
-        std::println(std::cerr, "Failed to start Chrome.");
-        curl_global_cleanup();
-        return 1;
+    if (args.connectOnly) {
+        // ── Connect mode: attach to a browser already running with --remote-debugging-port
+        std::println("Connect mode: attaching to browser on port {} ...", args.debugPort);
+        std::println("(Make sure your browser is running with --remote-debugging-port={})", args.debugPort);
+    } else {
+        // ── Spawn mode: launch Chrome/Chromium ourselves
+        std::string chrome = findChrome(args.chromeBin);
+        if (chrome.empty()) {
+            std::println(std::cerr, "Error: Chrome/Chromium not found. Install google-chrome or chromium-browser,");
+            std::println(std::cerr, "       or use --connect to attach to a browser you started manually.");
+            curl_global_cleanup();
+            return 1;
+        }
+        std::string mode = args.headless ? "headless" : "visible window";
+        std::println("Launching Chrome {} (port {}) ...", mode, args.debugPort);
+        if (!spawnChrome(chrome, args.debugPort, args.headless)) {
+            std::println(std::cerr, "Failed to start Chrome.");
+            curl_global_cleanup();
+            return 1;
+        }
+        std::println("Chrome started (PID {}).", static_cast<int>(g_chromePid));
     }
-    std::println("Chrome started (PID {}).", static_cast<int>(g_chromePid));
 
     // Connect CDP
     Cdp cdp;
