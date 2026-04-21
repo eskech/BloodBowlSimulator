@@ -488,12 +488,254 @@ static int countLoadedPlayers(Cdp& cdp) {
     try { return std::stoi(s); } catch (...) { return 0; }
 }
 
-// Extract all teams and their players from the /players page in one pass.
-// TourPlay renders all squads on this single page — no need to follow links.
-static json extractAllTeams(Cdp& cdp, const SeedSkills& seed, bool verbose) {
+// Extract team summaries (name + race + roster link) from the /players page.
+// The page lists one entry per team: coach, @handle, experience, teamName, race, [abbrev].
+// We collect all anchor hrefs that look like roster pages and correlate with team names.
+static json extractTeamSummaries(Cdp& cdp, const SeedSkills& seed,
+                                  const std::string& tournId, bool verbose)
+{
+    // Get links + page text in one call
+    std::string raw = cdp.evalString(R"js(
+(function() {
+  // Collect all anchor hrefs — roster links follow the pattern:
+  //   /en/blood-bowl/<tournId>/participants/<something>
+  //   or similar
+  var hrefs = [];
+  document.querySelectorAll('a[href]').forEach(function(a) {
+    var h = a.getAttribute('href') || '';
+    if (h && !hrefs.includes(h)) hrefs.push(h);
+  });
+  return JSON.stringify({
+    text: document.body.innerText,
+    hrefs: hrefs
+  });
+})()
+)js", 10000);
+
+    json page;
+    try { page = json::parse(raw); } catch (...) { return json::array(); }
+
+    std::string bodyText = page.value("text", "");
+    std::vector<std::string> hrefs;
+    for (const auto& h : page.value("hrefs", json::array()))
+        hrefs.push_back(h.get<std::string>());
+
+    if (verbose) {
+        std::println("  hrefs ({}):", hrefs.size());
+        for (const auto& h : hrefs) std::println("    {}", h);
+    }
+
+    // Build the set of known race names for anchoring
+    std::vector<std::string> knownRaces;
+    for (const auto& [r, _] : seed) knownRaces.push_back(r);
+    // Also add common aliases
+    for (const auto& [alias, canonical] : RACE_MAP)
+        knownRaces.push_back(alias);
+
+    // Parse the flat text: split by newlines, find blocks ending in a race name.
+    // Each team block looks like:
+    //   CoachName
+    //   @CoachHandle
+    //   Experience (Rookie/Experienced/etc.)
+    //   TeamName
+    //   RaceName
+    //   [optional short abbreviation]
+    std::vector<std::string> lines;
+    {
+        std::istringstream ss(bodyText);
+        std::string line;
+        while (std::getline(ss, line)) {
+            // Trim
+            line.erase(0, line.find_first_not_of(" \t\r"));
+            line.erase(line.find_last_not_of(" \t\r") + 1);
+            if (!line.empty()) lines.push_back(line);
+        }
+    }
+
+    static const std::set<std::string> EXPERIENCE_WORDS = {
+        "Rookie","Experienced","Expert","Veteran","Legend","Novice","Emerging"
+    };
+
+    // Find lines that are a known race name — that anchors each team entry
+    std::vector<std::pair<std::string,std::string>> teamSummaries; // {name, race}
+    for (size_t i = 0; i < lines.size(); ++i) {
+        // Check if lines[i] is a known race (after normalisation)
+        std::string norm = normaliseRace(lines[i]);
+        bool isRace = (seed.find(norm) != seed.end());
+        if (!isRace) continue;
+
+        // Team name is the line just before the race.
+        // Scan backwards to skip experience-level words and @handles.
+        int nameIdx = static_cast<int>(i) - 1;
+        while (nameIdx >= 0) {
+            const std::string& l = lines[nameIdx];
+            if (l.starts_with('@')) { --nameIdx; continue; }
+            if (EXPERIENCE_WORDS.count(l)) { --nameIdx; continue; }
+            break;
+        }
+        if (nameIdx < 0) continue;
+        std::string teamName = lines[nameIdx];
+        // Skip if it looks like a nav/ui element
+        if (teamName.size() < 2 || teamName == "Search" || teamName == "Category") continue;
+
+        teamSummaries.push_back({teamName, norm});
+        if (verbose) std::println("  Team: {} ({})", teamName, norm);
+    }
+
+    // Find roster links — URLs containing the tournament ID and a participant/squad segment
+    // Filter out known nav suffixes
+    static const std::set<std::string> NAV = {
+        "players","standings","schedule","news","phases","clasifications",
+        "board","coach-stats","team-stats","mercenaries","draws","awards","honors"
+    };
+    std::vector<std::string> rosterLinks;
+    for (const auto& h : hrefs) {
+        if (h.find(tournId) == std::string::npos) continue;
+        // Check last path segment isn't a nav page
+        auto last = h.rfind('/');
+        std::string seg = (last != std::string::npos) ? h.substr(last+1) : h;
+        if (NAV.count(seg)) continue;
+        if (seg.empty() || seg == tournId) continue;
+        rosterLinks.push_back(h);
+    }
+    if (verbose) {
+        std::println("  Roster links ({}):", rosterLinks.size());
+        for (const auto& l : rosterLinks) std::println("    {}", l);
+    }
+
+    // Build team stubs with default values; actual players filled in by caller
+    json result = json::array();
+    for (size_t i = 0; i < teamSummaries.size(); ++i) {
+        json t;
+        t["name"]          = teamSummaries[i].first;
+        t["race"]          = teamSummaries[i].second;
+        t["rerolls"]       = 2;
+        t["hasApothecary"] = false;
+        t["players"]       = json::array();
+        // Attach a roster link if available (one per team in order)
+        if (i < rosterLinks.size())
+            t["_rosterLink"] = rosterLinks[i];
+        result.push_back(std::move(t));
+    }
+    return result;
+}
+
+// Extract player rows from a single rendered roster page.
+static void enrichWithRoster(json& team, Cdp& cdp, const SeedSkills& seed, bool verbose) {
+    std::string raceStr = team.value("race","");
+    const std::map<std::string,std::set<std::string>>* seedRace = nullptr;
+    if (auto it = seed.find(raceStr); it != seed.end()) seedRace = &it->second;
+
+    std::string raw = cdp.evalString(R"js(
+(function() {
+  var rerolls = 2, apoth = false, riotous = false;
+  var body = document.body.innerText;
+  var m = body.match(/Re.?roll[s]?[:\s]+(\d+)/i);
+  if (m) rerolls = parseInt(m[1]);
+  if (/apothecary/i.test(body) && !/no apothecary/i.test(body)) apoth = true;
+  if (/riotous/i.test(body)) riotous = true;
+
+  var players = [];
+  // mat-table rows
+  document.querySelectorAll('mat-row, tbody tr').forEach(function(row) {
+    var cells = Array.from(row.querySelectorAll('mat-cell, td'))
+                     .map(function(c){ return c.textContent.trim(); });
+    if (cells.length >= 2 && /^\d+$/.test(cells[0]))
+      players.push({num:cells[0], name:cells[1]||'', pos:cells[2]||'', skills:cells[3]||''});
+  });
+  // card-based fallback
+  if (!players.length) {
+    document.querySelectorAll('[class*="player-card"],[class*="lineup"]').forEach(function(c) {
+      var n = c.querySelector('[class*="name"],h3,h4');
+      var p = c.querySelector('[class*="position"],[class*="pos"]');
+      var s = c.querySelector('[class*="skill"]');
+      if (n) players.push({num:'', name:n.textContent.trim(),
+                            pos: p?p.textContent.trim():'',
+                            skills: s?s.textContent.trim():''});
+    });
+  }
+  return JSON.stringify({rerolls:rerolls, apoth:apoth, riotous:riotous, players:players});
+})()
+)js", 15000);
+
+    json r;
+    try { r = json::parse(raw); } catch (...) { return; }
+
+    team["rerolls"]       = r.value("rerolls", 2);
+    team["hasApothecary"] = r.value("apoth", false);
+    if (r.value("riotous", false)) team["riotousRookies"] = true;
+
+    json players = json::array();
+    for (const auto& p : r.value("players", json::array())) {
+        std::string pName  = p.value("name","");
+        std::string posRaw = p.value("pos","");
+        std::string sklStr = p.value("skills","");
+        if (pName.empty()) continue;
+
+        std::vector<std::string> all;
+        std::istringstream ss(sklStr);
+        std::string sk;
+        while (std::getline(ss, sk, ',')) {
+            sk.erase(0, sk.find_first_not_of(" \t\n\r"));
+            sk.erase(sk.find_last_not_of(" \t\n\r") + 1);
+            if (!sk.empty()) all.push_back(normaliseSkill(sk));
+        }
+        std::vector<std::string> extra;
+        if (seedRace) {
+            auto posIt = seedRace->find(posRaw);
+            if (posIt != seedRace->end()) {
+                for (const auto& s : all)
+                    if (!posIt->second.count(s)) extra.push_back(s);
+            } else extra = all;
+        } else extra = all;
+
+        json player;
+        player["position"] = posRaw;
+        player["name"]     = pName;
+        if (!extra.empty()) player["extraSkills"] = extra;
+        players.push_back(std::move(player));
+    }
+    team["players"] = std::move(players);
+}
+
+// Wrapper called from main — extracts summaries then enriches with roster data.
+static json extractAllTeams(Cdp& cdp, const SeedSkills& seed,
+                             const std::string& tournId, bool verbose,
+                             int waitMs)
+{
+    json summaries = extractTeamSummaries(cdp, seed, tournId, verbose);
+    if (summaries.empty()) return summaries;
+
+    std::println("Found {} team(s) on players page.", summaries.size());
+
+    json result = json::array();
+    for (auto& t : summaries) {
+        std::string teamName = t.value("name","?");
+        std::string rosterLink = t.value("_rosterLink","");
+        t.erase("_rosterLink");
+
+        if (rosterLink.empty()) {
+            std::println("  {} — no roster link, using summary only", teamName);
+            result.push_back(std::move(t));
+            continue;
+        }
+
+        std::string rosterUrl = "https://tourplay.net" + rosterLink;
+        std::println("  {} → {}", teamName, rosterLink);
+        cdp.navigate(rosterUrl, 20000);
+        cdp.waitForAngular(waitMs);
+
+        enrichWithRoster(t, cdp, seed, verbose);
+        std::println("    {} players, {} rerolls, apoth={}",
+            t["players"].size(), t.value("rerolls",0), t.value("hasApothecary",false));
+        result.push_back(std::move(t));
+    }
+    return result;
+}
+
+// Legacy stub — no longer called but used in the old flow
+[[maybe_unused]] static json extractAllTeams_old(Cdp& cdp, const SeedSkills& seed, bool verbose) {
     // Pull the full page as one JSON blob via JS.
-    // Strategy: find all team sections (mat-expansion-panel or mat-card blocks),
-    // then for each section find the header info (name, race) and player rows.
     std::string raw = cdp.evalString(R"js(
 (function() {
   var teams = [];
@@ -1130,9 +1372,9 @@ int main(int argc, char* argv[]) {
     std::println("Waiting {}ms for Angular to finish rendering ...", args.waitMs);
     cdp.waitForAngular(args.waitMs);
 
-    // ── Step 2: Extract all teams from the /players page in one pass ─────────
-    std::println("Extracting teams and rosters from players page ...");
-    json teams = extractAllTeams(cdp, seed, args.verbose);
+    // ── Step 2: Extract all teams from the /players page ─────────────────────
+    std::println("Extracting teams from players page ...");
+    json teams = extractAllTeams(cdp, seed, tournId, args.verbose, args.waitMs);
 
     if (teams.empty()) {
         std::string snippet = cdp.evalString("document.body.innerText.substring(0,600)");
