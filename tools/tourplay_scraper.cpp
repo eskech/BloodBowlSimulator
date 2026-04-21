@@ -582,21 +582,11 @@ static json extractTeamSummaries(Cdp& cdp, const SeedSkills& seed,
         if (verbose) std::println("  Team: {} ({})", teamName, norm);
     }
 
-    // Find roster links — URLs containing the tournament ID and a participant/squad segment
-    // Filter out known nav suffixes
-    static const std::set<std::string> NAV = {
-        "players","standings","schedule","news","phases","clasifications",
-        "board","coach-stats","team-stats","mercenaries","draws","awards","honors"
-    };
+    // Roster links — only follow URLs that contain "/rosters/"
     std::vector<std::string> rosterLinks;
     for (const auto& h : hrefs) {
-        if (h.find(tournId) == std::string::npos) continue;
-        // Check last path segment isn't a nav page
-        auto last = h.rfind('/');
-        std::string seg = (last != std::string::npos) ? h.substr(last+1) : h;
-        if (NAV.count(seg)) continue;
-        if (seg.empty() || seg == tournId) continue;
-        rosterLinks.push_back(h);
+        if (h.find("/rosters/") != std::string::npos)
+            rosterLinks.push_back(h);
     }
     if (verbose) {
         std::println("  Roster links ({}):", rosterLinks.size());
