@@ -731,12 +731,16 @@ static void printUsage(const char* prog) {
     std::println("                     e.g. https://tourplay.net/en/blood-bowl/punchbowl-2");
     std::println("");
     std::println("Browser modes (pick one):");
-    std::println("  (default)          Launch Chrome headless — no visible window");
-    std::println("  --no-headless      Launch Chrome as a visible window");
-    std::println("  --connect          Connect to an already-running browser on --port");
-    std::println("                     Start your browser first with:");
+    std::println("  --no-headless      Launch Chrome as a visible window.");
+    std::println("                     The tool will pause at the NAF login page and");
+    std::println("                     wait for you to log in before continuing.");
+    std::println("  --connect          Connect to an already-running browser on --port.");
+    std::println("                     Recommended: your normal browser is already logged");
+    std::println("                     in to TourPlay so no auth prompt appears.");
+    std::println("                     Start Chrome once with:");
     std::println("                       google-chrome --remote-debugging-port=9222");
-    std::println("                     Then run this tool with --connect");
+    std::println("                     Log in to tourplay.net, then run this tool with --connect");
+    std::println("  (headless default) Not recommended — fresh profile has no NAF session.");
     std::println("");
     std::println("Options:");
     std::println("  --chrome PATH      Path to Chrome/Chromium (auto-detected if omitted)");
@@ -859,7 +863,39 @@ int main(int argc, char* argv[]) {
     bool loaded = cdp.navigate(playersUrl, 20000);
     std::string currentUrl = cdp.evalString("window.location.href");
     std::println("Page loaded: {}  URL: {}", loaded ? "yes" : "timeout", currentUrl);
-    std::println("Waiting {}ms for Angular to render ...", args.waitMs);
+
+    // Detect NAF / OIDC auth wall and give the user a chance to log in.
+    // TourPlay uses NAF OpenID Connect — a fresh Chrome profile has no session.
+    // In visible-window or connect mode the user can complete the auth manually.
+    {
+        std::string bodyText = cdp.evalString("document.body.innerText.substring(0,300)");
+        bool needsAuth = bodyText.find("NAF") != std::string::npos
+                      || bodyText.find("naf")  != std::string::npos
+                      || bodyText.find("login") != std::string::npos
+                      || bodyText.find("Login") != std::string::npos
+                      || bodyText.find("authorize") != std::string::npos
+                      || bodyText.find("Authorize") != std::string::npos
+                      || bodyText.find("sign in") != std::string::npos
+                      || bodyText.find("Sign in") != std::string::npos;
+        if (needsAuth) {
+            std::println("");
+            std::println("┌─────────────────────────────────────────────────────────┐");
+            std::println("│  Authentication required                                │");
+            std::println("│                                                         │");
+            std::println("│  TourPlay requires a NAF login.                         │");
+            std::println("│                                                         │");
+            std::println("│  1. Complete the login / NAF authorization in the       │");
+            std::println("│     browser window that opened.                         │");
+            std::println("│  2. Wait until the tournament players page loads fully. │");
+            std::println("│  3. Press Enter here to continue scraping.              │");
+            std::println("└─────────────────────────────────────────────────────────┘");
+            std::print("Press Enter when ready: ");
+            std::cin.get();
+            std::println("Resuming — waiting {}ms for Angular to render ...", args.waitMs);
+        } else {
+            std::println("Waiting {}ms for Angular to render ...", args.waitMs);
+        }
+    }
     cdp.waitForAngular(args.waitMs);
 
     // ── Step 2: Extract team links ───────────────────────────────────────────
