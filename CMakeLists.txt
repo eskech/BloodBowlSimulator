@@ -63,3 +63,18 @@ foreach(MATCH_FILE ${MATCH_FILES})
   get_filename_component(MATCH_NAME ${MATCH_FILE} NAME)
   configure_file(${MATCH_FILE} ${CMAKE_BINARY_DIR}/${MATCH_NAME} COPYONLY)
 endforeach()
+
+# ── TourPlay scraper (optional — requires libcurl) ────────────────────────────
+find_package(CURL QUIET)
+if(CURL_FOUND)
+  add_executable(tourplay_scraper tools/tourplay_scraper.cpp)
+  target_include_directories(tourplay_scraper PRIVATE src)
+  target_link_libraries(tourplay_scraper
+    PRIVATE
+      CURL::libcurl
+      nlohmann_json::nlohmann_json
+  )
+  message(STATUS "tourplay_scraper: ENABLED  (libcurl ${CURL_VERSION_STRING})")
+else()
+  message(STATUS "tourplay_scraper: DISABLED (libcurl not found — install libcurl-dev)")
+endif()
