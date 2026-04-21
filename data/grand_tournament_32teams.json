@@ -982,42 +982,34 @@
       },
       "players": [
         {
-          "position": "Catcher",
-          "name": "Thornweave",
-          "extraSkills": [
-            "Dodge"
-          ]
-        },
-        {
-          "position": "Catcher",
-          "name": "Yandrel"
-        },
-        {
-          "position": "Catcher",
-          "name": "Vaelindor"
-        },
-        {
-          "position": "Catcher",
-          "name": "Xalvrath"
-        },
-        {
-          "position": "Thrower",
+          "position": "Phoenix Warrior",
           "name": "Maelar",
           "extraSkills": [
             "Accurate"
           ]
         },
         {
-          "position": "Thrower",
+          "position": "Phoenix Warrior",
           "name": "Moonshade"
         },
         {
-          "position": "Blitzer",
+          "position": "Dragon Prince",
           "name": "Liriel"
         },
         {
-          "position": "Blitzer",
+          "position": "Dragon Prince",
           "name": "Jaraniel"
+        },
+        {
+          "position": "White Lion",
+          "name": "Thornweave",
+          "extraSkills": [
+            "Dodge"
+          ]
+        },
+        {
+          "position": "White Lion",
+          "name": "Yandrel"
         },
         {
           "position": "High Elf Lineman",
@@ -1025,6 +1017,14 @@
           "extraSkills": [
             "Block"
           ]
+        },
+        {
+          "position": "High Elf Lineman",
+          "name": "Vaelindor"
+        },
+        {
+          "position": "High Elf Lineman",
+          "name": "Xalvrath"
         },
         {
           "position": "High Elf Lineman",

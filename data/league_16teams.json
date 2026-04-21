@@ -272,20 +272,19 @@
       "hasApothecary": true,
       "strategy": { "wrestle": 0.4, "divingTackle": 0.6 },
       "players": [
+        { "position": "Phoenix Warrior",  "name": "Teclis",
+          "extraSkills": ["Accurate"] },
+        { "position": "Phoenix Warrior",  "name": "Finubar" },
+        { "position": "Dragon Prince",    "name": "Swiftwind" },
+        { "position": "Dragon Prince",    "name": "Imrik" },
+        { "position": "White Lion",       "name": "Tyrion",
+          "extraSkills": ["Mighty Blow"] },
+        { "position": "White Lion",       "name": "Korhil" },
         { "position": "High Elf Lineman", "name": "Alathariel" },
         { "position": "High Elf Lineman", "name": "Calandrel" },
         { "position": "High Elf Lineman", "name": "Eltharion" },
-        { "position": "High Elf Lineman", "name": "Finubar" },
-        { "position": "Catcher",          "name": "Swiftwind",
-          "extraSkills": ["Dodge"] },
-        { "position": "Catcher",          "name": "Moonstride" },
-        { "position": "Thrower",          "name": "Teclis",
-          "extraSkills": ["Accurate"] },
-        { "position": "Blitzer",          "name": "Tyrion",
-          "extraSkills": ["Mighty Blow"] },
-        { "position": "Blitzer",          "name": "Imrik" },
-        { "position": "Blitzer",          "name": "Korhil" },
-        { "position": "Blitzer",          "name": "Alith Anar" }
+        { "position": "High Elf Lineman", "name": "Moonstride" },
+        { "position": "High Elf Lineman", "name": "Alith Anar" }
       ]
     },
 

@@ -2893,7 +2893,7 @@
       "tier": 1,
       "rerollCost": 50,
       "canHaveApothecary": true,
-      "leagues": "Elven Kingdoms League, Old World Classic",
+      "leagues": "Elven Kingdoms League",
       "rosterPositions": [
         {
           "name": "High Elf Lineman",
@@ -2909,36 +2909,14 @@
             "Agility"
           ],
           "doubleSkillAccess": [
-            "Strength",
-            "Passing"
+            "Strength"
           ],
           "startingSkills": [],
           "keywords": "Lineman"
         },
         {
-          "name": "Catcher",
+          "name": "Phoenix Warrior",
           "cost": 90000,
-          "maxCount": 4,
-          "ma": 8,
-          "st": 3,
-          "ag": 2,
-          "pa": 3,
-          "av": 8,
-          "normalSkillAccess": [
-            "General",
-            "Agility"
-          ],
-          "doubleSkillAccess": [
-            "Strength"
-          ],
-          "startingSkills": [
-            "Catch"
-          ],
-          "keywords": "Catcher"
-        },
-        {
-          "name": "Thrower",
-          "cost": 100000,
           "maxCount": 2,
           "ma": 6,
           "st": 3,
@@ -2954,20 +2932,41 @@
             "Strength"
           ],
           "startingSkills": [
-            "Cloud Burster",
-            "Pass",
-            "Safe Pass"
+            "Cloud Burster"
           ],
           "keywords": "Thrower"
         },
         {
-          "name": "Blitzer",
-          "cost": 100000,
+          "name": "Dragon Prince",
+          "cost": 110000,
+          "maxCount": 2,
+          "ma": 8,
+          "st": 3,
+          "ag": 2,
+          "pa": 4,
+          "av": 9,
+          "normalSkillAccess": [
+            "General",
+            "Agility"
+          ],
+          "doubleSkillAccess": [
+            "Strength"
+          ],
+          "startingSkills": [
+            "Block",
+            "My Ball",
+            "Steady Footing"
+          ],
+          "keywords": "Blitzer"
+        },
+        {
+          "name": "White Lion",
+          "cost": 110000,
           "maxCount": 2,
           "ma": 7,
           "st": 3,
           "ag": 2,
-          "pa": 4,
+          "pa": 3,
           "av": 9,
           "normalSkillAccess": [
             "General",
@@ -2978,9 +2977,10 @@
             "Passing"
           ],
           "startingSkills": [
-            "Block"
+            "Claws",
+            "Wrestle"
           ],
-          "keywords": "Blitzer"
+          "keywords": "Blocker"
         }
       ],
       "canHaveTeamCaptain": false
