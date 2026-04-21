@@ -916,15 +916,39 @@ int main(int argc, char* argv[]) {
                 continue;
             }
             // Already asked — keep polling
-        } else if (curUrl.find(tournId) != std::string::npos && !bodySample.empty()) {
-            // On the right page with some content — done
-            std::println("URL: {}  (content: {} chars)", curUrl, bodySample.size());
-            break;
+        } else if (curUrl.find(tournId) != std::string::npos) {
+            // On the right URL — now check that Angular has rendered the team list.
+            // Count links that look like team roster entries (not just nav links).
+            std::string linkCount = cdp.evalString(std::format(R"js(
+(function() {{
+  var links = Array.from(document.querySelectorAll('a[href]'));
+  var nav = ['players','standings','schedule','news','phases','clasifications'];
+  var count = links.filter(function(a) {{
+    var h = a.getAttribute('href') || '';
+    if (!h.includes('{}')) return false;
+    return !nav.some(function(s) {{ return h.endsWith('/'+s) || h === '/en/blood-bowl/{}'; }});
+  }}).length;
+  return String(count);
+}})()
+)js", tournId, tournId));
+
+            int nLinks = 0;
+            try { nLinks = std::stoi(linkCount); } catch (...) {}
+
+            std::print("\r  Waiting for team links ... {} found", nLinks);
+            std::cout.flush();
+
+            if (nLinks > 0) {
+                std::println("");
+                std::println("Team links detected ({}). Proceeding.", nLinks);
+                break;
+            }
+            // Not ready yet — keep polling
         }
 
         if (std::chrono::steady_clock::now() > pollDeadline) {
-            std::println("Timed out waiting for the players page. Current URL: {}", curUrl);
-            std::println("Page sample: {:.200s}", bodySample);
+            std::println("");
+            std::println("Timed out. Current URL: {}", cdp.evalString("window.location.href"));
             break;
         }
         std::this_thread::sleep_for(std::chrono::seconds(2));
