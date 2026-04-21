@@ -582,10 +582,10 @@ static json extractTeamSummaries(Cdp& cdp, const SeedSkills& seed,
         if (verbose) std::println("  Team: {} ({})", teamName, norm);
     }
 
-    // Roster links — only follow URLs that contain "/rosters/"
+    // Roster links — only follow URLs that contain "/roster/"
     std::vector<std::string> rosterLinks;
     for (const auto& h : hrefs) {
-        if (h.find("/rosters/") != std::string::npos)
+        if (h.find("/roster/") != std::string::npos)
             rosterLinks.push_back(h);
     }
     if (verbose) {
