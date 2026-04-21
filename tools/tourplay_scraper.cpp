@@ -31,6 +31,7 @@
 #include <algorithm>
 #include <array>
 #include <chrono>
+#include <regex>
 #include <cstring>
 #include <format>
 #include <fstream>
@@ -468,26 +469,42 @@ static SeedSkills loadSeed(const std::string& path) {
 static std::vector<std::pair<std::string,std::string>> extractTeamLinks(
     Cdp& cdp, const std::string& tournId, bool verbose)
 {
-    // Get all hrefs containing the tournament name
-    std::string jsSimple = std::format(R"js(
-(function() {{
-  var anchors = Array.from(document.querySelectorAll('a[href]'));
-  var tourId = '{}';
-  var seen = {{}};
+    // Collect ALL unique hrefs on the page — we'll filter in C++
+    std::string js = R"js(
+(function() {
+  var seen = {};
   var results = [];
-  anchors.forEach(function(a) {{
+  document.querySelectorAll('a[href]').forEach(function(a) {
     var h = a.getAttribute('href') || '';
-    if (h.includes(tourId) && h.length > tourId.length + 10 && !seen[h]) {{
-      seen[h] = 1;
-      results.push(h + '|' + (a.textContent || '').trim().substring(0,80));
-    }}
-  }});
+    if (!h || seen[h]) return;
+    seen[h] = 1;
+    results.push(h + '|' + (a.textContent || '').trim().replace(/\s+/g,' ').substring(0,80));
+  });
   return results.join('\n');
-}})()
-)js", tournId);
+})()
+)js";
 
-    std::string raw = cdp.evalString(jsSimple);
-    if (verbose) std::println("  JS link extraction raw ({} chars): {:.200s}", raw.size(), raw);
+    std::string raw = cdp.evalString(js);
+    if (verbose) std::println("  All hrefs ({} chars):\n{}", raw.size(), raw);
+
+    // Patterns that look like team/roster detail pages:
+    //   /en/blood-bowl/<tournId>/squads/<id>
+    //   /en/blood-bowl/<tournId>/teams/<id>
+    //   /en/blood-bowl/<tournId>/rosters/<id>
+    //   /en/blood-bowl/<tournId>/<slug>  (team name slug)
+    // We accept any href that:
+    //   (a) contains the tournament ID, OR
+    //   (b) looks like a blood-bowl sub-page with a numeric or slug segment
+    // and excludes known nav pages.
+    static const std::vector<std::string> NAV_SUFFIXES = {
+        "/players", "/schedule", "/standings", "/news", "/phases",
+        "/clasifications", "/board", "/coach-stats", "/team-stats"
+    };
+    auto isNavPage = [&](const std::string& h) {
+        for (const auto& suf : NAV_SUFFIXES)
+            if (h.size() >= suf.size() && h.substr(h.size() - suf.size()) == suf) return true;
+        return false;
+    };
 
     std::vector<std::pair<std::string,std::string>> result;
     std::istringstream ss(raw);
@@ -498,12 +515,16 @@ static std::vector<std::pair<std::string,std::string>> extractTeamLinks(
         if (pipe == std::string::npos) continue;
         std::string href = line.substr(0, pipe);
         std::string name = line.substr(pipe + 1);
-        // Keep only "team detail" type links — exclude nav/schedule/standings links
-        if (href.find("/players") != std::string::npos) continue;
-        if (href.find("/schedule") != std::string::npos) continue;
-        if (href.find("/standings") != std::string::npos) continue;
-        if (href.find("/news") != std::string::npos) continue;
-        if (href.find("/phases") != std::string::npos) continue;
+
+        if (isNavPage(href)) continue;
+        if (href.find("blood-bowl") == std::string::npos) continue;
+
+        // Must contain either the tournament ID or a numeric/slug sub-path
+        bool hasTournId = href.find(tournId) != std::string::npos;
+        bool hasSubPath = std::regex_search(href,
+            std::regex(R"(/blood-bowl/[^/]+/[^/]+/[0-9a-z][^/]*)"));
+        if (!hasTournId && !hasSubPath) continue;
+
         result.push_back({href, name});
     }
     return result;
@@ -839,13 +860,22 @@ int main(int argc, char* argv[]) {
     std::println("Found {} potential team link(s).", teamLinks.size());
 
     if (teamLinks.empty()) {
-        // Dump page title and first 500 chars to help diagnose
-        std::string title = cdp.evalString("document.title");
-        std::string snippet = cdp.evalString("document.body.innerText.substring(0,500)");
-        std::println(std::cerr, "Page title: {}", title);
-        std::println(std::cerr, "Page snippet: {}", snippet);
-        std::println(std::cerr, "\nNo team links found. The page may require login or the DOM structure differs.");
-        std::println(std::cerr, "Try --verbose for more detail or increase --wait.");
+        std::string title   = cdp.evalString("document.title");
+        std::string snippet = cdp.evalString("document.body.innerText.substring(0,400)");
+        // Dump ALL hrefs so we can see the actual link pattern
+        std::string allHrefs = cdp.evalString(R"js(
+Array.from(document.querySelectorAll('a[href]'))
+  .map(a => a.getAttribute('href'))
+  .filter((v,i,arr) => arr.indexOf(v) === i)
+  .slice(0,60)
+  .join('\n')
+)js");
+        std::println("Page title   : {}", title);
+        std::println("Page text    : {:.400s}", snippet);
+        std::println("\nAll unique hrefs on the page:");
+        std::println("{}", allHrefs.empty() ? "(none found)" : allHrefs);
+        std::println("\nNo team links matched. Check the hrefs above for the correct URL pattern,");
+        std::println("then re-run with --wait 15000 if the page was still loading.");
         killChrome();
         curl_global_cleanup();
         return 1;
