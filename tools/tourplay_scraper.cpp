@@ -469,9 +469,195 @@ static SeedSkills loadSeed(const std::string& path) {
 // DOM-based data extraction via JavaScript evaluation in CDP
 // ─────────────────────────────────────────────────────────────────────────────
 
-// Extract team links from the rendered players/inscriptions page.
-// TourPlay shows teams in a list; each has a link to the team detail page.
-// We use JS to find all anchor tags containing the tournament path + a team ID.
+// Count how many player rows / team sections have loaded on the /players page.
+// Used to poll until Angular has finished rendering.
+static int countLoadedPlayers(Cdp& cdp) {
+    std::string s = cdp.evalString(R"js(
+(function() {
+  // Count mat-table rows that look like player rows (start with a jersey number)
+  var rows = Array.from(document.querySelectorAll('mat-row, tbody tr'));
+  var n = rows.filter(function(r) {
+    var cells = r.querySelectorAll('mat-cell, td');
+    return cells.length >= 2 && /^\d+$/.test((cells[0].textContent||'').trim());
+  }).length;
+  // Fall back: count any element with a class containing "player"
+  if (n === 0) n = document.querySelectorAll('[class*="player"],[class*="lineup"]').length;
+  return String(n);
+})()
+)js");
+    try { return std::stoi(s); } catch (...) { return 0; }
+}
+
+// Extract all teams and their players from the /players page in one pass.
+// TourPlay renders all squads on this single page — no need to follow links.
+static json extractAllTeams(Cdp& cdp, const SeedSkills& seed, bool verbose) {
+    // Pull the full page as one JSON blob via JS.
+    // Strategy: find all team sections (mat-expansion-panel or mat-card blocks),
+    // then for each section find the header info (name, race) and player rows.
+    std::string raw = cdp.evalString(R"js(
+(function() {
+  var teams = [];
+
+  // ── helper: parse skills string into array ────────────────────────────────
+  function parseSkills(s) {
+    if (!s) return [];
+    return s.split(/[,\n]/).map(function(x) {
+      return x.replace(/\(.*?\)/g,'').trim();
+    }).filter(function(x){ return x.length > 0; });
+  }
+
+  // ── helper: extract players from a container element ─────────────────────
+  function extractPlayers(container) {
+    var players = [];
+    // Try mat-table rows
+    var rows = Array.from(container.querySelectorAll('mat-row, tbody tr'));
+    rows.forEach(function(row) {
+      var cells = Array.from(row.querySelectorAll('mat-cell, td'))
+                       .map(function(c){ return c.textContent.trim(); });
+      if (cells.length >= 2 && /^\d+$/.test(cells[0])) {
+        players.push({ num: cells[0], name: cells[1] || '',
+                       pos: cells[2] || '', skills: cells[3] || '' });
+      }
+    });
+    return players;
+  }
+
+  // ── helper: read a text value after a label ───────────────────────────────
+  function labelValue(el, label) {
+    var text = el.innerText || '';
+    var m = text.match(new RegExp(label + '[:\\s]+([^\\n]+)', 'i'));
+    return m ? m[1].trim() : '';
+  }
+
+  // ── Strategy 1: mat-expansion-panel (one panel per team) ─────────────────
+  var panels = Array.from(document.querySelectorAll('mat-expansion-panel'));
+  if (panels.length > 0) {
+    panels.forEach(function(panel) {
+      var header = panel.querySelector('mat-expansion-panel-header');
+      var name  = (header ? header.textContent : panel.textContent).trim().split('\n')[0].trim();
+      var race  = labelValue(panel, 'Race') || labelValue(panel, 'Raza');
+      var rr    = labelValue(panel, 'Re.?roll');
+      var apoth = /apothecary/i.test(panel.innerText) && !/no apothecary/i.test(panel.innerText);
+      teams.push({ name: name, race: race, rerolls: parseInt(rr)||2,
+                   apothecary: apoth, players: extractPlayers(panel) });
+    });
+    return JSON.stringify(teams);
+  }
+
+  // ── Strategy 2: mat-card blocks (one card per team) ───────────────────────
+  var cards = Array.from(document.querySelectorAll('mat-card'));
+  // Filter to cards that look like team cards (have player rows inside)
+  var teamCards = cards.filter(function(c) {
+    return c.querySelectorAll('mat-row, tbody tr').length > 0 ||
+           /Race/i.test(c.textContent);
+  });
+  if (teamCards.length > 0) {
+    teamCards.forEach(function(card) {
+      var heading = card.querySelector('mat-card-title, h2, h3, .team-name');
+      var name  = heading ? heading.textContent.trim() : '';
+      var race  = labelValue(card, 'Race');
+      var rr    = labelValue(card, 'Re.?roll');
+      var apoth = /apothecary/i.test(card.innerText);
+      teams.push({ name: name, race: race, rerolls: parseInt(rr)||2,
+                   apothecary: apoth, players: extractPlayers(card) });
+    });
+    return JSON.stringify(teams);
+  }
+
+  // ── Strategy 3: scan the whole page DOM for a table with player data ──────
+  // Some TourPlay views render a flat table grouped by team heading rows.
+  var allRows = Array.from(document.querySelectorAll('mat-row, tbody tr'));
+  var current = null;
+  allRows.forEach(function(row) {
+    var cells = Array.from(row.querySelectorAll('mat-cell, td'))
+                     .map(function(c){ return c.textContent.trim(); });
+    if (cells.length === 1 && cells[0].length > 2) {
+      // Looks like a team heading row
+      current = { name: cells[0], race: '', rerolls: 2, apothecary: false, players: [] };
+      teams.push(current);
+    } else if (cells.length >= 2 && /^\d+$/.test(cells[0]) && current) {
+      current.players.push({ num: cells[0], name: cells[1]||'',
+                             pos: cells[2]||'', skills: cells[3]||'' });
+    }
+  });
+  if (teams.length > 0) return JSON.stringify(teams);
+
+  // ── Fallback: return raw page text for manual inspection ──────────────────
+  return JSON.stringify([{name:'__RAW__', race:'', rerolls:2, apothecary:false,
+    players:[], _debug: document.body.innerText.substring(0,2000)}]);
+})()
+)js", 20000);
+
+    if (verbose) std::println("  Raw JSON ({} chars): {:.500s}", raw.size(), raw);
+
+    json result = json::array();
+    json parsed;
+    try { parsed = json::parse(raw); } catch (...) {
+        std::println(std::cerr, "Failed to parse extraction JSON"); return result;
+    }
+
+    const auto buildSkills = [&](const std::string& posRaw, const std::string& skillStr,
+                                  const std::map<std::string,std::set<std::string>>* seedRace)
+        -> std::vector<std::string>
+    {
+        std::vector<std::string> all;
+        std::istringstream ss(skillStr);
+        std::string sk;
+        while (std::getline(ss, sk, ',')) {
+            sk.erase(0, sk.find_first_not_of(" \t\n\r"));
+            sk.erase(sk.find_last_not_of(" \t\n\r") + 1);
+            if (!sk.empty()) all.push_back(normaliseSkill(sk));
+        }
+        if (!seedRace || posRaw.empty()) return all;
+        auto posIt = seedRace->find(posRaw);
+        if (posIt == seedRace->end()) return all;
+        std::vector<std::string> extra;
+        for (const auto& s : all)
+            if (!posIt->second.count(s)) extra.push_back(s);
+        return extra;
+    };
+
+    for (const auto& t : parsed) {
+        std::string name  = t.value("name", "");
+        if (name == "__RAW__") {
+            std::println(std::cerr, "Could not parse team structure. Debug dump:");
+            std::println(std::cerr, "{:.800s}", t.value("_debug",""));
+            continue;
+        }
+        std::string raceRaw = t.value("race", "");
+        std::string race    = normaliseRace(raceRaw);
+        int rerolls  = t.value("rerolls", 2);
+        bool hasApoth = t.value("apothecary", false);
+
+        const std::map<std::string,std::set<std::string>>* seedRace = nullptr;
+        if (auto it = seed.find(race); it != seed.end()) seedRace = &it->second;
+
+        json players = json::array();
+        for (const auto& p : t.value("players", json::array())) {
+            std::string pName  = p.value("name", "");
+            std::string posRaw = p.value("pos", "");
+            auto extra = buildSkills(posRaw, p.value("skills",""), seedRace);
+            if (pName.empty()) continue;
+            json player;
+            player["position"] = posRaw;
+            player["name"]     = pName;
+            if (!extra.empty()) player["extraSkills"] = extra;
+            players.push_back(std::move(player));
+        }
+
+        std::println("  {} ({}) — {} players", name, race, players.size());
+        json team;
+        team["name"]          = name;
+        team["race"]          = race;
+        team["rerolls"]       = rerolls;
+        team["hasApothecary"] = hasApoth;
+        team["players"]       = std::move(players);
+        result.push_back(std::move(team));
+    }
+    return result;
+}
+
+// Legacy stubs — no longer used but kept for the compiler
 static std::vector<std::pair<std::string,std::string>> extractTeamLinks(
     Cdp& cdp, const std::string& tournId, bool verbose)
 {
@@ -917,33 +1103,15 @@ int main(int argc, char* argv[]) {
             }
             // Already asked — keep polling
         } else if (curUrl.find(tournId) != std::string::npos) {
-            // On the right URL — now check that Angular has rendered the team list.
-            // Count links that look like team roster entries (not just nav links).
-            std::string linkCount = cdp.evalString(std::format(R"js(
-(function() {{
-  var links = Array.from(document.querySelectorAll('a[href]'));
-  var nav = ['players','standings','schedule','news','phases','clasifications'];
-  var count = links.filter(function(a) {{
-    var h = a.getAttribute('href') || '';
-    if (!h.includes('{}')) return false;
-    return !nav.some(function(s) {{ return h.endsWith('/'+s) || h === '/en/blood-bowl/{}'; }});
-  }}).length;
-  return String(count);
-}})()
-)js", tournId, tournId));
-
-            int nLinks = 0;
-            try { nLinks = std::stoi(linkCount); } catch (...) {}
-
-            std::print("\r  Waiting for team links ... {} found", nLinks);
+            // On the right URL — poll until Angular has rendered player rows.
+            int nPlayers = countLoadedPlayers(cdp);
+            std::print("\r  Waiting for player data ... {} rows", nPlayers);
             std::cout.flush();
-
-            if (nLinks > 0) {
+            if (nPlayers > 0) {
                 std::println("");
-                std::println("Team links detected ({}). Proceeding.", nLinks);
+                std::println("Player data loaded ({} rows). Proceeding.", nPlayers);
                 break;
             }
-            // Not ready yet — keep polling
         }
 
         if (std::chrono::steady_clock::now() > pollDeadline) {
@@ -957,75 +1125,20 @@ int main(int argc, char* argv[]) {
     std::println("Waiting {}ms for Angular to finish rendering ...", args.waitMs);
     cdp.waitForAngular(args.waitMs);
 
-    // ── Step 2: Extract team links ───────────────────────────────────────────
-    std::println("Extracting team links ...");
-    auto teamLinks = extractTeamLinks(cdp, tournId, args.verbose);
-    std::println("Found {} potential team link(s).", teamLinks.size());
-
-    if (teamLinks.empty()) {
-        std::string title   = cdp.evalString("document.title");
-        std::string snippet = cdp.evalString("document.body.innerText.substring(0,400)");
-        // Dump ALL hrefs so we can see the actual link pattern
-        std::string allHrefs = cdp.evalString(R"js(
-Array.from(document.querySelectorAll('a[href]'))
-  .map(a => a.getAttribute('href'))
-  .filter((v,i,arr) => arr.indexOf(v) === i)
-  .slice(0,60)
-  .join('\n')
-)js");
-        std::println("Page title   : {}", title);
-        std::println("Page text    : {:.400s}", snippet);
-        std::println("\nAll unique hrefs on the page:");
-        std::println("{}", allHrefs.empty() ? "(none found)" : allHrefs);
-        std::println("\nNo team links matched. Check the hrefs above for the correct URL pattern,");
-        std::println("then re-run with --wait 15000 if the page was still loading.");
-        killChrome();
-        curl_global_cleanup();
-        return 1;
-    }
-
-    // ── Step 3: Visit each team roster page ──────────────────────────────────
-    json teams = json::array();
-    int ok = 0, fail = 0;
-    std::set<std::string> visited;
-
-    for (const auto& [href, linkText] : teamLinks) {
-        if (visited.count(href)) continue;
-        visited.insert(href);
-
-        std::string fullUrl = "https://tourplay.net" + href;
-        std::println("  Visiting {} ({}) ...", href, linkText.substr(0, 40));
-
-        cdp.navigate(fullUrl, 20000);
-        cdp.waitForAngular(args.waitMs);
-
-        json team = extractRosterFromPage(cdp, seed, args.verbose);
-
-        int nPlayers = static_cast<int>(team["players"].size());
-        std::println("    {} ({}) — {} players, {} rerolls, apoth={}",
-            team.value("name", "?"),
-            team.value("race", "?"),
-            nPlayers,
-            team.value("rerolls", 0),
-            team.value("hasApothecary", false));
-
-        if (nPlayers == 0) {
-            std::println(std::cerr, "    Warning: no players found — skipping");
-            ++fail;
-            continue;
-        }
-        teams.push_back(std::move(team));
-        ++ok;
-    }
-
-    std::println("\nScraped: {} ok, {} failed/skipped", ok, fail);
+    // ── Step 2: Extract all teams from the /players page in one pass ─────────
+    std::println("Extracting teams and rosters from players page ...");
+    json teams = extractAllTeams(cdp, seed, args.verbose);
 
     if (teams.empty()) {
-        std::println(std::cerr, "No teams scraped. Check that the tournament is public and try --verbose.");
+        std::string snippet = cdp.evalString("document.body.innerText.substring(0,600)");
+        std::println(std::cerr, "No teams extracted. Page content:");
+        std::println(std::cerr, "{}", snippet);
+        std::println(std::cerr, "\nTry --verbose or increase --wait.");
         killChrome();
         curl_global_cleanup();
         return 1;
     }
+    std::println("Extracted {} team(s).", teams.size());
 
     // ── Step 4: Write tournament JSON ─────────────────────────────────────────
     json tournament;
