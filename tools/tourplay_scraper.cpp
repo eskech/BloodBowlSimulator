@@ -356,12 +356,21 @@ public:
         return false;
     }
 
-    // Navigate to URL and wait for the page load to complete.
+    // Navigate to URL.
+    // For a full page load, Page.loadEventFired fires and we return immediately.
+    // For Angular SPA client-side navigation, loadEventFired never fires — we
+    // fall through after a short timeout so the caller can proceed with polling.
     bool navigate(const std::string& url, int timeoutMs = 30000) {
         call("Page.enable", {}, 5000);
-        eventQueue_.clear();  // discard stale events from previous page
+        eventQueue_.clear();
         call("Page.navigate", {{"url", url}}, 10000);
-        return waitForEvent("Page.loadEventFired", timeoutMs);
+        // Wait up to 5 s for a real page load event; SPA navigation won't fire it.
+        bool loaded = waitForEvent("Page.loadEventFired", std::min(timeoutMs, 5000));
+        if (!loaded) {
+            // SPA route change — give Angular a moment to update the DOM
+            std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+        }
+        return loaded;
     }
 
     // Sleep while the Angular app finishes async rendering.
