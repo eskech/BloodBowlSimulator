@@ -730,17 +730,19 @@ static void printUsage(const char* prog) {
     std::println("  --url URL          TourPlay tournament URL");
     std::println("                     e.g. https://tourplay.net/en/blood-bowl/punchbowl-2");
     std::println("");
-    std::println("Browser modes (pick one):");
-    std::println("  --no-headless      Launch Chrome as a visible window.");
-    std::println("                     The tool will pause at the NAF login page and");
-    std::println("                     wait for you to log in before continuing.");
-    std::println("  --connect          Connect to an already-running browser on --port.");
-    std::println("                     Recommended: your normal browser is already logged");
-    std::println("                     in to TourPlay so no auth prompt appears.");
-    std::println("                     Start Chrome once with:");
-    std::println("                       google-chrome --remote-debugging-port=9222");
-    std::println("                     Log in to tourplay.net, then run this tool with --connect");
-    std::println("  (headless default) Not recommended — fresh profile has no NAF session.");
+    std::println("Browser modes:");
+    std::println("");
+    std::println("  RECOMMENDED — use your normal browser (already logged in to TourPlay):");
+    std::println("    1. Start Chrome once with the debug flag:");
+    std::println("         google-chrome --remote-debugging-port=9222");
+    std::println("    2. Log in to tourplay.net as normal.");
+    std::println("    3. Run: tourplay_scraper --url <url> --connect");
+    std::println("");
+    std::println("  --no-headless      Launch a new visible Chrome window.");
+    std::println("                     The tool pauses at the NAF login page and");
+    std::println("                     waits for you to log in before continuing.");
+    std::println("  --connect          Attach to an already-running Chrome on --port.");
+    std::println("  (headless default) Not recommended — no NAF session in fresh profile.");
     std::println("");
     std::println("Options:");
     std::println("  --chrome PATH      Path to Chrome/Chromium (auto-detected if omitted)");
@@ -858,44 +860,77 @@ int main(int argc, char* argv[]) {
     }
     std::println("CDP connected.");
 
-    // ── Step 1: Navigate to players page ────────────────────────────────────
-    std::println("Navigating to {} ...", playersUrl);
-    bool loaded = cdp.navigate(playersUrl, 20000);
-    std::string currentUrl = cdp.evalString("window.location.href");
-    std::println("Page loaded: {}  URL: {}", loaded ? "yes" : "timeout", currentUrl);
-
-    // Detect NAF / OIDC auth wall and give the user a chance to log in.
-    // TourPlay uses NAF OpenID Connect — a fresh Chrome profile has no session.
-    // In visible-window or connect mode the user can complete the auth manually.
-    {
-        std::string bodyText = cdp.evalString("document.body.innerText.substring(0,300)");
-        bool needsAuth = bodyText.find("NAF") != std::string::npos
-                      || bodyText.find("naf")  != std::string::npos
-                      || bodyText.find("login") != std::string::npos
-                      || bodyText.find("Login") != std::string::npos
-                      || bodyText.find("authorize") != std::string::npos
-                      || bodyText.find("Authorize") != std::string::npos
-                      || bodyText.find("sign in") != std::string::npos
-                      || bodyText.find("Sign in") != std::string::npos;
-        if (needsAuth) {
-            std::println("");
-            std::println("┌─────────────────────────────────────────────────────────┐");
-            std::println("│  Authentication required                                │");
-            std::println("│                                                         │");
-            std::println("│  TourPlay requires a NAF login.                         │");
-            std::println("│                                                         │");
-            std::println("│  1. Complete the login / NAF authorization in the       │");
-            std::println("│     browser window that opened.                         │");
-            std::println("│  2. Wait until the tournament players page loads fully. │");
-            std::println("│  3. Press Enter here to continue scraping.              │");
-            std::println("└─────────────────────────────────────────────────────────┘");
-            std::print("Press Enter when ready: ");
-            std::cin.get();
-            std::println("Resuming — waiting {}ms for Angular to render ...", args.waitMs);
-        } else {
-            std::println("Waiting {}ms for Angular to render ...", args.waitMs);
+    // ── Step 1: Navigate to players page (or use current page in --connect mode)
+    if (args.connectOnly) {
+        // In connect mode the user must already be on the tournament players page.
+        // Check where we are; if not there yet, navigate.
+        std::string cur = cdp.evalString("window.location.href");
+        std::println("Current URL : {}", cur);
+        if (cur.find(tournId) == std::string::npos) {
+            std::println("Navigating to {} ...", playersUrl);
+            cdp.navigate(playersUrl, 30000);
         }
+    } else {
+        std::println("Navigating to {} ...", playersUrl);
+        cdp.navigate(playersUrl, 30000);
     }
+
+    // Poll until the TourPlay players page has real content (not an auth/login page).
+    // TourPlay uses NAF OpenID Connect — after the OIDC redirect chain completes the
+    // browser lands back on the original URL, but this may take several seconds.
+    auto pollDeadline = std::chrono::steady_clock::now()
+                      + std::chrono::seconds(120);
+    bool askedForAuth = false;
+    while (true) {
+        std::string curUrl  = cdp.evalString("window.location.href");
+        std::string bodySample = cdp.evalString("document.body.innerText.substring(0,500)");
+
+        // Detect auth wall (NAF OIDC, login pages)
+        bool onAuthPage = bodySample.find("NAF") != std::string::npos
+                       || bodySample.find("Authorize") != std::string::npos
+                       || bodySample.find("authorize") != std::string::npos
+                       || bodySample.find("Sign in") != std::string::npos
+                       || bodySample.find("sign in") != std::string::npos
+                       || curUrl.find("naf.net") != std::string::npos
+                       || curUrl.find("login") != std::string::npos
+                       || curUrl.find("oauth") != std::string::npos
+                       || curUrl.find("oidc") != std::string::npos;
+
+        if (onAuthPage) {
+            if (!askedForAuth) {
+                std::println("");
+                std::println("┌─────────────────────────────────────────────────────────┐");
+                std::println("│  NAF login required                                     │");
+                std::println("│                                                         │");
+                std::println("│  Complete the NAF login / authorization in the browser. │");
+                std::println("│  Then press Enter once the tournament page has loaded.  │");
+                std::println("│                                                         │");
+                std::println("│  Tip: next time use --connect with a browser that is    │");
+                std::println("│  already logged in to avoid this step.                  │");
+                std::println("└─────────────────────────────────────────────────────────┘");
+                std::print("Press Enter when the players page is fully loaded: ");
+                std::cin.get();
+                askedForAuth = true;
+                // Give Angular extra time after auth redirect completes
+                std::this_thread::sleep_for(std::chrono::seconds(3));
+                continue;
+            }
+            // Already asked — keep polling
+        } else if (curUrl.find(tournId) != std::string::npos && !bodySample.empty()) {
+            // On the right page with some content — done
+            std::println("URL: {}  (content: {} chars)", curUrl, bodySample.size());
+            break;
+        }
+
+        if (std::chrono::steady_clock::now() > pollDeadline) {
+            std::println("Timed out waiting for the players page. Current URL: {}", curUrl);
+            std::println("Page sample: {:.200s}", bodySample);
+            break;
+        }
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+    }
+
+    std::println("Waiting {}ms for Angular to finish rendering ...", args.waitMs);
     cdp.waitForAngular(args.waitMs);
 
     // ── Step 2: Extract team links ───────────────────────────────────────────
