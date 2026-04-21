@@ -1061,65 +1061,70 @@ int main(int argc, char* argv[]) {
         cdp.navigate(playersUrl, 30000);
     }
 
-    // Poll until the TourPlay players page has real content (not an auth/login page).
-    // TourPlay uses NAF OpenID Connect — after the OIDC redirect chain completes the
-    // browser lands back on the original URL, but this may take several seconds.
-    auto pollDeadline = std::chrono::steady_clock::now()
-                      + std::chrono::seconds(120);
-    bool askedForAuth = false;
-    while (true) {
-        std::string curUrl  = cdp.evalString("window.location.href");
-        std::string bodySample = cdp.evalString("document.body.innerText.substring(0,500)");
+    // Wait for the correct page to be ready.
+    // In --connect mode on the right URL we skip row-counting and proceed immediately.
+    {
+        auto pollDeadline = std::chrono::steady_clock::now() + std::chrono::seconds(120);
+        bool askedForAuth = false;
+        bool alreadyOnPage = false;
 
-        // Detect auth wall (NAF OIDC, login pages)
-        bool onAuthPage = bodySample.find("NAF") != std::string::npos
-                       || bodySample.find("Authorize") != std::string::npos
-                       || bodySample.find("authorize") != std::string::npos
-                       || bodySample.find("Sign in") != std::string::npos
-                       || bodySample.find("sign in") != std::string::npos
-                       || curUrl.find("naf.net") != std::string::npos
-                       || curUrl.find("login") != std::string::npos
-                       || curUrl.find("oauth") != std::string::npos
-                       || curUrl.find("oidc") != std::string::npos;
+        while (true) {
+            std::string curUrl     = cdp.evalString("window.location.href");
+            std::string bodySample = cdp.evalString("document.body.innerText.substring(0,500)");
 
-        if (onAuthPage) {
-            if (!askedForAuth) {
-                std::println("");
-                std::println("┌─────────────────────────────────────────────────────────┐");
-                std::println("│  NAF login required                                     │");
-                std::println("│                                                         │");
-                std::println("│  Complete the NAF login / authorization in the browser. │");
-                std::println("│  Then press Enter once the tournament page has loaded.  │");
-                std::println("│                                                         │");
-                std::println("│  Tip: next time use --connect with a browser that is    │");
-                std::println("│  already logged in to avoid this step.                  │");
-                std::println("└─────────────────────────────────────────────────────────┘");
-                std::print("Press Enter when the players page is fully loaded: ");
-                std::cin.get();
-                askedForAuth = true;
-                // Give Angular extra time after auth redirect completes
-                std::this_thread::sleep_for(std::chrono::seconds(3));
-                continue;
+            // Detect auth wall (NAF OIDC, login pages)
+            bool onAuthPage = bodySample.find("NAF") != std::string::npos
+                           || bodySample.find("Authorize") != std::string::npos
+                           || bodySample.find("authorize") != std::string::npos
+                           || bodySample.find("Sign in") != std::string::npos
+                           || bodySample.find("sign in") != std::string::npos
+                           || curUrl.find("naf.net") != std::string::npos
+                           || curUrl.find("login") != std::string::npos
+                           || curUrl.find("oauth") != std::string::npos
+                           || curUrl.find("oidc") != std::string::npos;
+
+            if (onAuthPage) {
+                if (!askedForAuth) {
+                    std::println("");
+                    std::println("┌─────────────────────────────────────────────────────────┐");
+                    std::println("│  NAF login required                                     │");
+                    std::println("│                                                         │");
+                    std::println("│  Complete the NAF login / authorization in the browser. │");
+                    std::println("│  Then press Enter once the tournament page has loaded.  │");
+                    std::println("└─────────────────────────────────────────────────────────┘");
+                    std::print("Press Enter when the players page is fully loaded: ");
+                    std::cin.get();
+                    askedForAuth = true;
+                    std::this_thread::sleep_for(std::chrono::seconds(3));
+                    continue;
+                }
+
+            } else if (curUrl.find(tournId) != std::string::npos) {
+                if (args.connectOnly && !alreadyOnPage) {
+                    // Already on the right page in --connect mode — trust the browser
+                    // and skip row-counting (DOM structure may not match our selectors).
+                    std::println("On correct page. Proceeding (--connect mode).");
+                    alreadyOnPage = true;
+                    break;
+                }
+                // Spawned-browser mode: poll until Angular renders player rows
+                int n = countLoadedPlayers(cdp);
+                std::print("\r  Waiting for player data ... {} rows", n);
+                std::cout.flush();
+                if (n > 0) {
+                    std::println("");
+                    std::println("Player data loaded ({} rows). Proceeding.", n);
+                    break;
+                }
             }
-            // Already asked — keep polling
-        } else if (curUrl.find(tournId) != std::string::npos) {
-            // On the right URL — poll until Angular has rendered player rows.
-            int nPlayers = countLoadedPlayers(cdp);
-            std::print("\r  Waiting for player data ... {} rows", nPlayers);
-            std::cout.flush();
-            if (nPlayers > 0) {
+
+            if (std::chrono::steady_clock::now() > pollDeadline) {
                 std::println("");
-                std::println("Player data loaded ({} rows). Proceeding.", nPlayers);
+                std::println("Timed out. Current URL: {}", curUrl);
                 break;
             }
+            std::this_thread::sleep_for(std::chrono::seconds(2));
         }
-
-        if (std::chrono::steady_clock::now() > pollDeadline) {
-            std::println("");
-            std::println("Timed out. Current URL: {}", cdp.evalString("window.location.href"));
-            break;
-        }
-        std::this_thread::sleep_for(std::chrono::seconds(2));
     }
 
     std::println("Waiting {}ms for Angular to finish rendering ...", args.waitMs);
