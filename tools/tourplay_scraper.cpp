@@ -277,62 +277,70 @@ public:
 class Cdp {
     WsClient ws_;
     int nextId_ = 1;
+    // Pending events buffered while waiting for a specific command response
+    std::vector<json> eventQueue_;
+
+    // Read one frame and categorise it: push events to eventQueue_, return
+    // the response if its id matches, or std::nullopt otherwise.
+    std::optional<json> readFrame(int wantId, int timeoutMs) {
+        auto frame = ws_.recv_frame(timeoutMs);
+        if (!frame) return std::nullopt;
+        json msg;
+        try { msg = json::parse(*frame); } catch (...) { return std::nullopt; }
+        if (msg.contains("id")) {
+            if (msg["id"].get<int>() == wantId)
+                return msg.value("result", json::object());
+            // Response to a different command — ignore
+        } else {
+            // CDP event — buffer it so navigate() / pollEvent() can see it
+            eventQueue_.push_back(std::move(msg));
+        }
+        return std::nullopt;
+    }
 
 public:
     bool connect(int port) {
-        // Get the list of tabs from CDP HTTP endpoint
         std::string info = httpGetSimple(std::format("http://127.0.0.1:{}/json", port));
         if (info.empty()) return false;
         json tabs;
         try { tabs = json::parse(info); } catch (...) { return false; }
-
-        // Find the first page tab (not devtools)
         for (const auto& tab : tabs) {
-            std::string type = tab.value("type", "");
-            if (type != "page") continue;
+            if (tab.value("type", "") != "page") continue;
             std::string wsUrl = tab.value("webSocketDebuggerUrl", "");
             if (wsUrl.empty()) continue;
-            // wsUrl = "ws://127.0.0.1:PORT/devtools/page/ID"
-            std::string path = wsUrl.substr(wsUrl.find('/', 5));  // strip ws://host
+            std::string path = wsUrl.substr(wsUrl.find('/', 5));
             return ws_.connect("127.0.0.1", port, path);
         }
         return false;
     }
 
-    // Send a CDP command and return the result (waits for matching id in response)
+    // Send a CDP command and wait for its response.
+    // Events that arrive while waiting are buffered in eventQueue_.
     std::optional<json> call(const std::string& method, json params = json::object(),
-                             int timeoutMs = 30000) {
+                             int timeoutMs = 15000) {
         int id = nextId_++;
         json cmd = {{"id", id}, {"method", method}, {"params", params}};
         ws_.send_text(cmd.dump());
 
-        // Drain events until we get our response
         auto deadline = std::chrono::steady_clock::now() + std::chrono::milliseconds(timeoutMs);
         while (std::chrono::steady_clock::now() < deadline) {
             int remaining = static_cast<int>(
                 std::chrono::duration_cast<std::chrono::milliseconds>(
                     deadline - std::chrono::steady_clock::now()).count());
-            auto frame = ws_.recv_frame(std::max(remaining, 100));
-            if (!frame) return std::nullopt;
-            json resp;
-            try { resp = json::parse(*frame); } catch (...) { continue; }
-            if (resp.contains("id") && resp["id"].get<int>() == id)
-                return resp.value("result", json::object());
+            if (auto r = readFrame(id, std::max(remaining, 100))) return r;
         }
         return std::nullopt;
     }
 
-    // Navigate and wait for Page.loadEventFired
-    bool navigate(const std::string& url, int timeoutMs = 30000) {
-        // Enable Page domain so we receive events
-        call("Page.enable");
-        call("Network.enable");
-
-        // Navigate
-        json params = {{"url", url}};
-        call("Page.navigate", params, 5000);
-
-        // Drain events looking for Page.loadEventFired
+    // Drain buffered events (and incoming frames) looking for a specific method.
+    bool waitForEvent(const std::string& method, int timeoutMs = 30000) {
+        // Check already-buffered events first
+        for (auto it = eventQueue_.begin(); it != eventQueue_.end(); ++it) {
+            if (it->value("method", "") == method) {
+                eventQueue_.erase(it);
+                return true;
+            }
+        }
         auto deadline = std::chrono::steady_clock::now() + std::chrono::milliseconds(timeoutMs);
         while (std::chrono::steady_clock::now() < deadline) {
             int remaining = static_cast<int>(
@@ -342,36 +350,34 @@ public:
             if (!frame) break;
             json msg;
             try { msg = json::parse(*frame); } catch (...) { continue; }
-            std::string method = msg.value("method", "");
-            if (method == "Page.loadEventFired") return true;
+            if (!msg.contains("id") && msg.value("method", "") == method) return true;
+            if (!msg.contains("id")) eventQueue_.push_back(std::move(msg));
         }
         return false;
     }
 
-    // Wait for Angular to finish rendering by polling document.readyState
-    // and checking that the Angular app root has content
+    // Navigate to URL and wait for the page load to complete.
+    bool navigate(const std::string& url, int timeoutMs = 30000) {
+        call("Page.enable", {}, 5000);
+        eventQueue_.clear();  // discard stale events from previous page
+        call("Page.navigate", {{"url", url}}, 10000);
+        return waitForEvent("Page.loadEventFired", timeoutMs);
+    }
+
+    // Sleep while the Angular app finishes async rendering.
     void waitForAngular(int extraMs = 8000) {
         std::this_thread::sleep_for(std::chrono::milliseconds(extraMs));
     }
 
-    // Get the full outer HTML of the document
-    std::string getHTML() {
-        auto result = call("Runtime.evaluate", {
-            {"expression", "document.documentElement.outerHTML"},
-            {"returnByValue", true}
-        }, 15000);
-        if (!result) return {};
-        return result->value("result", json{}).value("value", "");
-    }
-
-    // Evaluate JavaScript and return the string result
+    // Evaluate JavaScript in the page and return the string result.
     std::string evalString(const std::string& expr, int timeoutMs = 10000) {
         auto result = call("Runtime.evaluate", {
             {"expression", expr},
-            {"returnByValue", true},
-            {"awaitPromise", true}
+            {"returnByValue", true}
         }, timeoutMs);
         if (!result) return {};
+        // Check for evaluation errors
+        if (result->contains("exceptionDetails")) return {};
         return result->value("result", json{}).value("value", "");
     }
 };
@@ -850,7 +856,9 @@ int main(int argc, char* argv[]) {
 
     // ── Step 1: Navigate to players page ────────────────────────────────────
     std::println("Navigating to {} ...", playersUrl);
-    cdp.navigate(playersUrl, 20000);
+    bool loaded = cdp.navigate(playersUrl, 20000);
+    std::string currentUrl = cdp.evalString("window.location.href");
+    std::println("Page loaded: {}  URL: {}", loaded ? "yes" : "timeout", currentUrl);
     std::println("Waiting {}ms for Angular to render ...", args.waitMs);
     cdp.waitForAngular(args.waitMs);
 
