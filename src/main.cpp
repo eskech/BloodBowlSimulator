@@ -85,7 +85,7 @@ static void printTeamRoster(const TeamConfig& cfg, const SeedData& seed) {
                  ds.wrestle * 100.f, ds.standFirm * 100.f,
                  ds.divingTackle * 100.f, ds.pro * 100.f);
 
-    std::println("  Players ({}):", cfg.players.size());
+    std::println("  Players ({}):", cfg.players.size() + cfg.starPlayers.size());
     for (const auto& p : cfg.players) {
         const RosterPosition* pos = race ? race->findPosition(p.position) : nullptr;
         std::string skills;
@@ -115,6 +115,16 @@ static void printTeamRoster(const TeamConfig& cfg, const SeedData& seed) {
                          eff.wrestle * 100.f, eff.standFirm * 100.f,
                          eff.divingTackle * 100.f, eff.pro * 100.f);
         }
+    }
+    for (const auto& spName : cfg.starPlayers) {
+        const StarPlayer* sp = seed.findStarPlayer(spName);
+        if (!sp) continue;
+        std::string skills;
+        for (const auto& s : sp->skills) skills += s + ", ";
+        if (skills.size() >= 2) skills.resize(skills.size() - 2);
+        std::println("    ★ {:30s}  MA:{} ST:{} AG:{} AV:{:2d}  {}",
+                     std::format("{} (Star Player)", sp->name),
+                     sp->ma, sp->st, sp->ag, sp->av, skills);
     }
     std::println("");
 }

@@ -57,6 +57,28 @@ std::expected<SeedData, std::string> loadSeedData(std::string_view path) {
         }
     }
 
+    // ── Star players ─────────────────────────────────────────────────────────
+    if (j.contains("starPlayers")) {
+        for (const auto& sp : j["starPlayers"]) {
+            StarPlayer star;
+            star.name = sp.value("name", "");
+            if (star.name.empty()) continue;
+            star.cost = sp.value("cost", 0);
+            star.ma   = sp.value("ma", 6);
+            star.st   = sp.value("st", 3);
+            star.ag   = sp.value("ag", 3);
+            star.pa   = sp["pa"].is_null() ? std::nullopt : std::optional{sp.value("pa", 4)};
+            star.av   = sp.value("av", 8);
+            if (sp.contains("skills") && sp["skills"].is_array())
+                for (const auto& sk : sp["skills"])
+                    star.skills.push_back(sk.get<std::string>());
+            if (sp.contains("allowedTeams") && sp["allowedTeams"].is_array())
+                for (const auto& t : sp["allowedTeams"])
+                    star.allowedTeams.push_back(t.get<std::string>());
+            seed.starPlayers.push_back(std::move(star));
+        }
+    }
+
     // ── Races (teamNames) ────────────────────────────────────────────────────
     if (!j.contains("teamNames"))
         return std::unexpected("Seed JSON missing 'teamNames' key");
@@ -162,6 +184,34 @@ parseTeamConfig(const json& tj, const SeedData& seed) {
 
     if (cfg.players.empty())
         return std::unexpected(std::format("Team '{}' has no players", cfg.name));
+
+    // ── Star players ─────────────────────────────────────────────────────────
+    if (tj.contains("starPlayers") && tj["starPlayers"].is_array()) {
+        for (const auto& spj : tj["starPlayers"]) {
+            std::string spName = spj.get<std::string>();
+            const StarPlayer* sp = seed.findStarPlayer(spName);
+            if (!sp)
+                return std::unexpected(
+                    std::format("Star player '{}' not found in seed data", spName));
+            if (!sp->allowedTeams.empty()) {
+                bool allowed = false;
+                for (const auto& t : sp->allowedTeams)
+                    if (t == cfg.race) { allowed = true; break; }
+                if (!allowed)
+                    return std::unexpected(
+                        std::format("Star player '{}' cannot be hired by race '{}' "
+                                    "(allowed: {})",
+                                    spName, cfg.race,
+                                    [&]() {
+                                        std::string s;
+                                        for (const auto& t : sp->allowedTeams) s += t + ", ";
+                                        if (!s.empty()) s.erase(s.size() - 2);
+                                        return s;
+                                    }()));
+            }
+            cfg.starPlayers.push_back(spName);
+        }
+    }
 
     // ── Team Captain validation ──────────────────────────────────────────────
     const Race* captainRace = seed.findRace(cfg.race);

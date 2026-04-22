@@ -56,6 +56,33 @@ TeamState buildTeamState(const TeamConfig& cfg, const SeedData& seed) {
         ts.players[ts.playerCount++] = std::move(ps);
     }
 
+    // Star players: use their own stats from the seed, not a roster position.
+    for (const auto& spName : cfg.starPlayers) {
+        const StarPlayer* sp = seed.findStarPlayer(spName);
+        if (!sp || ts.playerCount >= static_cast<int>(ts.players.size())) continue;
+
+        PlayerStats stats;
+        stats.name     = sp->name;
+        stats.position = "Star Player";
+        stats.ma = sp->ma;  stats.st = sp->st;
+        stats.ag = sp->ag;  stats.pa = sp->pa;
+        stats.av = sp->av;
+
+        auto setBitSP = [&](const std::string& sk) {
+            int idx = skillNameToIndex(sk);
+            if (idx >= 0)
+                stats.skillFlags[static_cast<unsigned>(idx) >> 6]
+                    |= (1ULL << (idx & 63));
+        };
+        for (const auto& sk : sp->skills) setBitSP(sk);
+
+        PlayerState ps;
+        ps.stats     = std::move(stats);
+        ps.strategy  = cfg.defaultStrategy;
+        ps.zone      = Zone::OwnHalf;
+        ts.players[ts.playerCount++] = std::move(ps);
+    }
+
     if (cfg.riotousRookies && race) {
         ts.riotousRookies = true;
         const RosterPosition* pos = race->findPosition("Snotling Lineman");
@@ -86,6 +113,19 @@ TeamState buildTeamState(const TeamConfig& cfg, const SeedData& seed) {
 // Internal helpers
 // ============================================================
 namespace {
+
+// Consume one team re-roll.  Returns true if a re-roll was granted.
+//   • If actor has Loner, they must first roll 4+ on a D6 to use the re-roll
+//     (the re-roll is not consumed on failure).
+//   • If the team captain is active and the D6 rolls a natural 6, the
+//     re-roll is free (count not decremented).
+static bool useTeamReroll(TeamState& team, Dice& dice,
+                           const PlayerState* actor = nullptr) {
+    if (team.rerollsRemaining <= 0) return false;
+    if (actor && actor->stats.has(SK::Loner) && dice.d6() < 4) return false;
+    if (!team.captainActive() || dice.d6() != 6) --team.rerollsRemaining;
+    return true;
+}
 
 // Forward declarations
 bool simulateTurn(TeamState& offense, TeamState& defense, Dice& dice,
@@ -243,10 +283,8 @@ void setupKickoff(TeamState& offense, TeamState& defense, Dice& dice,
 bool checkBoneHead(PlayerState& p, TeamState& team, Dice& dice) {
     if (!p.stats.has(SK::BoneHead)) return false;
     bool distracted = (dice.d6() == 1);
-    if (distracted && team.rerollsRemaining > 0) {
-        if (!team.captainActive() || dice.d6() != 6) --team.rerollsRemaining;
+    if (distracted && useTeamReroll(team, dice, &p))
         distracted = (dice.d6() == 1);
-    }
     if (distracted) {
         p.activated        = true;
         p.boneHeadThisTurn = true;
@@ -456,10 +494,8 @@ bool advanceBallCarrier(TeamState& offense, TeamState& defense, Dice& dice,
                 int pickupTarget = std::clamp(p.stats.ag + ctx.catchModifier, 2, 6);
                 bool picked = dice.d6() >= pickupTarget;
                 if (!picked && sh) picked = dice.d6() >= pickupTarget;
-                if (!picked && defense.rerollsRemaining > 0) {
-                    if (!defense.captainActive() || dice.d6() != 6) --defense.rerollsRemaining;
+                if (!picked && useTeamReroll(defense, dice))
                     picked = dice.d6() >= pickupTarget;
-                }
                 if (picked) p.hasBall = true;
                 break;
             }
@@ -482,10 +518,8 @@ bool advanceBallCarrier(TeamState& offense, TeamState& defense, Dice& dice,
                     proReroll = false;
                     anyRerollUsed = true;
                 }
-                if (!dodged && !anyRerollUsed && offense.rerollsRemaining > 0) {
-                    if (!offense.captainActive() || dice.d6() != 6) --offense.rerollsRemaining;
+                if (!dodged && !anyRerollUsed && useTeamReroll(offense, dice, carrier))
                     dodged = dice.successRoll(std::clamp(ag + zones, 2, 6));
-                }
                 return dodged;
             };
 
@@ -496,10 +530,8 @@ bool advanceBallCarrier(TeamState& offense, TeamState& defense, Dice& dice,
                     int pickupTarget = std::clamp(p.stats.ag + ctx.catchModifier, 2, 6);
                     bool picked = dice.d6() >= pickupTarget;
                     bool skillUsed = p.stats.has(SK::SureHands) && !sureHands;
-                    if (!picked && !skillUsed && defense.rerollsRemaining > 0) {
-                        if (!defense.captainActive() || dice.d6() != 6) --defense.rerollsRemaining;
+                    if (!picked && !skillUsed && useTeamReroll(defense, dice))
                         picked = dice.d6() >= pickupTarget;
-                    }
                     if (picked) p.hasBall = true;
                     break;
                 }
@@ -572,10 +604,8 @@ bool attemptPass(TeamState& offense, const TeamState& defense, Dice& dice,
     bool passReroll = carrier->stats.has(SK::Pass);
     bool thrown = dice.passRoll(effectivePa, rangeMod, passReroll);
     bool passSkillUsed = carrier->stats.has(SK::Pass) && !passReroll;
-    if (!thrown && !passSkillUsed && offense.rerollsRemaining > 0) {
-        if (!offense.captainActive() || dice.d6() != 6) --offense.rerollsRemaining;
+    if (!thrown && !passSkillUsed && useTeamReroll(offense, dice, carrier))
         thrown = dice.successRoll(std::clamp(effectivePa + rangeMod, 2, 6));
-    }
     if (!thrown) return false;
 
     // ── 4. Interception: most agile eligible defender gets one attempt ────────
@@ -595,10 +625,8 @@ bool attemptPass(TeamState& offense, const TeamState& defense, Dice& dice,
     bool catchReroll = receiver->stats.has(SK::Catch);
     bool caught = dice.catchRoll(effectiveCatchAg, catchReroll);
     bool catchSkillUsed = receiver->stats.has(SK::Catch) && !catchReroll;
-    if (!caught && !catchSkillUsed && offense.rerollsRemaining > 0) {
-        if (!offense.captainActive() || dice.d6() != 6) --offense.rerollsRemaining;
+    if (!caught && !catchSkillUsed && useTeamReroll(offense, dice, receiver))
         caught = dice.successRoll(std::clamp(effectiveCatchAg, 2, 6));
-    }
 
     if (caught) {
         carrier->hasBall  = false;
@@ -639,10 +667,8 @@ bool attemptHandoff(TeamState& offense, const TeamState& defense, Dice& dice,
     if (carrier->stats.has(SK::NervesOfSteel)) tzOnCarrier = 0;
     int throwTarget = std::clamp(carrier->stats.ag + tzOnCarrier, 2, 6);
     bool throwOk = dice.d6() >= throwTarget;
-    if (!throwOk && offense.rerollsRemaining > 0) {
-        if (!offense.captainActive() || dice.d6() != 6) --offense.rerollsRemaining;
+    if (!throwOk && useTeamReroll(offense, dice, carrier))
         throwOk = dice.d6() >= throwTarget;
-    }
 
     if (!throwOk) {
         carrier->hasBall = false;
@@ -658,10 +684,8 @@ bool attemptHandoff(TeamState& offense, const TeamState& defense, Dice& dice,
     bool catchReroll = target->stats.has(SK::Catch);
     bool caught = dice.d6() >= catchTarget;
     bool catchSkillUsed = target->stats.has(SK::Catch) && !catchReroll;
-    if (!caught && !catchSkillUsed && offense.rerollsRemaining > 0) {
-        if (!offense.captainActive() || dice.d6() != 6) --offense.rerollsRemaining;
+    if (!caught && !catchSkillUsed && useTeamReroll(offense, dice, target))
         caught = dice.d6() >= catchTarget;
-    }
 
     carrier->hasBall = false;
     if (caught) {
@@ -850,10 +874,8 @@ bool simulateTurn(TeamState& offense, TeamState& defense, Dice& dice,
                             int pickupTarget = std::clamp(p2.stats.ag + ctx.catchModifier, 2, 6);
                             bool picked = dice.d6() >= pickupTarget;
                             bool skillUsed = p2.stats.has(SK::SureHands) && !sureHands;
-                            if (!picked && !skillUsed && defense.rerollsRemaining > 0) {
-                                if (!defense.captainActive() || dice.d6() != 6) --defense.rerollsRemaining;
+                            if (!picked && !skillUsed && useTeamReroll(defense, dice))
                                 picked = dice.d6() >= pickupTarget;
-                            }
                             if (picked) p2.hasBall = true;
                             break;
                         }

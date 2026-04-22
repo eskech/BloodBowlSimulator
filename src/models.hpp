@@ -314,6 +314,8 @@ inline int skillNameToIndex(std::string_view s) {
     if (s == "Lethal Flight")                  return SK::LethalFlight;
     if (s == "Lone Fouler")                    return SK::LoneFouler;
     if (s == "Loner")                          return SK::Loner;
+    if (s == "Loner (4+)")                     return SK::Loner;
+    if (s == "Loner (3+)")                     return SK::Loner;
     if (s == "Look into my Eyes")              return SK::LookIntoMyEyes;
     if (s == "Lord of Chaos")                  return SK::LordOfChaos;
     if (s == "Master Assassin")                return SK::MasterAssassin;
@@ -482,8 +484,22 @@ struct Race {
     }
 };
 
+// ---------------------------------------------------------------------------
+// Star player entry (from seed starPlayers array)
+// ---------------------------------------------------------------------------
+struct StarPlayer {
+    std::string name;
+    int cost{};
+    int ma{6}, st{3}, ag{3};
+    std::optional<int> pa;
+    int av{8};
+    Skills skills;
+    std::vector<std::string> allowedTeams;  // empty → may be hired by any team
+};
+
 struct SeedData {
     std::vector<Race> races;
+    std::vector<StarPlayer> starPlayers;
     std::vector<std::string> skillNames;
     // skill name → category (e.g. "Block" → "General")
     std::unordered_map<std::string, std::string> skillCategories;
@@ -491,6 +507,12 @@ struct SeedData {
     const Race* findRace(std::string_view name) const {
         for (const auto& r : races)
             if (r.name == name) return &r;
+        return nullptr;
+    }
+
+    const StarPlayer* findStarPlayer(std::string_view name) const {
+        for (const auto& sp : starPlayers)
+            if (sp.name == name) return &sp;
         return nullptr;
     }
 
@@ -551,6 +573,7 @@ struct TeamConfig {
     bool riotousRookies{false};
     PlayerStrategy defaultStrategy;   // team-wide defaults
     std::vector<PlayerConfig> players;
+    std::vector<std::string> starPlayers;  // names from seed starPlayers catalogue
 };
 
 struct MatchConfig {
@@ -620,7 +643,7 @@ struct TeamState {
     bool apothecaryUsed{false};
     bool riotousRookies{false};
     PlayerState riotousRookieTemplate{};    // pre-built Snotling Lineman for Riotous Rookies
-    std::array<PlayerState, 24> players{};  // 16 roster + up to 7 Riotous Rookies + 1 spare
+    std::array<PlayerState, 28> players{};  // 16 roster + 7 Riotous Rookies + 2 star players + 3 spare
     int playerCount{0};
     int rerollsRemaining{0};
 

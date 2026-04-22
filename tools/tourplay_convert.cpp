@@ -39,6 +39,27 @@ static std::string toLower(std::string s) {
     return s;
 }
 
+// TourPlay sometimes encodes apostrophes as Unicode curly quotes (U+2018/U+2019).
+// Normalize to straight ASCII apostrophe for reliable comparisons.
+static std::string normalizeQuotes(std::string s) {
+    // Replace UTF-8 encodings of U+2018 (E2 80 98) and U+2019 (E2 80 99) with '
+    std::string result;
+    result.reserve(s.size());
+    for (size_t i = 0; i < s.size(); ) {
+        unsigned char c0 = static_cast<unsigned char>(s[i]);
+        if (c0 == 0xE2 && i + 2 < s.size() &&
+            static_cast<unsigned char>(s[i+1]) == 0x80 &&
+            (static_cast<unsigned char>(s[i+2]) == 0x98 ||
+             static_cast<unsigned char>(s[i+2]) == 0x99)) {
+            result += '\'';
+            i += 3;
+        } else {
+            result += s[i++];
+        }
+    }
+    return result;
+}
+
 static std::string_view trimSV(std::string_view sv) {
     size_t a = sv.find_first_not_of(" \t\r\n");
     if (a == std::string_view::npos) return {};
@@ -122,10 +143,35 @@ struct SeedRace {
     std::vector<SeedPosition> positions;
 };
 
+struct SeedStarPlayer {
+    std::string name;
+    std::vector<std::string> allowedTeams;  // empty = any team
+};
+
 struct SeedData {
     std::vector<SeedRace> races;
+    std::vector<SeedStarPlayer> starPlayers;
     KnownSkills knownSkills;
     TraitSkills traitSkills;   // Trait-category skills: illegal as extraSkills
+
+    // Case-insensitive name lookup. Returns the canonical seed name or empty.
+    std::string findStarPlayer(const std::string& tpName) const {
+        const std::string ltp = toLower(tpName);
+        for (const auto& sp : starPlayers)
+            if (toLower(sp.name) == ltp) return sp.name;
+        return {};
+    }
+
+    bool starPlayerAllowed(const std::string& seedName, const std::string& race) const {
+        for (const auto& sp : starPlayers) {
+            if (sp.name != seedName) continue;
+            if (sp.allowedTeams.empty()) return true;
+            for (const auto& t : sp.allowedTeams)
+                if (t == race) return true;
+            return false;
+        }
+        return false;
+    }
 };
 
 // Return the root of a skill name (text before the first '(' if any, trimmed).
@@ -177,6 +223,17 @@ static SeedData loadSeed(const std::string& path) {
         }
         sd.races.push_back(std::move(race));
     }
+
+    // Load star player catalogue for inducement resolution.
+    for (const auto& sp : j.value("starPlayers", json::array())) {
+        SeedStarPlayer ssp;
+        ssp.name = sp.value("name", "");
+        if (ssp.name.empty()) continue;
+        for (const auto& t : sp.value("allowedTeams", json::array()))
+            ssp.allowedTeams.push_back(t.get<std::string>());
+        sd.starPlayers.push_back(std::move(ssp));
+    }
+
     return sd;
 }
 
@@ -272,6 +329,7 @@ struct ParsedTeam {
     bool hasApothecary{false};
     bool riotousRookies{false};
     std::vector<ParsedPlayer> players;
+    std::vector<std::string> starPlayerNames;  // inducement star players (raw TourPlay names)
 };
 
 // Column-index helpers.
@@ -386,9 +444,12 @@ static ParsedTeam parseRosterCSV(std::string_view raw) {
         }
         case State::Inducements: {
             auto cols = split(trimmed, ';');
-            std::string ind = toLower(trim(cols[0]));
-            if (ind == "riotousrookies" || ind == "riotous rookies")
+            std::string ind = normalizeQuotes(trim(cols[0]));
+            std::string indLower = toLower(ind);
+            if (indLower == "riotousrookies" || indLower == "riotous rookies")
                 team.riotousRookies = true;
+            else
+                team.starPlayerNames.push_back(ind);  // resolved against seed later
             break;
         }
         }
@@ -417,6 +478,23 @@ static json buildTeamJson(const ParsedTeam& pt,
     tj["rerolls"]      = pt.rerolls;
     tj["hasApothecary"] = pt.hasApothecary;
     if (pt.riotousRookies) tj["riotousRookies"] = true;
+
+    // Resolve inducement star players against the seed catalogue.
+    json starPlayers = json::array();
+    for (const auto& tpName : pt.starPlayerNames) {
+        std::string seedName = sd.findStarPlayer(tpName);
+        if (seedName.empty()) {
+            // Not a star player (e.g. "Bribes", "HalflingMasterChef") — skip silently.
+            continue;
+        }
+        if (!sd.starPlayerAllowed(seedName, seedRace)) {
+            warnings << std::format("  NOTE: star player '{}' not allowed for race '{}'"
+                                    " — skipped\n", seedName, seedRace);
+            continue;
+        }
+        starPlayers.push_back(seedName);
+    }
+    if (!starPlayers.empty()) tj["starPlayers"] = std::move(starPlayers);
 
     json players = json::array();
     for (const auto& p : pt.players) {
@@ -624,12 +702,15 @@ int main(int argc, char* argv[]) {
         const int nonStarCount = static_cast<int>(
             std::ranges::count_if(pt.players, [](const auto& p){ return !p.isStar; }));
 
-        std::print("  {:30s}  {:25s}  {} rerolls  {}{}  ({} players)\n",
+        std::string starNote;
+        for (const auto& s : pt.starPlayerNames) starNote += " +" + s;
+        std::print("  {:30s}  {:25s}  {} rerolls  {}{}{}  ({} players)\n",
                    pt.name,
                    pt.tpRace,
                    pt.rerolls,
                    pt.hasApothecary ? "apo" : "   ",
                    pt.riotousRookies ? "  riotous-rookies" : "",
+                   starNote,
                    nonStarCount);
 
         json tj = buildTeamJson(pt, sd, std::cerr);
