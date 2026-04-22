@@ -624,7 +624,7 @@ struct PlayerState {
     bool activated{false};          // already took an action this turn — prevents double-activation
     bool inReserves{false};         // waiting in reserves/bench (Riotous Rookies, etc.)
     bool isTeamCaptain{false};      // gains Pro; free team re-roll on natural 6 while on pitch
-    bool boneHeadThisTurn{false};   // rolled 1 on Bone Head — no action and no tackle zone this turn
+    bool distractedThisTurn{false};  // Bone Head or Really Stupid fired — no action, no tackle zone this turn
     int  stunTimer{0};
 
     bool isActive()   const { return !ko && !casualty && !inReserves; }

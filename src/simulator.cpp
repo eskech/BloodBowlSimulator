@@ -276,29 +276,48 @@ void setupKickoff(TeamState& offense, TeamState& defense, Dice& dice,
     kickoffEvent(offense, defense, dice, ctx);
 }
 
-// ── Bone Head roll (BB2025) ──────────────────────────────────────────────────
-// After declaring an action, a Bone Head player rolls D6.
-// 2+ → act normally.  1 → player becomes Distracted (no action, no tackle zone).
-// A team re-roll MAY be used on this roll.
-bool checkBoneHead(PlayerState& p, TeamState& team, Dice& dice) {
-    if (!p.stats.has(SK::BoneHead)) return false;
-    bool distracted = (dice.d6() == 1);
-    if (distracted && useTeamReroll(team, dice, &p))
-        distracted = (dice.d6() == 1);
-    if (distracted) {
-        p.activated        = true;
-        p.boneHeadThisTurn = true;
-        return true;
+// ── Activation rolls: Bone Head and Really Stupid (BB2025) ───────────────────
+// Called after a player declares an action.  Returns true if the player becomes
+// Distracted and loses their action and tackle zone for this turn.
+//
+// Bone Head:      roll D6 — 2+ acts normally, 1 = Distracted.
+//                 Team re-rolls and Loner are honoured.
+//
+// Really Stupid:  roll D6 (+2 modifier if any adjacent standing team-mate who
+//                 is not Distracted and does not have Really Stupid is present).
+//                 4+ acts normally, <4 = Distracted.
+//                 No team re-rolls (the rule text does not allow them).
+bool checkActivationRoll(PlayerState& p, const TeamState& team, Dice& dice) {
+    if (p.stats.has(SK::BoneHead)) {
+        bool distracted = (dice.d6() == 1);
+        if (distracted && useTeamReroll(const_cast<TeamState&>(team), dice, &p))
+            distracted = (dice.d6() == 1);
+        if (distracted) { p.activated = p.distractedThisTurn = true; return true; }
+        return false;
+    }
+    if (p.stats.has(SK::ReallyStupid)) {
+        // Count adjacent standing team-mates without Really Stupid that haven't
+        // themselves become Distracted this turn.
+        int supporters = 0;
+        for (const auto& tm : team.allPlayers()) {
+            if (&tm == &p) continue;
+            if (!tm.isActive() || tm.prone || tm.distractedThisTurn) continue;
+            if (tm.stats.has(SK::ReallyStupid)) continue;
+            if (std::abs(tm.zone - p.zone) <= 1) ++supporters;
+        }
+        bool distracted = (dice.d6() + (supporters > 0 ? 2 : 0)) < 4;
+        if (distracted) { p.activated = p.distractedThisTurn = true; return true; }
+        return false;
     }
     return false;
 }
 
 // ── Zone helpers ─────────────────────────────────────────────────────────────
-// Bone-headed players lose their tackle zone for the rest of the turn.
+// Distracted players (Bone Head / Really Stupid) lose their tackle zone.
 int defendersInZone(const TeamState& defense, Zone z) {
     int n = 0;
     for (const auto& p : defense.allPlayers())
-        if (p.isActive() && !p.prone && !p.boneHeadThisTurn && p.zone == z) ++n;
+        if (p.isActive() && !p.prone && !p.distractedThisTurn && p.zone == z) ++n;
     return n;
 }
 
@@ -753,8 +772,8 @@ void attemptFoul(TeamState& offense, TeamState& defense, Dice& dice)
 bool simulateTurn(TeamState& offense, TeamState& defense, Dice& dice,
                   int turnsLeft, const GameContext& ctx)
 {
-    for (auto& p : offense.allPlayers()) { p.activated = false; p.boneHeadThisTurn = false; }
-    for (auto& p : defense.allPlayers()) { p.activated = false; p.boneHeadThisTurn = false; }
+    for (auto& p : offense.allPlayers()) { p.activated = false; p.distractedThisTurn = false; }
+    for (auto& p : defense.allPlayers()) { p.activated = false; p.distractedThisTurn = false; }
 
     bool offensePassUsed    = false;
     bool offenseHandoffUsed = false;
@@ -783,7 +802,7 @@ bool simulateTurn(TeamState& offense, TeamState& defense, Dice& dice,
             if (std::abs(d.zone - p.zone) <= 1) { any = true; break; }
         }
         if (!any) continue;
-        if (checkBoneHead(p, offense, dice)) continue;
+        if (checkActivationRoll(p, offense, dice)) continue;
         p.activated = true;
         bool turnover = attemptBlock(p, defense, dice, offense);
         ++blocksThisTurn;
@@ -802,7 +821,7 @@ bool simulateTurn(TeamState& offense, TeamState& defense, Dice& dice,
             for (auto& d : defense.allPlayers()) {
                 if (!d.canAct()) continue;
                 if (std::abs(d.zone - carrier->zone) <= 1) {
-                    if (checkBoneHead(d, defense, dice)) break;  // blitzer distracted — no blitz this turn
+                    if (checkActivationRoll(d, defense, dice)) break;  // blitzer distracted — no blitz this turn
                     defenseBlitzUsed = true;
                     d.activated      = true;
                     d.zone = carrier->zone;
@@ -902,7 +921,7 @@ bool simulateTurn(TeamState& offense, TeamState& defense, Dice& dice,
     PlayerState* carrier = offense.ballCarrier();
 
     // ── Bone Head: ball carrier rolls before any action ──────────────────────
-    if (carrier && carrier->canAct() && checkBoneHead(*carrier, offense, dice))
+    if (carrier && carrier->canAct() && checkActivationRoll(*carrier, offense, dice))
         return false;  // carrier bone-heads — no advance, no pass, no hand-off
 
     // ── 2. Stalling: if ahead and carrier is safely in opponent territory,
