@@ -377,7 +377,7 @@ Each turn proceeds in this order:
 
 1. **Stand-up phase**: stunned players recover; prone players stand (simplified — no MA cost)
 2. **Blocking phase**: up to 3 offensive blocks (each blocker activates once)
-   - Bone Head players must pass a D6 check (2+) before acting; failure wastes the action and the player's tackle zone
+   - Bone Head / Really Stupid players must pass an activation roll before acting; failure wastes the action and the player's tackle zone (see Skills table)
    - A successful push causes the blocker to follow up one zone forward (unless the defender has Fend)
    - Frenzy players must follow up and immediately block again
 3. **Defense blitz**: one defender may move into the carrier's zone and attempt a block
@@ -415,6 +415,7 @@ Each turn proceeds in this order:
 | **Nerves of Steel** | Ignore tackle zone penalties on pass and catch rolls |
 | **Pass** | Re-roll one failed pass throw per activation |
 | **Pro** | Once per activation: re-roll any failed roll on 3+ |
+| **Really Stupid** | Before acting, roll D6 (+2 if any adjacent standing team-mate without Really Stupid is not Distracted): 4+ acts normally, <4 = Distracted (no action, no tackle zone this turn); no team re-rolls |
 | **Regeneration** | On a Casualty result: roll 4+ to place in Reserves instead (after apothecary) |
 | **Sidestep** | On a push result, defender chooses any adjacent square instead of being pushed back |
 | **Sneaky Git** | Avoid ejection on doubles when fouling |
