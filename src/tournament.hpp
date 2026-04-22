@@ -28,6 +28,7 @@ struct TournamentStats {
     int matchGames{};
     int numTeams{};
     std::string pairingSystem;
+    long gamesSimulated{};   // actual simulateGame() calls (pool precomputation)
     std::vector<std::string> teamNames;
     std::vector<int>    tournamentWins;       // times each team finished 1st
     std::vector<double> avgPoints;            // average points per tournament

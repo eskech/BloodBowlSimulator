@@ -330,11 +330,12 @@ TournamentStats runTournament(const TournamentConfig& cfg, const SeedData& seed,
 
     // ── Reduce ────────────────────────────────────────────────────────────
     TournamentStats stats;
-    stats.numTournaments = nT;
-    stats.numRounds      = cfg.numRounds;
-    stats.matchGames     = cfg.matchGames;
-    stats.numTeams       = n;
-    stats.pairingSystem  = cfg.pairingSystem;
+    stats.numTournaments  = nT;
+    stats.numRounds       = cfg.numRounds;
+    stats.matchGames      = cfg.matchGames;
+    stats.numTeams        = n;
+    stats.pairingSystem   = cfg.pairingSystem;
+    stats.gamesSimulated  = static_cast<long>(n) * (n - 1) / 2 * POOL_SIZE;
     stats.teamNames.resize(static_cast<size_t>(n));
     stats.tournamentWins      .assign(static_cast<size_t>(n), 0);
     stats.avgPoints           .assign(static_cast<size_t>(n), 0.0);

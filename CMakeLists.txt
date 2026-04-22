@@ -19,6 +19,28 @@ add_compile_options(
   $<$<CONFIG:Debug>:-O0>
 )
 
+# Profile-Guided Optimisation (PGO)
+#
+#   Step 1 — instrument build:
+#     cmake .. -DCMAKE_BUILD_TYPE=Release -DPGO=instrument
+#     make -j$(nproc)
+#     ./bloodbowl --tournament <file.json>     # representative workload
+#
+#   Step 2 — optimised build using collected profiles:
+#     cmake .. -DPGO=optimize
+#     make -j$(nproc)
+#
+#   Typical gain: 10-20% on this branch-heavy workload.
+#   Reset to normal build with:  cmake .. -DPGO=off  (or omit the flag)
+set(PGO "off" CACHE STRING "PGO mode: off | instrument | optimize")
+if(PGO STREQUAL "instrument")
+  add_compile_options(-fprofile-generate)
+  add_link_options(-fprofile-generate)
+elseif(PGO STREQUAL "optimize")
+  add_compile_options(-fprofile-use -fprofile-correction)
+  add_link_options(-fprofile-use)
+endif()
+
 # OpenMP
 find_package(OpenMP REQUIRED)
 

@@ -422,10 +422,9 @@ int main(int argc, char* argv[]) {
         auto t1 = std::chrono::high_resolution_clock::now();
 
         double elapsed = std::chrono::duration<double>(t1 - t0).count();
-        int totalGames = tc.numTournaments * tc.numRounds
-                       * (static_cast<int>(tc.teams.size()) / 2) * tc.matchGames;
-        std::println("  Completed in {:.3f} s  (~{:.0f} games/s)\n",
-                     elapsed, totalGames / elapsed);
+        std::println("  Completed in {:.3f} s  ({} games simulated, {:.0f} games/s)\n",
+                     elapsed, ts.gamesSimulated,
+                     ts.gamesSimulated / elapsed);
 
         printTournamentStats(ts);
         return EXIT_SUCCESS;
@@ -476,8 +475,9 @@ int main(int argc, char* argv[]) {
 
         auto t1 = std::chrono::high_resolution_clock::now();
         double elapsed = std::chrono::duration<double>(t1 - t0).count();
-        std::println("  Completed in {:.3f} s  ({:.0f} games/s)\n",
-                     elapsed, args.runs / elapsed);
+        std::println("  Completed in {:.3f} s  ({} games simulated, {:.0f} games/s)\n",
+                     elapsed, static_cast<long>(args.runs),
+                     args.runs / elapsed);
 
         SimulationStats stats = aggregateResults(samples);
         printAggregateStats(stats, matches[0].team1.name, matches[0].team2.name);
@@ -514,8 +514,9 @@ int main(int argc, char* argv[]) {
 
     auto t1 = std::chrono::high_resolution_clock::now();
     double elapsed = std::chrono::duration<double>(t1 - t0).count();
-    std::println("  Completed in {:.3f} s  ({:.0f} games/s)\n",
-                 elapsed, totalGames / elapsed);
+    std::println("  Completed in {:.3f} s  ({} games simulated, {:.0f} games/s)\n",
+                 elapsed, static_cast<long>(totalGames),
+                 totalGames / elapsed);
 
     // ---- Print results in order ----
     for (int i = 0; i < numMatchups; ++i) {
