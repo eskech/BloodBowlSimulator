@@ -87,7 +87,11 @@ Usage: tourplay-convert <zipfile> [options]
   -p, --pairing SYSTEM   dutch | monrad            (default: dutch)
 ```
 
-The tool processes every file in the zip whose name contains `roster`. It prints a summary line per team and emits `NOTE:` diagnostics for skills that were dropped (unknown skill names or Trait-category skills absent from the position's base kit — these cannot be gained through leveling and would fail validation). Star players (level field = `Star`) are excluded from the roster automatically; `RiotousRookies` inducements set the flag on the team.
+The tool processes every file in the zip whose name contains `roster`. It prints a summary line per team (with `+Name` for each star player) and emits `NOTE:` diagnostics for skills that were dropped (unknown skill names or Trait-category skills absent from the position's base kit — these cannot be gained through leveling and would fail validation).
+
+**Star players**: roster entries with level `Star` are skipped. Inducement rows are checked against the seed's star player catalogue; recognised names are added to the team's `starPlayers` array. Non-star inducements (`Bribes`, `HalflingMasterChef`, etc.) are silently ignored. TourPlay encodes apostrophes in names as Unicode curly quotes — the tool normalises these to ASCII before the lookup.
+
+**`RiotousRookies`** inducements set the `riotousRookies` flag on the team.
 
 **Position and race name mapping**: TourPlay uses slightly different names from the seed in several places (e.g. `Chaos Dwarf` → `Chaos Dwarves`, `Skink Lineman` → `Skink Runner Lineman`, `Tomb Kings Blitzer` → `Anointed Blitzer`). The tool resolves these automatically via exact match, substring match, and an explicit fallback table.
 
@@ -143,6 +147,7 @@ The tool processes every file in the zip whose name contains `roster`. It prints
 | `rerolls` | int | `2` | Team re-rolls available per half |
 | `hasApothecary` | bool | `false` | Enables apothecary (once per game) |
 | `riotousRookies` | bool | `false` | Snotlings inducement — adds 2D3+1 Snotling Lineman Journeymen before each game |
+| `starPlayers` | array | `[]` | Names of hired star players (must exist in seed and be allowed for the team's race) |
 | `strategy` | object | see below | Team-wide strategy defaults |
 
 **Strategy fields** (all `0.0`–`1.0`, probability of using the skill/tactic)
@@ -167,6 +172,27 @@ Strategy can be set at team level and overridden per player. Each player also in
 | `isTeamCaptain` | bool | Designate this player as Team Captain (see below) |
 
 Rosters can have 11–16 players. Positional limits from the seed data are enforced at load time. At most 11 players are fielded per drive; extras sit in the Reserves box and return at the next kickoff.
+
+### Star players
+
+Star players are hired as inducements and listed by name:
+
+```json
+{
+  "name": "Reikland Reavers",
+  "race": "Humans",
+  "rerolls": 3,
+  "hasApothecary": true,
+  "starPlayers": ["Morg 'n' Thorg"],
+  "players": [ ... ]
+}
+```
+
+Each name must match an entry in the `starPlayers` catalogue in `bloodbowl-2025-seed.json`. If `allowedTeams` in the catalogue is non-empty, the team's race must appear in that list (e.g. Fungus the Loon is restricted to Orcs, Goblins, Skaven, and a few others; Morg 'n' Thorg may be hired by any team).
+
+Star players use their own stats from the seed rather than any roster position. All their skills — including **Loner** — are set automatically. Loner means: before the team may spend a re-roll on behalf of that player, a D6 is rolled; on a **4+** the re-roll is granted, otherwise it is declined (the re-roll count is not decremented). Star players are always fielded; they are not subject to the 11-player cap bench logic.
+
+Star players are displayed with `★` in the roster printout.
 
 ### Team Captain
 
@@ -456,14 +482,15 @@ src/
                      weather (rollWeather), kickoff events (kickoffEvent),
                      hand-off (attemptHandoff), foul (attemptFoul),
                      interception (attemptInterception), Tentacles, Bone Head,
-                     crowd surfing, Frenzy, Fend, Strip Ball, Sidestep, Stunty
+                     crowd surfing, Frenzy, Fend, Strip Ball, Sidestep, Stunty,
+                     useTeamReroll (captain bonus + Loner gate)
   tournament.cpp/hpp Swiss bracket: pairing, standings, runTournament
                      match pool (buildMatchPool / sampleMatch) for fast sampling
   block.hpp          Block dice resolution, armour/injury rolls, apothecary,
                      crowd surf helper, resolvePush (Stand Firm / Sidestep / Grab)
   dice.hpp           Thread-local RNG wrapper (mt19937_64)
   models.hpp         All data structures, skill bitmask (SK:: constants),
-                     GameContext (weather state per game)
+                     GameContext (weather state per game), StarPlayer
 tools/
   tourplay_convert.cpp  TourPlay zip → tournament JSON converter
 bloodbowl-2025-seed.json   31 races, 175 skills, star player catalogue
