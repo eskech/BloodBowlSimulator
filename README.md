@@ -7,7 +7,7 @@ A Monte Carlo simulator for Blood Bowl 2020/2025. Runs thousands of games in par
 - C++23 compiler (GCC 13+ or Clang 17+)
 - CMake 3.28+
 - OpenMP
-- Internet connection on first build (CMake fetches [nlohmann/json](https://github.com/nlohmann/json) v3.11.3 automatically)
+- Internet connection on first build (CMake fetches [nlohmann/json](https://github.com/nlohmann/json) v3.11.3 and [miniz](https://github.com/richgel999/miniz) 3.0.2 automatically)
 
 ## Build
 
@@ -17,7 +17,11 @@ cmake .. -DCMAKE_BUILD_TYPE=Release
 make -j$(nproc)
 ```
 
-The build copies `bloodbowl-2025-seed.json` and all files from `data/` into the build directory automatically.
+The build produces two executables in the build directory:
+- `bloodbowl` — the simulator
+- `tourplay-convert` — converts a TourPlay data export to a tournament JSON (see below)
+
+The build also copies `bloodbowl-2025-seed.json` and all files from `data/` into the build directory automatically.
 
 ## Running
 
@@ -58,6 +62,40 @@ Usage: bloodbowl <match.json> [match2.json ...] [options]
   -r, --runs N           Collect N game samples → CSV (single matchup only)
   -o, --output STEM      Output file stem (default: results)
 ```
+
+## TourPlay import
+
+`tourplay-convert` reads a TourPlay data export zip and writes a tournament JSON ready for `bloodbowl --tournament`.
+
+```bash
+./tourplay-convert punchbowl-2-data.zip
+# writes tournament.json with 6 rounds, dutch pairing, 1000 simulations
+
+./tourplay-convert punchbowl-2-data.zip -r 7 -p monrad -o grand-prix.json
+```
+
+### All options
+
+```
+Usage: tourplay-convert <zipfile> [options]
+
+  -s, --seed FILE        Seed data file           (default: bloodbowl-2025-seed.json)
+  -o, --output FILE      Output tournament JSON    (default: tournament.json)
+  -r, --rounds N         Swiss rounds             (default: 6)
+  -t, --tournaments N    Simulation count          (default: 1000)
+  -g, --games N          Games per match           (default: 1)
+  -p, --pairing SYSTEM   dutch | monrad            (default: dutch)
+```
+
+The tool processes every file in the zip whose name contains `roster`. It prints a summary line per team and emits `NOTE:` diagnostics for skills that were dropped (unknown skill names or Trait-category skills absent from the position's base kit — these cannot be gained through leveling and would fail validation). Star players (level field = `Star`) are excluded from the roster automatically; `RiotousRookies` inducements set the flag on the team.
+
+**Position and race name mapping**: TourPlay uses slightly different names from the seed in several places (e.g. `Chaos Dwarf` → `Chaos Dwarves`, `Skink Lineman` → `Skink Runner Lineman`, `Tomb Kings Blitzer` → `Anointed Blitzer`). The tool resolves these automatically via exact match, substring match, and an explicit fallback table.
+
+**Skill normalization**: TourPlay appends team IDs to some skills (`Hatred (102)` → `Hatred`) and uses short forms for others (`Pogo` → `Pogo Stick`). Annotated seed names (`Animosity (Underworld Goblin Linemen)`) are matched against the plain TourPlay form by comparing root names.
+
+**Zip files are gitignored** (`data/*.zip`).
+
+---
 
 ## Input file format
 
@@ -412,20 +450,22 @@ When a defender is pushed and their zone is already `OwnEndZone`, they are pushe
 
 ```
 src/
-  main.cpp          CLI, argument parsing, output formatting
-  loader.cpp/hpp    JSON parsing for match, tournament, and seed files
-  simulator.cpp/hpp Game engine: buildTeamState, simulateGame, runSimulations
-                    weather (rollWeather), kickoff events (kickoffEvent),
-                    hand-off (attemptHandoff), foul (attemptFoul),
-                    interception (attemptInterception), Tentacles, Bone Head,
-                    crowd surfing, Frenzy, Fend, Strip Ball, Sidestep, Stunty
+  main.cpp           CLI, argument parsing, output formatting
+  loader.cpp/hpp     JSON parsing for match, tournament, and seed files
+  simulator.cpp/hpp  Game engine: buildTeamState, simulateGame, runSimulations
+                     weather (rollWeather), kickoff events (kickoffEvent),
+                     hand-off (attemptHandoff), foul (attemptFoul),
+                     interception (attemptInterception), Tentacles, Bone Head,
+                     crowd surfing, Frenzy, Fend, Strip Ball, Sidestep, Stunty
   tournament.cpp/hpp Swiss bracket: pairing, standings, runTournament
-                    match pool (buildMatchPool / sampleMatch) for fast sampling
-  block.hpp         Block dice resolution, armour/injury rolls, apothecary,
-                    crowd surf helper, resolvePush (Stand Firm / Sidestep / Grab)
-  dice.hpp          Thread-local RNG wrapper (mt19937_64)
-  models.hpp        All data structures, skill bitmask (SK:: constants),
-                    GameContext (weather state per game)
+                     match pool (buildMatchPool / sampleMatch) for fast sampling
+  block.hpp          Block dice resolution, armour/injury rolls, apothecary,
+                     crowd surf helper, resolvePush (Stand Firm / Sidestep / Grab)
+  dice.hpp           Thread-local RNG wrapper (mt19937_64)
+  models.hpp         All data structures, skill bitmask (SK:: constants),
+                     GameContext (weather state per game)
+tools/
+  tourplay_convert.cpp  TourPlay zip → tournament JSON converter
 bloodbowl-2025-seed.json   31 races, 175 skills, star player catalogue
-data/              Sample match and tournament JSON files
+data/              Sample match and tournament JSON files (zip files gitignored)
 ```
