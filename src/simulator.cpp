@@ -13,9 +13,9 @@
 // ============================================================
 TeamState buildTeamState(const TeamConfig& cfg, const SeedData& seed) {
     TeamState ts;
-    ts.name           = cfg.name;
-    ts.race           = cfg.race;
-    ts.hasApothecary  = cfg.hasApothecary;
+    ts.name             = cfg.name;
+    ts.race             = cfg.race;
+    ts.hasApothecary    = cfg.hasApothecary;
     ts.rerollsRemaining = cfg.rerolls;
 
     const Race* race = seed.findRace(cfg.race);
@@ -44,11 +44,8 @@ TeamState buildTeamState(const TeamConfig& cfg, const SeedData& seed) {
             }
         }
         for (const auto& sk : pc.extraSkills) setBit(sk);
-
-        // Team Captain: gains Pro regardless of position skill access (BB2020 special rule).
         if (pc.isTeamCaptain) setBit("Pro");
 
-        // Resolve effective strategy: player override merged into team default
         PlayerStrategy strategy = pc.strategy.mergedWith(cfg.defaultStrategy);
 
         PlayerState ps;
@@ -59,7 +56,6 @@ TeamState buildTeamState(const TeamConfig& cfg, const SeedData& seed) {
         ts.players[ts.playerCount++] = std::move(ps);
     }
 
-    // Riotous Rookies: build a Snotling Lineman template for use at game start.
     if (cfg.riotousRookies && race) {
         ts.riotousRookies = true;
         const RosterPosition* pos = race->findPosition("Snotling Lineman");
@@ -89,82 +85,135 @@ TeamState buildTeamState(const TeamConfig& cfg, const SeedData& seed) {
 // ============================================================
 // Internal helpers
 // ============================================================
-
 namespace {
 
-// Assign starting positions on kickoff
-// offenseTeam receives the ball.
-void setupKickoff(TeamState& offense, TeamState& defense, Dice& dice) {
-    // Return players that were benched last drive by the 11-player cap.
-    // Swarming-trait players stay in reserves — they enter only via Swarming.
+// Forward declarations
+bool simulateTurn(TeamState& offense, TeamState& defense, Dice& dice,
+                  int turnsLeft, const GameContext& ctx);
+
+// ── 9. Weather ────────────────────────────────────────────────────────────────
+// Roll 2D6 at the start of each game.  5-10 = Nice (no effect).
+GameContext rollWeather(Dice& dice) {
+    GameContext ctx;
+    int roll = dice.d6() + dice.d6();
+    if      (roll == 2)  ctx.swelteringHeat = true;        // Sweltering Heat
+    else if (roll <= 4)  ctx.paModifier = 1;               // Very Sunny
+    else if (roll == 11) { ctx.paModifier = 1; ctx.catchModifier = 1; } // Pouring Rain
+    else if (roll == 12) ctx.blizzard = true;              // Blizzard
+    // 5-10: Nice — no modifiers
+    return ctx;
+}
+
+// ── 1. Kickoff events ────────────────────────────────────────────────────────
+// Roll D8 after each kickoff setup.
+void kickoffEvent(TeamState& offense, TeamState& defense, Dice& dice,
+                  const GameContext& ctx)
+{
+    // Sweltering Heat: each player on the pitch rolls 6+ or is KO'd before the drive.
+    if (ctx.swelteringHeat) {
+        for (auto& p : offense.allPlayers())
+            if (p.isOnPitch() && !p.ko && dice.d6() >= 6) p.ko = true;
+        for (auto& p : defense.allPlayers())
+            if (p.isOnPitch() && !p.ko && dice.d6() >= 6) p.ko = true;
+    }
+
+    int roll = dice.d8();
+    switch (roll) {
+        case 1: // Riot — random team loses/gains a turn (model: reroll swap)
+            if (dice.d6() >= 4) {
+                if (offense.rerollsRemaining > 0) { --offense.rerollsRemaining; ++defense.rerollsRemaining; }
+            }
+            break;
+
+        case 2: {// Blitz — defense gets a free block on the ball carrier before offense moves
+            PlayerState* carrier = offense.ballCarrier();
+            if (carrier) {
+                for (auto& d : defense.allPlayers()) {
+                    if (!d.canAct()) continue;
+                    if (std::abs(d.zone - carrier->zone) <= 1) {
+                        d.zone = carrier->zone;
+                        // Simple free block — don't count stats, don't cause game turnover
+                        resolveBlock(d, *carrier, 0, 0, dice, false, defense, offense);
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+
+        case 3: // High Kick — receiver repositions; advance ball carrier one zone for free
+            if (PlayerState* c = offense.ballCarrier())
+                if (c->zone < Zone::OppEndZone) c->zone = c->zone + 1;
+            break;
+
+        case 4: // Cheering Fans — coin flip for 1 extra re-roll
+        case 5: // Brilliant Coaching — same effect
+            if (dice.d6() >= 4) ++offense.rerollsRemaining;
+            else                ++defense.rerollsRemaining;
+            break;
+
+        case 6: // Quick Snap — offense advances all players one zone before defense reacts
+            for (auto& p : offense.allPlayers())
+                if (p.isActive() && p.zone < Zone::OppEndZone) p.zone = p.zone + 1;
+            break;
+
+        case 7: // Perfect Defense — no practical effect in zone model
+            break;
+
+        case 8: // Pitch Invasion — random players on both sides go prone (5-6 on D6)
+            for (auto& p : offense.allPlayers())
+                if (p.isOnPitch() && dice.d6() >= 5) p.prone = true;
+            for (auto& p : defense.allPlayers())
+                if (p.isOnPitch() && dice.d6() >= 5) p.prone = true;
+            break;
+    }
+}
+
+// ── Kickoff setup ────────────────────────────────────────────────────────────
+void setupKickoff(TeamState& offense, TeamState& defense, Dice& dice,
+                  const GameContext& ctx)
+{
+    // Return benched (non-Swarming) players to the pitch.
     for (TeamState* team : {&offense, &defense})
         for (auto& p : team->allPlayers())
             if (p.inReserves && !p.stats.has(SK::Swarming)) p.inReserves = false;
 
-    // KO recovery: each KO'd player rolls 4+ to return at every new drive (BB2020 §4.2)
-    for (auto& p : offense.allPlayers()) {
-        if (p.ko && !p.casualty && dice.d6() >= 4) {
-            p.ko = p.prone = p.stunned = false;
-        }
-    }
-    for (auto& p : defense.allPlayers()) {
-        if (p.ko && !p.casualty && dice.d6() >= 4) {
-            p.ko = p.prone = p.stunned = false;
-        }
-    }
+    // KO recovery (4+ per KO'd player).
+    for (auto& p : offense.allPlayers())
+        if (p.ko && !p.casualty && dice.d6() >= 4) p.ko = p.prone = p.stunned = false;
+    for (auto& p : defense.allPlayers())
+        if (p.ko && !p.casualty && dice.d6() >= 4) p.ko = p.prone = p.stunned = false;
 
-    // Swarming: D3 Swarming-trait players from Reserves (inReserves) enter the pitch.
-    // Cap = number of Swarming players already being fielded this drive (BB2020).
+    // Swarming: D3 Swarming players from reserves enter (capped by on-pitch count).
     for (TeamState* team : {&offense, &defense}) {
         int onPitch = 0;
         for (const auto& p : team->allPlayers())
             if (!p.ko && !p.casualty && !p.inReserves && p.stats.has(SK::Swarming)) ++onPitch;
-        if (onPitch == 0) continue;
-
+        if (!onPitch) continue;
         int canEnter = std::min(dice.d3(), onPitch);
         for (auto& p : team->allPlayers()) {
             if (canEnter <= 0) break;
-            if (p.inReserves && !p.casualty && p.stats.has(SK::Swarming)) {
-                p.inReserves = false;
-                --canEnter;
-            }
+            if (p.inReserves && !p.casualty && p.stats.has(SK::Swarming)) { p.inReserves = false; --canEnter; }
         }
     }
 
-    // 11-player cap: at most 11 players per team per drive (BB2020 setup rules).
-    // Team Captain must be fielded if able — exempt from benching.
-    // Bench from the end of the roster (typically reserve linemen/extras).
+    // 11-player cap.
     for (TeamState* team : {&offense, &defense}) {
         int active = 0;
-        for (const auto& p : team->allPlayers())
-            if (!p.ko && !p.casualty && !p.inReserves) ++active;
-
+        for (const auto& p : team->allPlayers()) if (!p.ko && !p.casualty && !p.inReserves) ++active;
         int toBench = active - 11;
         for (int i = team->playerCount - 1; i >= 0 && toBench > 0; --i) {
             auto& p = team->players[static_cast<size_t>(i)];
             if (p.ko || p.casualty || p.inReserves || p.isTeamCaptain) continue;
-            p.inReserves = true;
-            --toBench;
+            p.inReserves = true; --toBench;
         }
     }
 
-    // Reset per-drive states
-    for (auto& p : offense.allPlayers()) {
-        if (!p.isOnPitch()) continue;
-        p.prone   = false;
-        p.hasBall = false;
-        // Stunned players stand up at start of their turn;
-        // on a new half KOs may recover (50%)
-    }
-    for (auto& p : defense.allPlayers()) {
-        if (!p.isOnPitch()) continue;
-        p.prone   = false;
-        p.hasBall = false;
-    }
+    // Reset per-drive states.
+    for (auto& p : offense.allPlayers()) { if (!p.isOnPitch()) continue; p.prone = p.hasBall = false; }
+    for (auto& p : defense.allPlayers()) { if (!p.isOnPitch()) continue; p.prone = p.hasBall = false; }
 
-    // Place players in zones
-    // Offense: 3 on Line of Scrimmage (Midfield), rest in OwnHalf
-    // Defense: 3 on Line of Scrimmage (Midfield), rest in OppHalf (from their view = OwnHalf here)
+    // Zone placement.
     int offLiners = 0, defLiners = 0;
     for (auto& p : offense.allPlayers()) {
         if (!p.isOnPitch()) continue;
@@ -172,37 +221,49 @@ void setupKickoff(TeamState& offense, TeamState& defense, Dice& dice) {
     }
     for (auto& p : defense.allPlayers()) {
         if (!p.isOnPitch()) continue;
-        // From offense perspective, defense is in OppHalf/OppEndZone
         p.zone = (defLiners++ < 3) ? Zone::Midfield : Zone::OppHalf;
     }
 
-    // Ball placed in offense's OwnHalf (scatter from kick)
-    // Give ball to first usable player in OwnHalf
+    // Ball to first usable player in OwnHalf.
     for (auto& p : offense.allPlayers()) {
-        if (p.isActive() && p.zone == Zone::OwnHalf) {
-            p.hasBall = true;
-            break;
-        }
+        if (p.isActive() && p.zone == Zone::OwnHalf) { p.hasBall = true; break; }
     }
-    // If no one in OwnHalf (unlikely at start), give to first active player
     if (!offense.ballCarrier()) {
-        for (auto& p : offense.allPlayers()) {
-            if (p.isActive()) { p.hasBall = true; break; }
-        }
+        for (auto& p : offense.allPlayers()) { if (p.isActive()) { p.hasBall = true; break; } }
     }
+
+    // 1. Kickoff event roll.
+    kickoffEvent(offense, defense, dice, ctx);
 }
 
-// Count defenders in a zone (opponents from offense PoV)
+// ── Bone Head roll (BB2025) ──────────────────────────────────────────────────
+// After declaring an action, a Bone Head player rolls D6.
+// 2+ → act normally.  1 → player becomes Distracted (no action, no tackle zone).
+// A team re-roll MAY be used on this roll.
+bool checkBoneHead(PlayerState& p, TeamState& team, Dice& dice) {
+    if (!p.stats.has(SK::BoneHead)) return false;
+    bool distracted = (dice.d6() == 1);
+    if (distracted && team.rerollsRemaining > 0) {
+        if (!team.captainActive() || dice.d6() != 6) --team.rerollsRemaining;
+        distracted = (dice.d6() == 1);
+    }
+    if (distracted) {
+        p.activated        = true;
+        p.boneHeadThisTurn = true;
+        return true;
+    }
+    return false;
+}
+
+// ── Zone helpers ─────────────────────────────────────────────────────────────
+// Bone-headed players lose their tackle zone for the rest of the turn.
 int defendersInZone(const TeamState& defense, Zone z) {
     int n = 0;
     for (const auto& p : defense.allPlayers())
-        if (p.isActive() && !p.prone && p.zone == z) ++n;
+        if (p.isActive() && !p.prone && !p.boneHeadThisTurn && p.zone == z) ++n;
     return n;
 }
 
-// Count effective tackle zones on a player in ballZone.
-// Raw count capped at 4. Offensive players in the same zone screen defenders:
-// Guards cancel 1:1, other non-prone blockers cancel at 2:1 (cage effect).
 int countTackleZones(const TeamState& defense, const TeamState& offense, Zone ballZone) {
     int raw = defendersInZone(defense, ballZone);
     int guards = 0, blockers = 0;
@@ -215,12 +276,28 @@ int countTackleZones(const TeamState& defense, const TeamState& offense, Zone ba
     return std::max(0, std::min(4, raw - screened));
 }
 
-// Attempt a block: attacker vs nearest opponent in same/adjacent zone
-// Returns true if defender was knocked down / removed from path
+// ── 3. Tentacles check ───────────────────────────────────────────────────────
+// Before a player leaves a zone, each Tentacles defender in that zone gets a
+// ST vs ST contest.  If any Tentacles player wins (ties go to tentacles), the
+// mover is held and cannot advance this attempt.
+bool blockedByTentacles(const PlayerStats& mover, const TeamState& opponents,
+                        Zone fromZone, Dice& dice)
+{
+    for (const auto& opp : opponents.allPlayers()) {
+        if (!opp.isActive() || opp.prone || opp.zone != fromZone) continue;
+        if (!opp.stats.has(SK::Tentacles)) continue;
+        int moverRoll = dice.d6() + mover.st;
+        int tentRoll  = dice.d6() + opp.stats.st;
+        if (tentRoll >= moverRoll) return true;  // held
+    }
+    return false;
+}
+
+// ── Block ─────────────────────────────────────────────────────────────────────
+// Returns true if the block caused a turnover.
 bool attemptBlock(PlayerState& attacker, TeamState& defenseTeam,
                   Dice& dice, TeamState& attackerTeam)
 {
-    // Find nearest opponent to block (same zone preferred, else adjacent)
     PlayerState* target = nullptr;
     for (auto& p : defenseTeam.allPlayers()) {
         if (!p.canAct()) continue;
@@ -229,22 +306,30 @@ bool attemptBlock(PlayerState& attacker, TeamState& defenseTeam,
     if (!target) {
         for (auto& p : defenseTeam.allPlayers()) {
             if (!p.canAct()) continue;
-            int diff = std::abs(p.zone - attacker.zone);
-            if (diff <= 1) { target = &p; break; }
+            if (std::abs(p.zone - attacker.zone) <= 1) { target = &p; break; }
         }
     }
     if (!target) return false;
 
-    // Count assists (simplified: 1 per adjacent same-team player not in tackle zone)
+    // Titchy: cannot make or receive assists.
     int attackAssists = 0;
-    for (const auto& p : attackerTeam.allPlayers()) {
-        if (&p == &attacker || !p.canAct()) continue;
-        if (std::abs(p.zone - attacker.zone) <= 1) ++attackAssists;
+    if (!attacker.stats.has(SK::Titchy)) {
+        for (const auto& p : attackerTeam.allPlayers()) {
+            if (&p == &attacker || !p.canAct()) continue;
+            if (p.stats.has(SK::Titchy)) continue;          // Titchy can't assist
+            if (std::abs(p.zone - attacker.zone) <= 1) ++attackAssists;
+        }
     }
+    // Stunty: blocker gets one extra assist against a Stunty target.
+    if (target->stats.has(SK::Stunty)) ++attackAssists;
+
     int defAssists = 0;
-    for (const auto& p : defenseTeam.allPlayers()) {
-        if (&p == target || !p.canAct()) continue;
-        if (std::abs(p.zone - target->zone) <= 1) ++defAssists;
+    if (!target->stats.has(SK::Titchy)) {
+        for (const auto& p : defenseTeam.allPlayers()) {
+            if (&p == target || !p.canAct()) continue;
+            if (p.stats.has(SK::Titchy)) continue;          // Titchy can't assist
+            if (std::abs(p.zone - target->zone) <= 1) ++defAssists;
+        }
     }
 
     bool attackerHasBall = attacker.hasBall;
@@ -252,52 +337,102 @@ bool attemptBlock(PlayerState& attacker, TeamState& defenseTeam,
                                       dice, attackerHasBall, attackerTeam, defenseTeam);
 
     ++attackerTeam.blocksAttempted;
-
     if (result.outcome == BlockOutcome::DefenderDown     ||
         result.outcome == BlockOutcome::DefenderStumbles ||
         result.outcome == BlockOutcome::DefenderPushed)
-    {
         ++attackerTeam.blocksSuccessful;
-    }
 
     if (result.defenderInjured) {
         if (target->casualty) ++attackerTeam.casualties;
         else if (target->ko)  ++attackerTeam.knockouts;
     }
 
-    // Follow-up: non-ball-carrier blocker advances one zone after a successful push.
-    // Models the blocker stepping into the vacated space, opening a lane for the carrier.
-    if (!attackerHasBall &&
-        (result.outcome == BlockOutcome::DefenderPushed ||
-         result.outcome == BlockOutcome::DefenderStumbles) &&
-        attacker.zone < Zone::OppEndZone)
-    {
+    // ── 5. Frenzy: must follow up and block again on any push/stumble/down ──
+    bool frenzied = attacker.stats.has(SK::Frenzy)
+                 && !result.followUpBlocked
+                 && !result.turnover
+                 && (result.outcome == BlockOutcome::DefenderPushed  ||
+                     result.outcome == BlockOutcome::DefenderStumbles ||
+                     result.outcome == BlockOutcome::DefenderDown);
+
+    if (frenzied && target->isActive()) {
+        if (!attackerHasBall) attacker.zone = target->zone;
+
+        int atkA2 = 0, defA2 = 0;
+        for (const auto& p : attackerTeam.allPlayers()) {
+            if (&p == &attacker || !p.canAct()) continue;
+            if (std::abs(p.zone - attacker.zone) <= 1) ++atkA2;
+        }
+        for (const auto& p : defenseTeam.allPlayers()) {
+            if (&p == target || !p.canAct()) continue;
+            if (std::abs(p.zone - target->zone) <= 1) ++defA2;
+        }
+
+        BlockResult r2 = resolveBlock(attacker, *target, atkA2, defA2,
+                                       dice, attacker.hasBall, attackerTeam, defenseTeam);
+        ++attackerTeam.blocksAttempted;
+        if (r2.outcome == BlockOutcome::DefenderDown     ||
+            r2.outcome == BlockOutcome::DefenderStumbles ||
+            r2.outcome == BlockOutcome::DefenderPushed)
+            ++attackerTeam.blocksSuccessful;
+        if (r2.defenderInjured) {
+            if (target->casualty) ++attackerTeam.casualties;
+            else if (target->ko)  ++attackerTeam.knockouts;
+        }
+        if (r2.turnover) return true;
+    } else if (!attackerHasBall && !result.followUpBlocked &&
+               (result.outcome == BlockOutcome::DefenderPushed ||
+                result.outcome == BlockOutcome::DefenderStumbles) &&
+               attacker.zone < Zone::OppEndZone) {
+        // Non-Frenzy follow-up: blocker steps forward into vacated space
         attacker.zone = attacker.zone + 1;
     }
 
     return result.turnover;
 }
 
-// Simulate the ball carrier advancing toward the opponent's end zone.
-// High-MA players can attempt to cross multiple zones in one turn.
-// Applies Diving Tackle (forces a re-dodge) and Pro (re-roll failed dodge).
-// Returns true if a touchdown was scored.
-bool advanceBallCarrier(TeamState& offense, TeamState& defense, Dice& dice) {
+// ── 4. Interception attempt ───────────────────────────────────────────────────
+// The most-agile defender in the pass path (receiver's or passer's zone) gets
+// one attempt.  Target = max(4, ag + 2) on D6 (lower AG = harder to intercept).
+// Returns true if ball was intercepted (turnover).
+bool attemptInterception(PlayerState& passer, PlayerState& receiver,
+                          TeamState& defense, Dice& dice)
+{
+    PlayerState* interceptor = nullptr;
+    int bestAg = 99;
+    for (auto& d : defense.allPlayers()) {
+        if (!d.isActive() || d.prone) continue;
+        if (d.zone == receiver.zone || d.zone == passer.zone) {
+            if (d.stats.ag < bestAg) { bestAg = d.stats.ag; interceptor = &d; }
+        }
+    }
+    if (!interceptor) return false;
+
+    int target = std::max(4, interceptor->stats.ag + 2);
+    if (dice.d6() >= target) {
+        passer.hasBall    = false;
+        receiver.hasBall  = false;
+        interceptor->hasBall = true;
+        return true;
+    }
+    return false;
+}
+
+// ── Advance ball carrier ─────────────────────────────────────────────────────
+// Now takes GameContext for Tentacles and weather-adjusted pickup.
+bool advanceBallCarrier(TeamState& offense, TeamState& defense, Dice& dice,
+                        const GameContext& ctx)
+{
     PlayerState* carrier = offense.ballCarrier();
-    // canAct() is not re-checked here: activation is managed by simulateTurn.
-    // We only verify the carrier exists and is physically on the pitch.
     if (!carrier || !carrier->isActive() || carrier->stunned || carrier->prone) return false;
 
-    // Zone-crossing attempts scale with MA: MA4→1, MA5→1, MA6-8→2, MA9+→3.
     int maxZoneAttempts = std::max(1, carrier->stats.ma / 3);
-    // Sprint: one extra rush at 2+ (d6 >= 2). Sure Feet re-rolls one failed sprint attempt.
     if (carrier->stats.has(SK::Sprint)) {
         bool sprintOk = dice.d6() >= 2;
         if (!sprintOk && carrier->stats.has(SK::SureFeet)) sprintOk = dice.d6() >= 2;
         if (sprintOk) ++maxZoneAttempts;
     }
 
-    // Track once-per-activation re-roll availability for the ball carrier.
     bool dodgeReroll = carrier->stats.has(SK::Dodge);
     bool proReroll   = carrier->stats.has(SK::Pro);
 
@@ -309,10 +444,32 @@ bool advanceBallCarrier(TeamState& offense, TeamState& defense, Dice& dice) {
             return true;
         }
 
+        // ── 3. Tentacles: each Tentacles defender in current zone gets to hold the carrier ──
+        if (blockedByTentacles(carrier->stats, defense, current, dice)) {
+            // Carrier is held — failed dodge equivalent (carrier stays, no ball drop from Tentacles)
+            carrier->prone   = true;
+            carrier->hasBall = false;
+            // Defense tries to pick up the loose ball.
+            for (auto& p : defense.allPlayers()) {
+                if (!p.canAct() || p.zone != current) continue;
+                bool sh = p.stats.has(SK::SureHands);
+                int pickupTarget = std::clamp(p.stats.ag + ctx.catchModifier, 2, 6);
+                bool picked = dice.d6() >= pickupTarget;
+                if (!picked && sh) picked = dice.d6() >= pickupTarget;
+                if (!picked && defense.rerollsRemaining > 0) {
+                    if (!defense.captainActive() || dice.d6() != 6) --defense.rerollsRemaining;
+                    picked = dice.d6() >= pickupTarget;
+                }
+                if (picked) p.hasBall = true;
+                break;
+            }
+            return false;
+        }
+
         int tz = countTackleZones(defense, offense, current);
+        // Stunty: -1 modifier to all dodge rolls (effectively +1 to the target number).
+        if (carrier->stats.has(SK::Stunty)) ++tz;
         if (tz > 0) {
-            // Helper: attempt one dodge, enforcing exactly one re-roll of any kind.
-            // Priority: Dodge skill → Pro → team re-roll (mutually exclusive).
             auto tryDodge = [&](int ag, int zones) -> bool {
                 bool dodgeSkillBefore = dodgeReroll;
                 bool dodged = dice.dodgeRoll(ag, zones, dodgeReroll);
@@ -320,8 +477,7 @@ bool advanceBallCarrier(TeamState& offense, TeamState& defense, Dice& dice) {
 
                 if (!dodged && !anyRerollUsed && proReroll
                             && dice.useSkill(carrier->strategy.pro)
-                            && dice.d6() >= 3)
-                {
+                            && dice.d6() >= 3) {
                     dodged = dice.successRoll(std::clamp(ag + zones, 2, 6));
                     proReroll = false;
                     anyRerollUsed = true;
@@ -333,19 +489,19 @@ bool advanceBallCarrier(TeamState& offense, TeamState& defense, Dice& dice) {
                 return dodged;
             };
 
-            // Defense pickup helper (called when carrier drops ball).
             auto defensePickup = [&]() {
                 for (auto& p : defense.allPlayers()) {
                     if (!p.canAct() || p.zone != current) continue;
                     bool sureHands = p.stats.has(SK::SureHands);
-                    bool picked = dice.pickupRoll(p.stats.ag, 0, sureHands);
+                    int pickupTarget = std::clamp(p.stats.ag + ctx.catchModifier, 2, 6);
+                    bool picked = dice.d6() >= pickupTarget;
                     bool skillUsed = p.stats.has(SK::SureHands) && !sureHands;
                     if (!picked && !skillUsed && defense.rerollsRemaining > 0) {
                         if (!defense.captainActive() || dice.d6() != 6) --defense.rerollsRemaining;
-                        picked = dice.successRoll(std::clamp(p.stats.ag, 2, 6));
+                        picked = dice.d6() >= pickupTarget;
                     }
                     if (picked) p.hasBall = true;
-                    break;  // only first eligible player attempts
+                    break;
                 }
             };
 
@@ -356,13 +512,11 @@ bool advanceBallCarrier(TeamState& offense, TeamState& defense, Dice& dice) {
                 return false;
             }
 
-            // ── Diving Tackle: a defender in this zone may fall prone to
-            //    force the carrier to make one more dodge roll ──────────────
+            // Diving Tackle
             for (auto& def : defense.allPlayers()) {
                 if (!def.canAct() || def.zone != current) continue;
                 if (!def.stats.has(SK::DivingTackle)) continue;
                 if (!dice.useSkill(def.strategy.divingTackle)) continue;
-
                 def.prone = true;
                 if (!tryDodge(carrier->stats.ag, 1)) {
                     carrier->prone   = true;
@@ -370,7 +524,7 @@ bool advanceBallCarrier(TeamState& offense, TeamState& defense, Dice& dice) {
                     defensePickup();
                     return false;
                 }
-                break;  // one Diving Tackle per dodge
+                break;
             }
         }
 
@@ -385,14 +539,19 @@ bool advanceBallCarrier(TeamState& offense, TeamState& defense, Dice& dice) {
     return false;
 }
 
-// Try to pass the ball to an open receiver closer to end zone
-bool attemptPass(TeamState& offense, const TeamState& defense, Dice& dice) {
-    PlayerState* carrier = offense.ballCarrier();
-    // Activation already validated by simulateTurn; just check physical state.
-    if (!carrier || !carrier->isActive() || carrier->stunned || carrier->prone) return false;
-    if (!carrier->stats.pa.has_value()) return false; // can't pass
+// ── 4. Pass ───────────────────────────────────────────────────────────────────
+// Now respects weather context (blizzard, paModifier, catchModifier) and checks
+// for interceptions after a successful throw.
+bool attemptPass(TeamState& offense, const TeamState& defense, Dice& dice,
+                 const GameContext& ctx)
+{
+    // 9. Blizzard: no passing at all.
+    if (ctx.blizzard) return false;
 
-    // Look for a receiver one zone ahead
+    PlayerState* carrier = offense.ballCarrier();
+    if (!carrier || !carrier->isActive() || carrier->stunned || carrier->prone) return false;
+    if (!carrier->stats.pa.has_value()) return false;
+
     Zone targetZone = std::min(Zone::OppEndZone, carrier->zone + 1);
 
     PlayerState* receiver = nullptr;
@@ -405,13 +564,11 @@ bool attemptPass(TeamState& offense, const TeamState& defense, Dice& dice) {
     int rangeMod = (targetZone == Zone::OppEndZone) ? 1 : 0;
     ++offense.passesAttempted;
 
-    // Accurate: -1 to PA target. TZ in passer's zone: +1 per TZ (Nerves of Steel ignores).
-    int effectivePa = *carrier->stats.pa;
+    int effectivePa = *carrier->stats.pa + ctx.paModifier;
     if (carrier->stats.has(SK::Accurate)) --effectivePa;
     if (!carrier->stats.has(SK::NervesOfSteel))
         effectivePa += countTackleZones(defense, offense, carrier->zone);
 
-    // Pass: Pass skill re-roll OR team re-roll — not both.
     bool passReroll = carrier->stats.has(SK::Pass);
     bool thrown = dice.passRoll(effectivePa, rangeMod, passReroll);
     bool passSkillUsed = carrier->stats.has(SK::Pass) && !passReroll;
@@ -421,14 +578,20 @@ bool attemptPass(TeamState& offense, const TeamState& defense, Dice& dice) {
     }
     if (!thrown) return false;
 
-    // Diving Catch: +1 modifier to AG on accurate catches (i.e. -1 to target).
-    // TZ in receiver's zone: +1 per TZ (Nerves of Steel ignores).
-    int effectiveCatchAg = receiver->stats.ag;
+    // ── 4. Interception: most agile eligible defender gets one attempt ────────
+    // Cast away const — interception modifies defender state (hasBall).
+    if (attemptInterception(*carrier, *receiver,
+                             const_cast<TeamState&>(defense), dice)) {
+        carrier->hasBall = false;
+        return false;  // turnover — defense caught it
+    }
+
+    // ── Catch ─────────────────────────────────────────────────────────────────
+    int effectiveCatchAg = receiver->stats.ag + ctx.catchModifier;
     if (receiver->stats.has(SK::DivingCatch)) --effectiveCatchAg;
     if (!receiver->stats.has(SK::NervesOfSteel))
         effectiveCatchAg += countTackleZones(defense, offense, receiver->zone);
 
-    // Catch: Catch skill re-roll OR team re-roll — not both.
     bool catchReroll = receiver->stats.has(SK::Catch);
     bool caught = dice.catchRoll(effectiveCatchAg, catchReroll);
     bool catchSkillUsed = receiver->stats.has(SK::Catch) && !catchReroll;
@@ -436,110 +599,208 @@ bool attemptPass(TeamState& offense, const TeamState& defense, Dice& dice) {
         if (!offense.captainActive() || dice.d6() != 6) --offense.rerollsRemaining;
         caught = dice.successRoll(std::clamp(effectiveCatchAg, 2, 6));
     }
+
     if (caught) {
-        carrier->hasBall = false;
+        carrier->hasBall  = false;
         receiver->hasBall = true;
         ++offense.passesCompleted;
         return true;
     }
-    // Incomplete pass – ball scatters to receiver's zone (simplified: stays there loose)
+
     carrier->hasBall = false;
-    // Try to recover (no one picks it up this action)
     return false;
+}
+
+// ── 7. Hand-off ───────────────────────────────────────────────────────────────
+// Carrier throws to an adjacent teammate using AG (not PA).
+// Returns true if the hand-off succeeded (new carrier has ball).
+// Sets carrier->hasBall = false on any attempt regardless of success.
+bool attemptHandoff(TeamState& offense, const TeamState& defense, Dice& dice,
+                    const GameContext& ctx)
+{
+    PlayerState* carrier = offense.ballCarrier();
+    if (!carrier || !carrier->isActive() || carrier->stunned || carrier->prone) return false;
+
+    Zone ahead = std::min(Zone::OppEndZone, carrier->zone + 1);
+
+    // Find a target in same zone or ahead who hasn't activated yet.
+    PlayerState* target = nullptr;
+    for (auto& p : offense.allPlayers()) {
+        if (&p == carrier || !p.canAct() || p.hasBall) continue;
+        if (p.zone == ahead || p.zone == carrier->zone) { target = &p; break; }
+    }
+    if (!target) return false;
+
+    carrier->activated = true;
+    ++offense.passesAttempted;
+
+    // Throw: AG roll, +1 per TZ on the carrier (unless Nerves of Steel).
+    int tzOnCarrier = countTackleZones(defense, offense, carrier->zone);
+    if (carrier->stats.has(SK::NervesOfSteel)) tzOnCarrier = 0;
+    int throwTarget = std::clamp(carrier->stats.ag + tzOnCarrier, 2, 6);
+    bool throwOk = dice.d6() >= throwTarget;
+    if (!throwOk && offense.rerollsRemaining > 0) {
+        if (!offense.captainActive() || dice.d6() != 6) --offense.rerollsRemaining;
+        throwOk = dice.d6() >= throwTarget;
+    }
+
+    if (!throwOk) {
+        carrier->hasBall = false;
+        return false;  // fumble — turnover
+    }
+
+    // Catch: AG roll, modified by TZ on the receiver and weather.
+    int catchAg = target->stats.ag + ctx.catchModifier;
+    if (target->stats.has(SK::Catch)) catchAg = std::max(2, catchAg - 1);
+    int tzAtTarget = countTackleZones(defense, offense, target->zone);
+    if (target->stats.has(SK::NervesOfSteel)) tzAtTarget = 0;
+    int catchTarget = std::clamp(catchAg + tzAtTarget, 2, 6);
+    bool catchReroll = target->stats.has(SK::Catch);
+    bool caught = dice.d6() >= catchTarget;
+    bool catchSkillUsed = target->stats.has(SK::Catch) && !catchReroll;
+    if (!caught && !catchSkillUsed && offense.rerollsRemaining > 0) {
+        if (!offense.captainActive() || dice.d6() != 6) --offense.rerollsRemaining;
+        caught = dice.d6() >= catchTarget;
+    }
+
+    carrier->hasBall = false;
+    if (caught) {
+        target->hasBall = true;
+        ++offense.passesCompleted;
+        return true;
+    }
+    return false;  // incomplete — ball is loose, turnover
+}
+
+// ── 6. Foul ───────────────────────────────────────────────────────────────────
+// One foul per turn. Fouler makes an unassisted armor roll against a prone
+// opponent. Dirty Player (+1 armor + injury). Sneaky Git avoids ejection on doubles.
+void attemptFoul(TeamState& offense, TeamState& defense, Dice& dice)
+{
+    // Find the most valuable prone target (prefer ball carrier or team captain).
+    PlayerState* foulTarget = nullptr;
+    for (auto& d : defense.allPlayers()) {
+        if (!d.isOnPitch() || !d.prone) continue;
+        if (!foulTarget || d.hasBall || d.isTeamCaptain) foulTarget = &d;
+    }
+    if (!foulTarget) return;
+
+    // Find an adjacent fouler who hasn't acted yet.
+    PlayerState* fouler = nullptr;
+    for (auto& p : offense.allPlayers()) {
+        if (!p.canAct() || p.hasBall) continue;
+        if (std::abs(p.zone - foulTarget->zone) <= 1) { fouler = &p; break; }
+    }
+    if (!fouler) return;
+
+    fouler->activated = true;
+
+    bool dirtyPlayer = fouler->stats.has(SK::DirtyPlayer);
+    bool sneakyGit   = fouler->stats.has(SK::SneakyGit);
+    int bonus        = dirtyPlayer ? 1 : 0;
+
+    int die1 = dice.d6(), die2 = dice.d6();
+    int total = die1 + die2 + bonus;
+
+    // Ejection on doubles (unless Sneaky Git).
+    if (die1 == die2 && !sneakyGit) {
+        fouler->casualty = true;  // sent off for the game
+    }
+
+    if (total > foulTarget->stats.av) {
+        auto inj = dice.injuryRoll(bonus);
+        if (inj == Dice::Injury::Casualty && defense.hasApothecary && !defense.apothecaryUsed) {
+            defense.apothecaryUsed = true;
+            auto reroll = dice.injuryRoll(0);
+            if (reroll < inj) inj = reroll;
+        }
+        if (inj == Dice::Injury::Casualty && foulTarget->stats.has(SK::Regeneration) && dice.d6() >= 4)
+            inj = Dice::Injury::KO;
+
+        if      (inj == Dice::Injury::KO)       { foulTarget->ko = true;       ++offense.knockouts; }
+        else if (inj == Dice::Injury::Casualty) { foulTarget->casualty = true; ++offense.casualties; }
+        else                                     { foulTarget->stunned = true;  }
+    }
 }
 
 // ============================================================
 // Simulate one team's turn
-// Returns true if a touchdown was scored (resets drive)
 // ============================================================
 bool simulateTurn(TeamState& offense, TeamState& defense, Dice& dice,
-                  int turnsLeft)
+                  int turnsLeft, const GameContext& ctx)
 {
-    // --- Reset per-turn activation flags ---
-    // Every player starts the turn unactivated; each may take exactly one action.
-    for (auto& p : offense.allPlayers()) p.activated = false;
-    for (auto& p : defense.allPlayers()) p.activated = false;
+    for (auto& p : offense.allPlayers()) { p.activated = false; p.boneHeadThisTurn = false; }
+    for (auto& p : defense.allPlayers()) { p.activated = false; p.boneHeadThisTurn = false; }
 
-    // Per-turn once-only action gates (Blood Bowl 2020 §8)
-    // blitzUsed  – only one player per team may make a Blitz action per turn
-    // passUsed   – only one Pass action per turn
-    // handoffUsed– only one Hand-off action per turn
-    // foulUsed   – only one Foul action per turn
-    // (Throw Team-mate / Kick Team-mate share the "pass" slot and are not yet simulated)
-    [[maybe_unused]] bool offenseBlitzUsed  = false;
-    bool offensePassUsed   = false;
-    [[maybe_unused]] bool offenseHandoffUsed = false;
-    [[maybe_unused]] bool offenseFoulUsed    = false;
-    bool defenseBlitzUsed  = false;
+    bool offensePassUsed    = false;
+    bool offenseHandoffUsed = false;
+    bool offenseFoulUsed    = false;
+    bool defenseBlitzUsed   = false;
 
-    // --- Stand up prone players (they used their stunned turn already) ---
+    // Stand up prone/stunned players.
     for (auto& p : offense.allPlayers()) {
         if (!p.isActive()) continue;
-        if (p.stunned) {
-            p.stunned = false;
-            p.prone   = false;  // stood up
-        } else if (p.prone) {
-            p.prone = false;  // stands up (costs half MA but simplified here)
-        }
+        if (p.stunned) { p.stunned = p.prone = false; }
+        else if (p.prone) { p.prone = false; }
     }
     for (auto& p : defense.allPlayers()) {
         if (!p.isActive()) continue;
-        if (p.stunned) {
-            p.stunned = false;
-            p.prone   = false;
-        } else if (p.prone) {
-            p.prone = false;
-        }
+        if (p.stunned) { p.stunned = p.prone = false; }
+        else if (p.prone) { p.prone = false; }
     }
 
-    // --- Blocking phase ---
-    // Each offensive player may take a Block action (not Blitz — no movement).
-    // Capped at 3 to reflect that the sim only models ~3 meaningful blocks per turn.
+    // ── Blocking phase ─────────────────────────────────────────────────────
     int blocksThisTurn = 0;
     for (auto& p : offense.allPlayers()) {
         if (!p.canAct() || p.hasBall || blocksThisTurn >= 3) continue;
-        // Only block if there are defenders to block nearby
         bool any = false;
         for (const auto& d : defense.allPlayers()) {
             if (!d.canAct()) continue;
             if (std::abs(d.zone - p.zone) <= 1) { any = true; break; }
         }
         if (!any) continue;
-
-        p.activated = true;  // player spends their action on this Block
+        if (checkBoneHead(p, offense, dice)) continue;
+        p.activated = true;
         bool turnover = attemptBlock(p, defense, dice, offense);
         ++blocksThisTurn;
-        if (turnover) return false;  // attacker fell = turnover, no TD
+        if (turnover) return false;
     }
 
-    // --- Defense blitz on ball carrier ---
-    // ONE defender per turn may make a Blitz action (move + block).
-    // 50% chance the most suitable defender is actually close enough to reach
-    // the carrier (reflecting path obstructions and actual board distance).
+    // ── Defense blitz ───────────────────────────────────────────────────────
     {
         PlayerState* carrier = offense.ballCarrier();
-        // Defense blitzes more aggressively early in the drive when fresh;
-        // less so late when players are depleted. turnsLeft 6-8→67%, 3-5→50%, 1-2→33%.
         int blitzThreshold = (turnsLeft >= 6) ? 3 : (turnsLeft >= 3) ? 4 : 5;
+        // Sidestep: pushing the carrier stays neutral in our model, so a blitz
+        // only helps if it knocks them down.  Raise the threshold so the defense
+        // is less eager to blitz a Sidestep carrier.
+        if (carrier && carrier->stats.has(SK::Sidestep)) blitzThreshold += 2;
         if (carrier && !defenseBlitzUsed && dice.d6() >= blitzThreshold) {
             for (auto& d : defense.allPlayers()) {
                 if (!d.canAct()) continue;
                 if (std::abs(d.zone - carrier->zone) <= 1) {
-                    // Blitz: defender moves into carrier's zone and blocks.
-                    // Mark both the blitz as used and the blitzer as activated.
+                    if (checkBoneHead(d, defense, dice)) break;  // blitzer distracted — no blitz this turn
                     defenseBlitzUsed = true;
                     d.activated      = true;
                     d.zone = carrier->zone;
+
                     int defAssists = 0;
-                    for (const auto& od : defense.allPlayers()) {
-                        if (&od == &d || !od.canAct()) continue;
-                        if (std::abs(od.zone - d.zone) <= 1) ++defAssists;
+                    if (!d.stats.has(SK::Titchy)) {
+                        for (const auto& od : defense.allPlayers()) {
+                            if (&od == &d || !od.canAct() || od.stats.has(SK::Titchy)) continue;
+                            if (std::abs(od.zone - d.zone) <= 1) ++defAssists;
+                        }
                     }
+                    // Stunty carrier: blitzer gets an extra assist
+                    if (carrier->stats.has(SK::Stunty)) ++defAssists;
+
                     int atkAssists = 0;
-                    for (const auto& op : offense.allPlayers()) {
-                        if (!op.canAct() || op.hasBall) continue;
-                        if (std::abs(op.zone - carrier->zone) <= 1) ++atkAssists;
+                    if (!carrier->stats.has(SK::Titchy)) {
+                        for (const auto& op : offense.allPlayers()) {
+                            if (!op.canAct() || op.hasBall || op.stats.has(SK::Titchy)) continue;
+                            if (std::abs(op.zone - carrier->zone) <= 1) ++atkAssists;
+                        }
                     }
+
                     bool hadBall = carrier->hasBall;
                     BlockResult res = resolveBlock(d, *carrier, defAssists, atkAssists,
                                                    dice, false, defense, offense);
@@ -552,69 +813,138 @@ bool simulateTurn(TeamState& offense, TeamState& defense, Dice& dice,
                         if (carrier->casualty) ++defense.casualties;
                         else if (carrier->ko)  ++defense.knockouts;
                     }
-                    // If carrier KD: turnover, ball loose
-                    if (res.outcome == BlockOutcome::DefenderDown  ||
-                        res.outcome == BlockOutcome::DefenderStumbles ||
-                        res.outcome == BlockOutcome::BothDown) {
-                        if (carrier->prone || carrier->ko || carrier->casualty) {
-                            bool wasBall = hadBall;
-                            carrier->hasBall = false;
-                            if (wasBall) {
-                                // Try defense pick-up (first eligible player only;
-                                // Sure Hands OR team re-roll — not both).
-                                for (auto& p2 : defense.allPlayers()) {
-                                    if (!p2.canAct() || p2.zone != carrier->zone) continue;
-                                    bool sureHands = p2.stats.has(SK::SureHands);
-                                    bool picked = dice.pickupRoll(p2.stats.ag, 0, sureHands);
-                                    bool skillUsed = p2.stats.has(SK::SureHands) && !sureHands;
-                                    if (!picked && !skillUsed && defense.rerollsRemaining > 0) {
-                                        if (!defense.captainActive() || dice.d6() != 6) --defense.rerollsRemaining;
-                                        picked = dice.successRoll(std::clamp(p2.stats.ag, 2, 6));
-                                    }
-                                    if (picked) p2.hasBall = true;
-                                    break;
-                                }
-                                return false;  // turnover
-                            }
+
+                    // ── 5. Frenzy follow-up for the blitzing defender ──────
+                    bool defFrenzied = d.stats.has(SK::Frenzy)
+                                    && !res.followUpBlocked
+                                    && !res.turnover
+                                    && (res.outcome == BlockOutcome::DefenderPushed  ||
+                                        res.outcome == BlockOutcome::DefenderStumbles ||
+                                        res.outcome == BlockOutcome::DefenderDown);
+                    if (defFrenzied && carrier->isActive()) {
+                        d.zone = carrier->zone;
+                        int da2 = 0, aa2 = 0;
+                        for (const auto& od : defense.allPlayers()) {
+                            if (&od == &d || !od.canAct()) continue;
+                            if (std::abs(od.zone - d.zone) <= 1) ++da2;
                         }
+                        for (const auto& op : offense.allPlayers()) {
+                            if (!op.canAct() || op.hasBall) continue;
+                            if (std::abs(op.zone - carrier->zone) <= 1) ++aa2;
+                        }
+                        BlockResult r2 = resolveBlock(d, *carrier, da2, aa2,
+                                                       dice, false, defense, offense);
+                        ++defense.blocksAttempted;
+                        if (r2.defenderInjured) {
+                            if (carrier->casualty) ++defense.casualties;
+                            else if (carrier->ko)  ++defense.knockouts;
+                        }
+                        res = r2;
                     }
-                    break;  // one blitz per turn
+
+                    // Turnover if carrier lost the ball (knockdown OR Strip Ball).
+                    if (hadBall && !carrier->hasBall) {
+                        for (auto& p2 : defense.allPlayers()) {
+                            if (!p2.canAct() || p2.zone != carrier->zone) continue;
+                            bool sureHands = p2.stats.has(SK::SureHands);
+                            int pickupTarget = std::clamp(p2.stats.ag + ctx.catchModifier, 2, 6);
+                            bool picked = dice.d6() >= pickupTarget;
+                            bool skillUsed = p2.stats.has(SK::SureHands) && !sureHands;
+                            if (!picked && !skillUsed && defense.rerollsRemaining > 0) {
+                                if (!defense.captainActive() || dice.d6() != 6) --defense.rerollsRemaining;
+                                picked = dice.d6() >= pickupTarget;
+                            }
+                            if (picked) p2.hasBall = true;
+                            break;
+                        }
+                        return false;  // turnover for offense
+                    }
+                    break;
                 }
             }
         }
     }
 
-    // --- Ball carrier advance ---
-    // Decide: pass if receiver is open ahead and near end zone, otherwise run.
-    // Either way the carrier takes exactly one action this turn.
-    bool scored = false;
+    // ── 6. Foul phase ──────────────────────────────────────────────────────
+    if (!offenseFoulUsed) {
+        bool hasProne = false;
+        for (const auto& d : defense.allPlayers())
+            if (d.isOnPitch() && d.prone) { hasProne = true; break; }
+        if (hasProne) {
+            offenseFoulUsed = true;
+            attemptFoul(offense, defense, dice);
+        }
+    }
+
+    // ── Ball carrier advance ────────────────────────────────────────────────
     PlayerState* carrier = offense.ballCarrier();
+
+    // ── Bone Head: ball carrier rolls before any action ──────────────────────
+    if (carrier && carrier->canAct() && checkBoneHead(*carrier, offense, dice))
+        return false;  // carrier bone-heads — no advance, no pass, no hand-off
+
+    // ── 2. Stalling: if ahead and carrier is safely in opponent territory,
+    //    prefer to delay the TD rather than give defense time to equalise.
+    //    Always score on the last 2 turns of the half (turnsLeft ≤ 2).
+    if (carrier && carrier->canAct() && offense.score > defense.score
+               && carrier->zone == Zone::OppHalf
+               && turnsLeft > 2
+               && dice.useSkill(0.70f)) {
+        // Stall: carrier holds position this turn — no advance action taken.
+        carrier->activated = true;
+        return false;
+    }
+
     if (carrier && carrier->canAct()) {
-        // Consider passing if there's a viable receiver and the pass action
-        // has not already been used this turn.
-        bool triedPass = false;
-        if (!offensePassUsed && carrier->stats.pa.has_value() && turnsLeft >= 3) {
+        // ── 7. Hand-off: prefer when carrier can't pass or a faster teammate is ahead.
+        bool triedHandoff = false;
+        if (!offenseHandoffUsed && !carrier->stats.pa.has_value() && turnsLeft >= 2) {
             Zone ahead = std::min(Zone::OppEndZone, carrier->zone + 1);
-            bool receiverAhead = std::ranges::any_of(offense.allPlayers(),
-                [&](const auto& p) {
-                    return &p != carrier && p.canAct() && p.zone == ahead;
-                });
-            if (receiverAhead && dice.d6() >= 4) {  // 50% chance to decide to pass
-                offensePassUsed = true;
-                carrier->activated = true;  // Pass action — carrier is now spent
-                triedPass = attemptPass(offense, defense, dice);
-                if (!offense.ballCarrier()) return false; // ball lost
+            bool targetAhead = std::ranges::any_of(offense.allPlayers(), [&](const auto& p) {
+                return &p != carrier && p.canAct() && (p.zone == ahead || p.zone == carrier->zone);
+            });
+            if (targetAhead && dice.useSkill(0.40f)) {
+                offenseHandoffUsed = true;
+                triedHandoff = true;
+                bool ok = attemptHandoff(offense, defense, dice, ctx);
+                if (!offense.ballCarrier()) return false;  // ball lost
+                carrier = offense.ballCarrier();
+                if (!ok) return false;
+                // Fall through: new carrier (if any) may still advance.
             }
         }
 
-        if (!triedPass) {
-            carrier->activated = true;  // Move action — carrier is now spent
-            scored = advanceBallCarrier(offense, defense, dice);
+        // ── Pass or run ────────────────────────────────────────────────────
+        carrier = offense.ballCarrier();
+        if (carrier && carrier->canAct()) {
+            bool triedPass = false;
+            if (!offensePassUsed && !triedHandoff && carrier->stats.pa.has_value()
+                                 && turnsLeft >= 3) {
+                Zone ahead = std::min(Zone::OppEndZone, carrier->zone + 1);
+                bool receiverAhead = std::ranges::any_of(offense.allPlayers(),
+                    [&](const auto& p) {
+                        return &p != carrier && p.canAct() && p.zone == ahead;
+                    });
+                if (receiverAhead && dice.d6() >= 4) {
+                    offensePassUsed = true;
+                    carrier->activated = true;
+                    triedPass = attemptPass(offense, defense, dice, ctx);
+                    if (!offense.ballCarrier()) return false;
+                }
+            }
+
+            if (!triedPass) {
+                carrier = offense.ballCarrier();
+                if (carrier && carrier->canAct()) {
+                    carrier->activated = true;
+                    return advanceBallCarrier(offense, defense, dice, ctx);
+                }
+            }
         }
     }
-    return scored;
-}
 
+    return false;
+}
 
 } // namespace
 
@@ -622,8 +952,10 @@ bool simulateTurn(TeamState& offense, TeamState& defense, Dice& dice,
 // Simulate a full game
 // ============================================================
 GameResult simulateGame(TeamState team1, TeamState team2, Dice& dice) {
-    // Riotous Rookies inducement: 2D3+1 Snotling Lineman Journeymen added before the game.
-    // They start inReserves and enter via Swarming each drive.
+    // 9. Roll weather once per game.
+    GameContext ctx = rollWeather(dice);
+
+    // Riotous Rookies.
     auto addRiotousRookies = [&](TeamState& team) {
         if (!team.riotousRookies) return;
         int count = dice.d3() + dice.d3() + 1;
@@ -637,85 +969,61 @@ GameResult simulateGame(TeamState team1, TeamState team2, Dice& dice) {
     addRiotousRookies(team1);
     addRiotousRookies(team2);
 
-    // Coin toss: team1 receives first half by default
-    // (or randomise: dice.d6() >= 4 ? team1 receives : team2 receives)
     bool team1Receives = (dice.d6() >= 4);
-
     constexpr int TURNS_PER_HALF = 8;
 
     for (int half = 0; half < 2; ++half) {
-        // Who receives this half?
         TeamState& offense = team1Receives ? team1 : team2;
         TeamState& defense = team1Receives ? team2 : team1;
 
-        // Kick off
-        setupKickoff(offense, defense, dice);
+        setupKickoff(offense, defense, dice, ctx);
 
-        // 8 pairs of turns (each team gets 8 turns per half)
         for (int t = 0; t < TURNS_PER_HALF; ++t) {
-            // Team1 offense turn (if team1 is on offense)
             if (&offense == &team1) {
-                // turnsLeft = remaining turns for offense
                 int turnsLeft = TURNS_PER_HALF - t;
-                bool td = simulateTurn(team1, team2, dice, turnsLeft);
-                if (td) {
-                    // Reset with defense now receiving if turns remain
-                    if (t < TURNS_PER_HALF - 1) {
-                        team1Receives = !team1Receives;
-                        TeamState& newOff = team1Receives ? team1 : team2;
-                        TeamState& newDef = team1Receives ? team2 : team1;
-                        setupKickoff(newOff, newDef, dice);
-                    }
+                bool td = simulateTurn(team1, team2, dice, turnsLeft, ctx);
+                if (td && t < TURNS_PER_HALF - 1) {
+                    team1Receives = !team1Receives;
+                    TeamState& no = team1Receives ? team1 : team2;
+                    TeamState& nd = team1Receives ? team2 : team1;
+                    setupKickoff(no, nd, dice, ctx);
                 }
             } else {
                 int turnsLeft = TURNS_PER_HALF - t;
-                bool td = simulateTurn(team2, team1, dice, turnsLeft);
-                if (td) {
-                    if (t < TURNS_PER_HALF - 1) {
-                        team1Receives = !team1Receives;
-                        TeamState& newOff = team1Receives ? team1 : team2;
-                        TeamState& newDef = team1Receives ? team2 : team1;
-                        setupKickoff(newOff, newDef, dice);
-                    }
+                bool td = simulateTurn(team2, team1, dice, turnsLeft, ctx);
+                if (td && t < TURNS_PER_HALF - 1) {
+                    team1Receives = !team1Receives;
+                    TeamState& no = team1Receives ? team1 : team2;
+                    TeamState& nd = team1Receives ? team2 : team1;
+                    setupKickoff(no, nd, dice, ctx);
                 }
             }
 
-            // Defense (team2 if team1 offense) also gets its turn
             {
-                // The "defense" team also takes a turn (they're on offense simultaneously
-                // in BB each team takes turns). Simplify: same loop, swap roles.
                 TeamState& off2 = team1Receives ? team2 : team1;
                 TeamState& def2 = team1Receives ? team1 : team2;
                 if (&off2 != &offense) {
                     int turnsLeft = TURNS_PER_HALF - t;
-                    bool td = simulateTurn(off2, def2, dice, turnsLeft);
-                    if (td) {
-                        if (t < TURNS_PER_HALF - 1) {
-                            team1Receives = !team1Receives;
-                            TeamState& newOff = team1Receives ? team1 : team2;
-                            TeamState& newDef = team1Receives ? team2 : team1;
-                            setupKickoff(newOff, newDef, dice);
-                        }
+                    bool td = simulateTurn(off2, def2, dice, turnsLeft, ctx);
+                    if (td && t < TURNS_PER_HALF - 1) {
+                        team1Receives = !team1Receives;
+                        TeamState& no = team1Receives ? team1 : team2;
+                        TeamState& nd = team1Receives ? team2 : team1;
+                        setupKickoff(no, nd, dice, ctx);
                     }
                 }
             }
         }
 
-        // Swap receiving team for second half
         team1Receives = !team1Receives;
     }
 
     GameResult r;
-    r.score1 = team1.score;
-    r.score2 = team2.score;
-    r.casualties1 = team1.casualties;
-    r.casualties2 = team2.casualties;
-    r.ko1  = team1.knockouts;
-    r.ko2  = team2.knockouts;
-    r.blocks1 = team1.blocksSuccessful;
-    r.blocks2 = team2.blocksSuccessful;
-    r.passes1 = team1.passesCompleted;
-    r.passes2 = team2.passesCompleted;
+    r.score1      = team1.score;       r.score2      = team2.score;
+    r.casualties1 = team1.casualties;  r.casualties2 = team2.casualties;
+    r.ko1         = team1.knockouts;   r.ko2         = team2.knockouts;
+    r.blocks1     = team1.blocksSuccessful; r.blocks2 = team2.blocksSuccessful;
+    r.passes1     = team1.passesCompleted;  r.passes2 = team2.passesCompleted;
     return r;
 }
 
@@ -760,16 +1068,11 @@ SimulationStats runSimulations(const TeamConfig& cfg1, const TeamConfig& cfg2,
             if      (r.score1 > r.score2) ++wins1;
             else if (r.score2 > r.score1) ++wins2;
             else                          ++draws;
-            score1 += r.score1;
-            score2 += r.score2;
-            cas1   += r.casualties1;
-            cas2   += r.casualties2;
-            ko1    += r.ko1;
-            ko2    += r.ko2;
-            blk1   += r.blocks1;
-            blk2   += r.blocks2;
-            pass1  += r.passes1;
-            pass2  += r.passes2;
+            score1 += r.score1;  score2 += r.score2;
+            cas1   += r.casualties1; cas2 += r.casualties2;
+            ko1    += r.ko1;         ko2  += r.ko2;
+            blk1   += r.blocks1;     blk2 += r.blocks2;
+            pass1  += r.passes1;     pass2 += r.passes2;
         }
     }
 

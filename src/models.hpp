@@ -423,6 +423,16 @@ struct PlayerStrategy {
     float pro{0.5f};
 };
 
+// ── Per-game weather context ──────────────────────────────────────────────────
+// Rolled once at the start of each game (2D6 table) and threaded through all
+// turn functions that involve passing, catching, or pickup rolls.
+struct GameContext {
+    int  paModifier{0};       // +1 = harder to pass (Very Sunny, Pouring Rain)
+    int  catchModifier{0};    // +1 = harder to catch/pick up (Pouring Rain)
+    bool blizzard{false};     // no passing allowed at all (Blizzard)
+    bool swelteringHeat{false}; // random KO check before each drive
+};
+
 // Merge: player overrides take precedence over team defaults where explicitly set.
 // We represent "not overridden" as a negative sentinel in parsing.
 struct StrategyOverride {
@@ -588,9 +598,10 @@ struct PlayerState {
     bool ko{false};               // knocked out – may return next half
     bool casualty{false};         // out for the game
     bool hasBall{false};
-    bool activated{false};        // already took an action this turn — prevents double-activation
-    bool inReserves{false};       // waiting in reserves/bench (Riotous Rookies, etc.)
-    bool isTeamCaptain{false};    // gains Pro; free team re-roll on natural 6 while on pitch
+    bool activated{false};          // already took an action this turn — prevents double-activation
+    bool inReserves{false};         // waiting in reserves/bench (Riotous Rookies, etc.)
+    bool isTeamCaptain{false};      // gains Pro; free team re-roll on natural 6 while on pitch
+    bool boneHeadThisTurn{false};   // rolled 1 on Bone Head — no action and no tackle zone this turn
     int  stunTimer{0};
 
     bool isActive()   const { return !ko && !casualty && !inReserves; }

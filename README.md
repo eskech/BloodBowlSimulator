@@ -280,46 +280,90 @@ This makes zone control a genuine strategic factor. Bash teams that mass players
 - **Kickoff** at the start of each half and after every touchdown, following the drive setup sequence above
 - **Touchdown** ends the current drive and resets positions
 
+### Weather
+
+At the start of each game the simulator rolls 2D6 to determine weather for the full game:
+
+| Roll | Condition | Effect |
+|---|---|---|
+| 2 | Sweltering Heat | Before each drive, each on-pitch player rolls D6 — on a 6 they are KO'd |
+| 3–4 | Very Sunny | +1 to PA target number (harder to pass) |
+| 5–10 | Nice | No effect |
+| 11 | Pouring Rain | +1 to PA target and +1 to catch/pickup target |
+| 12 | Blizzard | No passing allowed at all |
+
+### Kickoff events
+
+After each kickoff setup, a D8 is rolled to determine the kickoff event:
+
+| Roll | Event | Effect |
+|---|---|---|
+| 1 | Riot | Coin flip: one team loses a re-roll and the other gains one |
+| 2 | Blitz | Defense gets one free block on the ball carrier before the drive begins |
+| 3 | High Kick | Ball carrier advances one zone for free |
+| 4 | Cheering Fans | Coin flip: one team gains a re-roll |
+| 5 | Brilliant Coaching | Coin flip: one team gains a re-roll |
+| 6 | Quick Snap | All offense players advance one zone before the defense can react |
+| 7 | Perfect Defense | No modelled effect |
+| 8 | Pitch Invasion | Each on-pitch player rolls D6 — on a 5–6 they go prone |
+
 ### Turn structure
 
 Each turn proceeds in this order:
 
 1. **Stand-up phase**: stunned players recover; prone players stand (simplified — no MA cost)
 2. **Blocking phase**: up to 3 offensive blocks (each blocker activates once)
-   - A successful push causes the blocker to follow up one zone forward, opening a lane for the carrier
+   - Bone Head players must pass a D6 check (2+) before acting; failure wastes the action and the player's tackle zone
+   - A successful push causes the blocker to follow up one zone forward (unless the defender has Fend)
+   - Frenzy players must follow up and immediately block again
 3. **Defense blitz**: one defender may move into the carrier's zone and attempt a block
    - Probability varies with turns remaining: 67% early (turns 6–8), 50% mid (3–5), 33% late (1–2), reflecting fresh vs depleted defenses
-4. **Ball carrier action**: carrier either passes (if a receiver is open ahead) or runs
+   - A Sidestep carrier raises the blitz threshold by 2 (defense less eager to blitz)
+4. **Ball carrier action**: carrier may hand off to an adjacent teammate, pass to a receiver ahead, or run
+   - A pass is subject to interception: the most-agile eligible defender in the pass path gets one attempt (target = max(4, AG+2))
+5. **Foul**: one offensive player may foul a prone opponent (one foul per turn)
 
 **Per-turn action limits enforced (BB2020 §8):**
 - One Blitz action per team per turn
 - One Pass action per team per turn
+- One Hand-off action per team per turn
+- One Foul action per team per turn
 - Each player activates at most once per turn
 
 ### Skills simulated
 
 | Skill | Effect |
 |---|---|
-| **Block** | Re-roll Both Down results |
-| **Wrestle** | Accept Both Down to bring down opponent |
-| **Dodge** | Re-roll one failed dodge per activation |
-| **Tackle** | Cancels opponent's Dodge skill |
-| **Sure Hands** | Re-roll failed pickup |
-| **Catch** | Re-roll failed catch |
-| **Pass** | Re-roll failed pass throw |
 | **Accurate** | −1 to PA target number |
+| **Block** | Re-roll Both Down results |
+| **Bone Head** | Before acting, roll D6: on a 1 the player is Distracted (no action, no tackle zone this turn); team re-roll may be used |
+| **Catch** | Re-roll one failed catch per activation |
+| **Claws** | Armour rolls of 8+ break armour regardless of AV |
+| **Dirty Player** | +1 to armour and injury rolls when fouling |
 | **Diving Catch** | −1 to AG catch target (easier to catch) |
 | **Diving Tackle** | Fall prone after opponent dodges away to force an extra dodge roll |
-| **Stand Firm** | Resist being pushed back when blocked |
-| **Mighty Blow** | +1 to armour/injury rolls |
-| **Claws** | Armour rolls of 8+ break armour regardless of AV |
+| **Dodge** | Re-roll one failed dodge per activation |
+| **Fend** | Attacker cannot follow up after a push result |
+| **Frenzy** | Must follow up after any push/stumble/down and block again immediately |
+| **Grab** | Negates the Sidestep skill on the defender |
 | **Guard** | Cancels one effective tackle zone on the ball carrier when in the same zone (cage effect) |
-| **Sprint** | One extra zone-crossing attempt per activation |
-| **Sure Feet** | Re-roll a failed Sprint roll |
+| **Mighty Blow** | +1 to armour/injury rolls |
 | **Nerves of Steel** | Ignore tackle zone penalties on pass and catch rolls |
+| **Pass** | Re-roll one failed pass throw per activation |
 | **Pro** | Once per activation: re-roll any failed roll on 3+ |
 | **Regeneration** | On a Casualty result: roll 4+ to place in Reserves instead (after apothecary) |
+| **Sidestep** | On a push result, defender chooses any adjacent square instead of being pushed back |
+| **Sneaky Git** | Avoid ejection on doubles when fouling |
+| **Sprint** | One extra zone-crossing attempt per activation |
+| **Stand Firm** | Resist being pushed back when blocked |
+| **Strip Ball** | On a push result against a ball carrier, the ball is knocked loose (no knockdown) |
+| **Sure Feet** | Re-roll a failed Sprint roll |
+| **Sure Hands** | Re-roll one failed pickup per activation |
 | **Swarming** | Snotling Linemen only — D3 enter the pitch from Reserves each drive, capped by on-pitch Swarming count |
+| **Tackle** | Cancels opponent's Dodge skill |
+| **Tentacles** | Before the ball carrier leaves a zone, each Tentacles defender in that zone contests ST vs ST (ties go to Tentacles); on a win the carrier is held and drops the ball |
+| **Titchy** | Cannot make or receive assists |
+| **Wrestle** | Accept Both Down to bring down opponent |
 
 All 175 skills from the 2025 rulebook are stored in a bitmask for O(1) lookup. Skills not listed above are loaded and displayed correctly but have no active simulation effect.
 
@@ -331,10 +375,15 @@ All 175 skills from the 2025 rulebook are stored in a bitmask for O(1) lookup. S
 - **Regeneration**: after apothecary, 4+ converts Casualty to Reserves (modelled as KO)
 - **KO recovery**: 4+ roll at every drive kickoff
 
+### Crowd surfing
+
+When a defender is pushed and their zone is already `OwnEndZone`, they are pushed off the pitch into the crowd. The crowd makes an armour roll against the player's own AV; if the roll exceeds AV the player is injured normally. If armour holds, the player is still KO'd (removed from the pitch for the remainder of the drive).
+
 ### Special rules
 
 | Rule | Teams | Effect |
 |---|---|---|
+| **Stunty** | Halflings, Snotlings, Goblin-type positions | −1 to all dodge target numbers (effectively one extra tackle zone); opponents get +1 assist when blocking a Stunty player |
 | **Team Captain** | Humans, Orcs | One non-Big-Guy player gains Pro for free; natural 6 before a team re-roll makes it free; captain always fielded if able |
 
 ### Inducements
@@ -349,6 +398,7 @@ All 175 skills from the 2025 rulebook are stored in a bitmask for O(1) lookup. S
 - **Monrad pairing**: sort standings, pair consecutive (1st vs 2nd, 3rd vs 4th, …)
 - **Bye**: lowest-ranked team without a previous bye gets a free win (3 pts, +1 net score)
 - **Rematch avoidance**: one-pass adjacent swap when pairing would create a rematch
+- **Match pool**: before tournament rounds begin, all N×(N−1)/2 pairings are pre-simulated 512 times in parallel. Each round then samples from this pool instead of running new games, giving a ~20× speedup for large tournaments with many rounds
 
 ### Parallelism
 
@@ -365,10 +415,17 @@ src/
   main.cpp          CLI, argument parsing, output formatting
   loader.cpp/hpp    JSON parsing for match, tournament, and seed files
   simulator.cpp/hpp Game engine: buildTeamState, simulateGame, runSimulations
+                    weather (rollWeather), kickoff events (kickoffEvent),
+                    hand-off (attemptHandoff), foul (attemptFoul),
+                    interception (attemptInterception), Tentacles, Bone Head,
+                    crowd surfing, Frenzy, Fend, Strip Ball, Sidestep, Stunty
   tournament.cpp/hpp Swiss bracket: pairing, standings, runTournament
-  block.hpp         Block dice resolution, armour/injury rolls, apothecary
+                    match pool (buildMatchPool / sampleMatch) for fast sampling
+  block.hpp         Block dice resolution, armour/injury rolls, apothecary,
+                    crowd surf helper, resolvePush (Stand Firm / Sidestep / Grab)
   dice.hpp          Thread-local RNG wrapper (mt19937_64)
-  models.hpp        All data structures, skill bitmask (SK:: constants)
+  models.hpp        All data structures, skill bitmask (SK:: constants),
+                    GameContext (weather state per game)
 bloodbowl-2025-seed.json   31 races, 175 skills, star player catalogue
 data/              Sample match and tournament JSON files
 ```

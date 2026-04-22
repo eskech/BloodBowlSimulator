@@ -12,7 +12,7 @@ enum class BlockOutcome {
     NoEffect,
     AttackerDown,     // Attacker falls (turnover!)
     BothDown,         // Both fall (turnover if attacker has ball)
-    DefenderPushed,   // Defender pushed back one zone
+    DefenderPushed,   // Defender pushed back one zone (or surfed, or side-stepped)
     DefenderStumbles, // Defender falls unless Dodge saves them
     DefenderDown      // Defender knocked down → armour roll
 };
@@ -22,6 +22,9 @@ struct BlockResult {
     bool attackerInjured{false};
     bool defenderInjured{false};
     bool turnover{false};
+    bool followUpBlocked{false};  // Fend: attacker cannot follow up
+    bool ballDropped{false};       // Strip Ball on Push — ball loose without knockdown
+    bool crowdSurfed{false};       // Defender pushed off the pitch into crowd
     Dice::Injury attackerInjury{Dice::Injury::Stunned};
     Dice::Injury defenderInjury{Dice::Injury::Stunned};
 };
@@ -69,8 +72,6 @@ inline BlockFace pickBestFaceForDefender(std::span<const BlockFace> faces) {
 
 // ---------------------------------------------------------------------------
 // Main block resolver.
-// Strategy fields in attacker.strategy and defender.strategy are consulted
-// for Wrestle (who wants Both Down) and Stand Firm (resist the push).
 // ---------------------------------------------------------------------------
 inline BlockResult resolveBlock(
     PlayerState& attacker, PlayerState& defender,
@@ -93,8 +94,6 @@ inline BlockResult resolveBlock(
         : pickBestFaceForDefender(faces);
 
     // ── Block skill: attacker may re-roll Both Down ──────────────────────────
-    // Wrestle can intercept here: if the DEFENDER has Wrestle and decides to
-    // use it, they lock in the Both Down before the attacker's Block re-roll.
     if (chosen == BlockFace::BothDown) {
         bool defenderWrestles = dStats.has(SK::Wrestle)
                              && dice.useSkill(defender.strategy.wrestle);
@@ -102,56 +101,39 @@ inline BlockResult resolveBlock(
                              && dice.useSkill(attacker.strategy.wrestle);
 
         if (!defenderWrestles) {
-            // Defender did not lock the Both Down → attacker may use Block to re-roll
             if (aStats.has(SK::Block) && diceCount >= 0) {
                 rolled = dice.rollBlockDice(numDice);
                 faces  = std::span<const BlockFace>(rolled.data(),
                                                      static_cast<size_t>(numDice));
                 chosen = pickBestFaceForAttacker(faces);
-                // If still Both Down after re-roll, attacker may still Wrestle
-                if (chosen == BlockFace::BothDown && attackerWrestles) {
-                    // Attacker accepts both falling (e.g. doesn't have ball)
-                }
-            } else if (attackerWrestles) {
-                // No Block but attacker has Wrestle – accepts both falling
+                (void)attackerWrestles;
             }
         }
-        // else: defender locked Both Down with Wrestle; Block re-roll skipped
     }
 
     // ── Injury helper ────────────────────────────────────────────────────────
     int mightyBlowBonus = aStats.has(SK::MightyBlow) ? 1 : 0;
     bool hasClaws       = aStats.has(SK::Claws);
-    // Mighty Blow: +1 applied to ONE roll only — armour OR injury, never both.
-    //   Optimal play: if armour breaks without the bonus, apply it to injury.
-    //                 if the bonus was needed to break armour, it is spent there.
-    // Claws: any modified armour roll of 8+ breaks regardless of AV (injury unaffected).
 
     auto applyKnockdown = [&](PlayerState& player, int mbBonus, bool claws,
-                               TeamState& team) {
+                               TeamState& team) -> bool {
         int raw = dice.d6x2();
 
-        // Does armour break without Mighty Blow?
         bool brokeWithout = (raw > player.stats.av) || (claws && raw >= 8);
-        // Does armour break with Mighty Blow applied to the armour roll?
         bool brokeWith    = (raw + mbBonus > player.stats.av)
                          || (claws && (raw + mbBonus) >= 8);
 
-        if (!brokeWith) return false;  // armour held
+        if (!brokeWith) return false;
 
-        // MB goes to injury only if armour broke without it (bonus was not spent on armour).
         int injBonus = brokeWithout ? mbBonus : 0;
-
         auto inj = dice.injuryRoll(injBonus);
 
-        // Apothecary: re-roll one casualty result per game, keep the better outcome.
         if (inj == Dice::Injury::Casualty && team.hasApothecary && !team.apothecaryUsed) {
             team.apothecaryUsed = true;
             auto reroll = dice.injuryRoll(0);
             if (reroll < inj) inj = reroll;
         }
 
-        // Regeneration: after any apothecary use, a 4+ converts Casualty to Reserves (BB2020 §7).
         if (inj == Dice::Injury::Casualty && player.stats.has(SK::Regeneration) && dice.d6() >= 4)
             inj = Dice::Injury::KO;
 
@@ -161,6 +143,47 @@ inline BlockResult resolveBlock(
         return true;
     };
 
+    // ── Crowd-surf helper ────────────────────────────────────────────────────
+    // Called when a defender is pushed off the pitch at Zone::OwnEndZone.
+    // Armor roll vs player's own AV; if held → KO (off pitch this drive).
+    auto applyCrowdSurf = [&]() {
+        result.crowdSurfed = true;
+        bool broke = applyKnockdown(defender, 0, false, defenderTeam);
+        if (!broke) defender.ko = true;  // armor held but player is still removed from pitch
+        result.defenderInjured = true;
+        result.defenderInjury  =
+            defender.casualty ? Dice::Injury::Casualty :
+            defender.ko       ? Dice::Injury::KO       : Dice::Injury::Stunned;
+    };
+
+    // ── Push helper: resolve where defender ends up after a push ────────────
+    // Returns true if the push resulted in a crowd surf.
+    auto resolvePush = [&]() -> bool {
+        bool defStandsFirm  = dStats.has(SK::StandFirm) && dice.useSkill(defender.strategy.standFirm);
+        bool attackerGrabs  = aStats.has(SK::Grab);
+        // Sidestep lets defender move forward (away from their own endzone), negated by Grab
+        bool defSidesteps   = dStats.has(SK::Sidestep) && !attackerGrabs;
+
+        if (defStandsFirm) return false;
+
+        if (defSidesteps) {
+            // Defender chooses any adjacent square — in the zone model we model
+            // this as staying put (sideways / into a safer pocket), NOT as a free
+            // advance.  True zone advancement only happens in the carrier's own
+            // movement action.
+            return false;
+        }
+
+        // Normal push: defender moves toward own endzone
+        if (defender.zone == Zone::OwnEndZone) {
+            // Pushed off the pitch into the crowd
+            applyCrowdSurf();
+            return true;
+        }
+        defender.zone = defender.zone - 1;
+        return false;
+    };
+
     // ── Resolve the chosen face ──────────────────────────────────────────────
     switch (chosen) {
         case BlockFace::AttackerDown:
@@ -168,9 +191,10 @@ inline BlockResult resolveBlock(
             result.outcome  = BlockOutcome::AttackerDown;
             result.turnover = true;
             result.attackerInjured = applyKnockdown(attacker, 0, false, attackerTeam);
-            if (result.attackerInjured) result.attackerInjury =
-                attacker.ko ? Dice::Injury::KO :
-                attacker.casualty ? Dice::Injury::Casualty : Dice::Injury::Stunned;
+            if (result.attackerInjured)
+                result.attackerInjury =
+                    attacker.ko       ? Dice::Injury::KO :
+                    attacker.casualty ? Dice::Injury::Casualty : Dice::Injury::Stunned;
             break;
 
         case BlockFace::BothDown:
@@ -182,32 +206,36 @@ inline BlockResult resolveBlock(
             result.defenderInjured = applyKnockdown(defender, mightyBlowBonus, hasClaws, defenderTeam);
             if (result.attackerInjured)
                 result.attackerInjury =
-                    attacker.ko ? Dice::Injury::KO :
+                    attacker.ko       ? Dice::Injury::KO :
                     attacker.casualty ? Dice::Injury::Casualty : Dice::Injury::Stunned;
             if (result.defenderInjured)
                 result.defenderInjury =
-                    defender.ko ? Dice::Injury::KO :
+                    defender.ko       ? Dice::Injury::KO :
                     defender.casualty ? Dice::Injury::Casualty : Dice::Injury::Stunned;
             break;
 
         case BlockFace::Push: {
-            // ── Stand Firm: defender may choose to stay in current zone ────
-            bool defenderStandsFirm = dStats.has(SK::StandFirm)
-                                   && dice.useSkill(defender.strategy.standFirm);
-            if (!defenderStandsFirm && defender.zone != Zone::OwnEndZone)
-                defender.zone = defender.zone - 1;
+            resolvePush();
+            // Strip Ball: a pushed ball carrier drops the ball (stays standing)
+            if (aStats.has(SK::StripBall) && defender.hasBall) {
+                defender.hasBall  = false;
+                result.ballDropped = true;
+            }
+            // Fend: attacker may not follow up after this push
+            result.followUpBlocked = dStats.has(SK::Fend);
             result.outcome = BlockOutcome::DefenderPushed;
             break;
         }
 
         case BlockFace::DefenderStumbles:
-            // Dodge skill (and no Tackle on attacker) keeps the defender upright
             if (dStats.has(SK::Dodge) && !aStats.has(SK::Tackle)) {
-                // ── Stand Firm on Stumbles: still pushed but stays up ───────
-                bool standsFirm = dStats.has(SK::StandFirm)
-                               && dice.useSkill(defender.strategy.standFirm);
-                if (!standsFirm && defender.zone != Zone::OwnEndZone)
-                    defender.zone = defender.zone - 1;
+                // Defender stays up but is still pushed (Dodge negates the fall)
+                resolvePush();
+                if (aStats.has(SK::StripBall) && defender.hasBall) {
+                    defender.hasBall   = false;
+                    result.ballDropped = true;
+                }
+                result.followUpBlocked = dStats.has(SK::Fend);
                 result.outcome = BlockOutcome::DefenderPushed;
             } else {
                 defender.prone = true;
@@ -215,7 +243,7 @@ inline BlockResult resolveBlock(
                 result.defenderInjured = applyKnockdown(defender, mightyBlowBonus, hasClaws, defenderTeam);
                 if (result.defenderInjured)
                     result.defenderInjury =
-                        defender.ko ? Dice::Injury::KO :
+                        defender.ko       ? Dice::Injury::KO :
                         defender.casualty ? Dice::Injury::Casualty : Dice::Injury::Stunned;
             }
             break;
@@ -226,10 +254,9 @@ inline BlockResult resolveBlock(
             result.defenderInjured = applyKnockdown(defender, mightyBlowBonus, hasClaws, defenderTeam);
             if (result.defenderInjured)
                 result.defenderInjury =
-                    defender.ko ? Dice::Injury::KO :
+                    defender.ko       ? Dice::Injury::KO :
                     defender.casualty ? Dice::Injury::Casualty : Dice::Injury::Stunned;
             break;
-
     }
 
     return result;
