@@ -32,6 +32,15 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(nlohmann_json)
 
+# miniz (ZIP reading for tourplay-convert)
+FetchContent_Declare(
+  miniz
+  GIT_REPOSITORY https://github.com/richgel999/miniz.git
+  GIT_TAG        3.0.2
+  GIT_SHALLOW    TRUE
+)
+FetchContent_MakeAvailable(miniz)
+
 # Sources
 set(SOURCES
   src/main.cpp
@@ -63,3 +72,11 @@ foreach(MATCH_FILE ${MATCH_FILES})
   get_filename_component(MATCH_NAME ${MATCH_FILE} NAME)
   configure_file(${MATCH_FILE} ${CMAKE_BINARY_DIR}/${MATCH_NAME} COPYONLY)
 endforeach()
+
+# tourplay-convert — standalone TourPlay zip → tournament JSON converter
+add_executable(tourplay-convert tools/tourplay_convert.cpp)
+target_link_libraries(tourplay-convert
+  PRIVATE
+    miniz
+    nlohmann_json::nlohmann_json
+)
