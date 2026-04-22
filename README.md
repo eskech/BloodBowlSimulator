@@ -436,7 +436,7 @@ Each turn proceeds in this order:
 | **Take Root** | At activation, roll D6: on a 2+ the player acts normally; on a 1 the player is Rooted for the turn — they may still make a Block action in place but cannot move, follow up after a push, be pushed, or make a Blitz action |
 | **Tackle** | Cancels opponent's Dodge skill |
 | **Tentacles** | Before the ball carrier leaves a zone, each Tentacles defender in that zone contests ST vs ST (ties go to Tentacles); on a win the carrier is held and drops the ball |
-| **Titchy** | Cannot make or receive assists |
+| **Titchy** | +1 AG modifier on own dodge rolls (easier to dodge); opponents do not suffer a tackle zone penalty when dodging away from this player (Titchy players do not mark opponents for dodge purposes) |
 | **Wrestle** | Accept Both Down to bring down opponent |
 
 All 175 skills from the 2025 rulebook are stored in a bitmask for O(1) lookup. Skills not listed above are loaded and displayed correctly but have no active simulation effect.

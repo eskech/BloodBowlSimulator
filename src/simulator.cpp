@@ -339,11 +339,13 @@ static bool checkTakeRoot(PlayerState& p, Dice& dice) {
 }
 
 // ── Zone helpers ─────────────────────────────────────────────────────────────
-// Distracted players (Bone Head / Really Stupid) lose their tackle zone.
+// Distracted players (Bone Head / Really Stupid) and Titchy players do not
+// apply a tackle zone penalty to dodge rolls.
 int defendersInZone(const TeamState& defense, Zone z) {
     int n = 0;
     for (const auto& p : defense.allPlayers())
-        if (p.isActive() && !p.prone && !p.distractedThisTurn && p.zone == z) ++n;
+        if (p.isActive() && !p.prone && !p.distractedThisTurn
+                         && !p.stats.has(SK::Titchy) && p.zone == z) ++n;
     return n;
 }
 
@@ -394,14 +396,10 @@ bool attemptBlock(PlayerState& attacker, TeamState& defenseTeam,
     }
     if (!target) return false;
 
-    // Titchy: cannot make or receive assists.
     int attackAssists = 0;
-    if (!attacker.stats.has(SK::Titchy)) {
-        for (const auto& p : attackerTeam.allPlayers()) {
-            if (&p == &attacker || !p.canAct()) continue;
-            if (p.stats.has(SK::Titchy)) continue;
-            if (std::abs(p.zone - attacker.zone) <= 1) ++attackAssists;
-        }
+    for (const auto& p : attackerTeam.allPlayers()) {
+        if (&p == &attacker || !p.canAct()) continue;
+        if (std::abs(p.zone - attacker.zone) <= 1) ++attackAssists;
     }
     // Stunty: blocker gets one extra assist against a Stunty target.
     if (target->stats.has(SK::Stunty)) ++attackAssists;
@@ -410,12 +408,9 @@ bool attemptBlock(PlayerState& attacker, TeamState& defenseTeam,
     if (isBlitz && attacker.stats.has(SK::Horns)) ++attackAssists;
 
     int defAssists = 0;
-    if (!target->stats.has(SK::Titchy)) {
-        for (const auto& p : defenseTeam.allPlayers()) {
-            if (&p == target || !p.canAct()) continue;
-            if (p.stats.has(SK::Titchy)) continue;
-            if (std::abs(p.zone - target->zone) <= 1) ++defAssists;
-        }
+    for (const auto& p : defenseTeam.allPlayers()) {
+        if (&p == target || !p.canAct()) continue;
+        if (std::abs(p.zone - target->zone) <= 1) ++defAssists;
     }
 
     // Dauntless: when blocking a higher-ST opponent, roll D6+own ST; on
@@ -560,11 +555,13 @@ bool advanceBallCarrier(TeamState& offense, TeamState& defense, Dice& dice,
         int tz = countTackleZones(defense, offense, current);
         if (carrier->stats.has(SK::Stunty)) ++tz;
         if (tz > 0) {
-            // Break Tackle: use ST instead of AG for dodge rolls if ST is lower
-            // (lower = better target number in this simulator's convention).
-            const int dodgeAg = carrier->stats.has(SK::BreakTackle)
-                                ? std::min(carrier->stats.ag, carrier->stats.st)
-                                : carrier->stats.ag;
+            // Effective AG for dodge rolls:
+            //   Break Tackle: may substitute ST for AG (beneficial when ST < AG).
+            //   Titchy:       +1 modifier to own dodge (equivalent to -1 on target, i.e. use ag-1).
+            int dodgeAg = carrier->stats.has(SK::BreakTackle)
+                          ? std::min(carrier->stats.ag, carrier->stats.st)
+                          : carrier->stats.ag;
+            if (carrier->stats.has(SK::Titchy)) --dodgeAg;
             auto tryDodge = [&](int ag, int zones) -> bool {
                 bool dodgeSkillBefore = dodgeReroll;
                 bool dodged = dice.dodgeRoll(ag, zones, dodgeReroll);
@@ -874,22 +871,18 @@ bool simulateTurn(TeamState& offense, TeamState& defense, Dice& dice,
                     d.zone = carrier->zone;
 
                     int defAssists = 0;
-                    if (!d.stats.has(SK::Titchy)) {
-                        for (const auto& od : defense.allPlayers()) {
-                            if (&od == &d || !od.canAct() || od.stats.has(SK::Titchy)) continue;
-                            if (std::abs(od.zone - d.zone) <= 1) ++defAssists;
-                        }
+                    for (const auto& od : defense.allPlayers()) {
+                        if (&od == &d || !od.canAct()) continue;
+                        if (std::abs(od.zone - d.zone) <= 1) ++defAssists;
                     }
                     if (carrier->stats.has(SK::Stunty)) ++defAssists;
                     // Horns: +1 ST on the Blitz action.
                     if (d.stats.has(SK::Horns)) ++defAssists;
 
                     int atkAssists = 0;
-                    if (!carrier->stats.has(SK::Titchy)) {
-                        for (const auto& op : offense.allPlayers()) {
-                            if (!op.canAct() || op.hasBall || op.stats.has(SK::Titchy)) continue;
-                            if (std::abs(op.zone - carrier->zone) <= 1) ++atkAssists;
-                        }
+                    for (const auto& op : offense.allPlayers()) {
+                        if (!op.canAct() || op.hasBall) continue;
+                        if (std::abs(op.zone - carrier->zone) <= 1) ++atkAssists;
                     }
 
                     // Dauntless: blitzer with lower ST contests to equalize.
