@@ -378,12 +378,16 @@ Each turn proceeds in this order:
 1. **Stand-up phase**: stunned players recover; prone players stand (simplified — no MA cost)
 2. **Blocking phase**: up to 3 offensive blocks (each blocker activates once)
    - Bone Head / Really Stupid players must pass an activation roll before acting; failure wastes the action and the player's tackle zone (see Skills table)
-   - A successful push causes the blocker to follow up one zone forward (unless the defender has Fend)
+   - Take Root players roll 2+; on a 1 they are Rooted and may still block in place but cannot move or be pushed this turn
+   - The first block each turn is the **Blitz action** — the acting player benefits from Horns (+1 ST) if they have it
+   - A successful push causes the blocker to follow up one zone forward (unless the defender has Fend or is Rooted)
    - Frenzy players must follow up and immediately block again
 3. **Defense blitz**: one defender may move into the carrier's zone and attempt a block
    - Probability varies with turns remaining: 67% early (turns 6–8), 50% mid (3–5), 33% late (1–2), reflecting fresh vs depleted defenses
    - A Sidestep carrier raises the blitz threshold by 2 (defense less eager to blitz)
+   - A Take Root defender who fails their roll cannot blitz (a Blitz requires movement)
 4. **Ball carrier action**: carrier may hand off to an adjacent teammate, pass to a receiver ahead, or run
+   - A Take Root carrier who fails their roll is Rooted and cannot advance this turn
    - A pass is subject to interception: the most-agile eligible defender in the pass path gets one attempt (target = max(4, AG+2))
 5. **Foul**: one offensive player may foul a prone opponent (one foul per turn)
 
@@ -401,8 +405,10 @@ Each turn proceeds in this order:
 | **Accurate** | −1 to PA target number |
 | **Block** | Re-roll Both Down results |
 | **Bone Head** | Before acting, roll D6: on a 1 the player is Distracted (no action, no tackle zone this turn); team re-roll may be used |
+| **Break Tackle** | Use ST instead of AG for dodge rolls (beneficial when ST is lower than AG, i.e. the player is strong but slow) |
 | **Catch** | Re-roll one failed catch per activation |
 | **Claws** | Armour rolls of 8+ break armour regardless of AV |
+| **Dauntless** | When blocking a player with higher ST, roll D6 + own ST; if equal to or higher than the opponent's ST, proceed as if the STs are equal (same block dice count) |
 | **Dirty Player** | +1 to armour and injury rolls when fouling |
 | **Diving Catch** | −1 to AG catch target (easier to catch) |
 | **Diving Tackle** | Fall prone after opponent dodges away to force an extra dodge roll |
@@ -411,6 +417,8 @@ Each turn proceeds in this order:
 | **Frenzy** | Must follow up after any push/stumble/down and block again immediately |
 | **Grab** | Negates the Sidestep skill on the defender |
 | **Guard** | Cancels one effective tackle zone on the ball carrier when in the same zone (cage effect) |
+| **Horns** | +1 ST when making a Blitz action (the one designated block per turn that involves movement) |
+| **Leader** | Once per half, while this player is active on the pitch, the team may use them as a free team re-roll (does not decrement the re-roll count) |
 | **Mighty Blow** | +1 to armour/injury rolls |
 | **Nerves of Steel** | Ignore tackle zone penalties on pass and catch rolls |
 | **Pass** | Re-roll one failed pass throw per activation |
@@ -425,6 +433,7 @@ Each turn proceeds in this order:
 | **Sure Feet** | Re-roll a failed Sprint roll |
 | **Sure Hands** | Re-roll one failed pickup per activation |
 | **Swarming** | Snotling Linemen only — D3 enter the pitch from Reserves each drive, capped by on-pitch Swarming count |
+| **Take Root** | At activation, roll D6: on a 2+ the player acts normally; on a 1 the player is Rooted for the turn — they may still make a Block action in place but cannot move, follow up after a push, be pushed, or make a Blitz action |
 | **Tackle** | Cancels opponent's Dodge skill |
 | **Tentacles** | Before the ball carrier leaves a zone, each Tentacles defender in that zone contests ST vs ST (ties go to Tentacles); on a win the carrier is held and drops the ball |
 | **Titchy** | Cannot make or receive assists |
