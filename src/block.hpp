@@ -159,6 +159,9 @@ inline BlockResult resolveBlock(
     // ── Push helper: resolve where defender ends up after a push ────────────
     // Returns true if the push resulted in a crowd surf.
     auto resolvePush = [&]() -> bool {
+        // Take Root: rooted players cannot be pushed (acts as automatic Stand Firm).
+        if (defender.rootedThisTurn) return false;
+
         bool defStandsFirm  = dStats.has(SK::StandFirm) && dice.useSkill(defender.strategy.standFirm);
         bool attackerGrabs  = aStats.has(SK::Grab);
         // Sidestep lets defender move forward (away from their own endzone), negated by Grab

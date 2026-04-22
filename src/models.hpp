@@ -625,6 +625,7 @@ struct PlayerState {
     bool inReserves{false};         // waiting in reserves/bench (Riotous Rookies, etc.)
     bool isTeamCaptain{false};      // gains Pro; free team re-roll on natural 6 while on pitch
     bool distractedThisTurn{false};  // Bone Head or Really Stupid fired — no action, no tackle zone this turn
+    bool rootedThisTurn{false};      // Take Root failed — cannot move or be pushed this turn
     int  stunTimer{0};
 
     bool isActive()   const { return !ko && !casualty && !inReserves; }
@@ -646,6 +647,7 @@ struct TeamState {
     std::array<PlayerState, 28> players{};  // 16 roster + 7 Riotous Rookies + 2 star players + 3 spare
     int playerCount{0};
     int rerollsRemaining{0};
+    bool leaderRerollUsedThisHalf{false};
 
     std::span<PlayerState>       allPlayers()       { return {players.data(), static_cast<size_t>(playerCount)}; }
     std::span<const PlayerState> allPlayers() const { return {players.data(), static_cast<size_t>(playerCount)}; }

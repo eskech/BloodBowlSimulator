@@ -121,8 +121,22 @@ namespace {
 //     re-roll is free (count not decremented).
 static bool useTeamReroll(TeamState& team, Dice& dice,
                            const PlayerState* actor = nullptr) {
-    if (team.rerollsRemaining <= 0) return false;
+    // Loner check: star players must roll 4+ to use a team re-roll.
     if (actor && actor->stats.has(SK::Loner) && dice.d6() < 4) return false;
+
+    // Leader: once per half, a Leader player on the pitch provides a free re-roll.
+    if (!team.leaderRerollUsedThisHalf) {
+        bool leaderOnPitch = false;
+        for (const auto& p : team.allPlayers())
+            if (p.isActive() && !p.stunned && p.stats.has(SK::Leader))
+                { leaderOnPitch = true; break; }
+        if (leaderOnPitch) {
+            team.leaderRerollUsedThisHalf = true;
+            return true;   // free — does not decrement rerollsRemaining
+        }
+    }
+
+    if (team.rerollsRemaining <= 0) return false;
     if (!team.captainActive() || dice.d6() != 6) --team.rerollsRemaining;
     return true;
 }
@@ -312,6 +326,18 @@ bool checkActivationRoll(PlayerState& p, const TeamState& team, Dice& dice) {
     return false;
 }
 
+// ── Take Root ────────────────────────────────────────────────────────────────
+// Roll 2+ at activation; on a 1 the player is Rooted for the turn.
+// Rooted players may still make a Block action but cannot move, follow up,
+// or be pushed.  Unlike Bone Head, this does NOT prevent the action entirely.
+// Returns true if the player is now rooted.
+static bool checkTakeRoot(PlayerState& p, Dice& dice) {
+    if (!p.stats.has(SK::TakeRoot)) return false;
+    if (dice.d6() >= 2) return false;
+    p.rootedThisTurn = true;
+    return true;
+}
+
 // ── Zone helpers ─────────────────────────────────────────────────────────────
 // Distracted players (Bone Head / Really Stupid) lose their tackle zone.
 int defendersInZone(const TeamState& defense, Zone z) {
@@ -353,7 +379,7 @@ bool blockedByTentacles(const PlayerStats& mover, const TeamState& opponents,
 // ── Block ─────────────────────────────────────────────────────────────────────
 // Returns true if the block caused a turnover.
 bool attemptBlock(PlayerState& attacker, TeamState& defenseTeam,
-                  Dice& dice, TeamState& attackerTeam)
+                  Dice& dice, TeamState& attackerTeam, bool isBlitz = false)
 {
     PlayerState* target = nullptr;
     for (auto& p : defenseTeam.allPlayers()) {
@@ -373,20 +399,30 @@ bool attemptBlock(PlayerState& attacker, TeamState& defenseTeam,
     if (!attacker.stats.has(SK::Titchy)) {
         for (const auto& p : attackerTeam.allPlayers()) {
             if (&p == &attacker || !p.canAct()) continue;
-            if (p.stats.has(SK::Titchy)) continue;          // Titchy can't assist
+            if (p.stats.has(SK::Titchy)) continue;
             if (std::abs(p.zone - attacker.zone) <= 1) ++attackAssists;
         }
     }
     // Stunty: blocker gets one extra assist against a Stunty target.
     if (target->stats.has(SK::Stunty)) ++attackAssists;
 
+    // Horns: +1 ST on a Blitz action.
+    if (isBlitz && attacker.stats.has(SK::Horns)) ++attackAssists;
+
     int defAssists = 0;
     if (!target->stats.has(SK::Titchy)) {
         for (const auto& p : defenseTeam.allPlayers()) {
             if (&p == target || !p.canAct()) continue;
-            if (p.stats.has(SK::Titchy)) continue;          // Titchy can't assist
+            if (p.stats.has(SK::Titchy)) continue;
             if (std::abs(p.zone - target->zone) <= 1) ++defAssists;
         }
+    }
+
+    // Dauntless: when blocking a higher-ST opponent, roll D6+own ST; on
+    // equal-or-higher vs opponent's ST, proceed as if the STs are equal.
+    if (attacker.stats.has(SK::Dauntless) && target->stats.st > attacker.stats.st) {
+        if (dice.d6() + attacker.stats.st >= target->stats.st)
+            attackAssists += target->stats.st - attacker.stats.st;
     }
 
     bool attackerHasBall = attacker.hasBall;
@@ -437,7 +473,7 @@ bool attemptBlock(PlayerState& attacker, TeamState& defenseTeam,
             else if (target->ko)  ++attackerTeam.knockouts;
         }
         if (r2.turnover) return true;
-    } else if (!attackerHasBall && !result.followUpBlocked &&
+    } else if (!attackerHasBall && !result.followUpBlocked && !attacker.rootedThisTurn &&
                (result.outcome == BlockOutcome::DefenderPushed ||
                 result.outcome == BlockOutcome::DefenderStumbles) &&
                attacker.zone < Zone::OppEndZone) {
@@ -522,9 +558,13 @@ bool advanceBallCarrier(TeamState& offense, TeamState& defense, Dice& dice,
         }
 
         int tz = countTackleZones(defense, offense, current);
-        // Stunty: -1 modifier to all dodge rolls (effectively +1 to the target number).
         if (carrier->stats.has(SK::Stunty)) ++tz;
         if (tz > 0) {
+            // Break Tackle: use ST instead of AG for dodge rolls if ST is lower
+            // (lower = better target number in this simulator's convention).
+            const int dodgeAg = carrier->stats.has(SK::BreakTackle)
+                                ? std::min(carrier->stats.ag, carrier->stats.st)
+                                : carrier->stats.ag;
             auto tryDodge = [&](int ag, int zones) -> bool {
                 bool dodgeSkillBefore = dodgeReroll;
                 bool dodged = dice.dodgeRoll(ag, zones, dodgeReroll);
@@ -556,7 +596,7 @@ bool advanceBallCarrier(TeamState& offense, TeamState& defense, Dice& dice,
                 }
             };
 
-            if (!tryDodge(carrier->stats.ag, tz)) {
+            if (!tryDodge(dodgeAg, tz)) {
                 carrier->prone   = true;
                 carrier->hasBall = false;
                 defensePickup();
@@ -569,7 +609,7 @@ bool advanceBallCarrier(TeamState& offense, TeamState& defense, Dice& dice,
                 if (!def.stats.has(SK::DivingTackle)) continue;
                 if (!dice.useSkill(def.strategy.divingTackle)) continue;
                 def.prone = true;
-                if (!tryDodge(carrier->stats.ag, 1)) {
+                if (!tryDodge(dodgeAg, 1)) {
                     carrier->prone   = true;
                     carrier->hasBall = false;
                     defensePickup();
@@ -772,9 +812,10 @@ void attemptFoul(TeamState& offense, TeamState& defense, Dice& dice)
 bool simulateTurn(TeamState& offense, TeamState& defense, Dice& dice,
                   int turnsLeft, const GameContext& ctx)
 {
-    for (auto& p : offense.allPlayers()) { p.activated = false; p.distractedThisTurn = false; }
-    for (auto& p : defense.allPlayers()) { p.activated = false; p.distractedThisTurn = false; }
+    for (auto& p : offense.allPlayers()) { p.activated = false; p.distractedThisTurn = false; p.rootedThisTurn = false; }
+    for (auto& p : defense.allPlayers()) { p.activated = false; p.distractedThisTurn = false; p.rootedThisTurn = false; }
 
+    bool offenseBlitzUsed   = false;
     bool offensePassUsed    = false;
     bool offenseHandoffUsed = false;
     bool offenseFoulUsed    = false;
@@ -803,8 +844,12 @@ bool simulateTurn(TeamState& offense, TeamState& defense, Dice& dice,
         }
         if (!any) continue;
         if (checkActivationRoll(p, offense, dice)) continue;
+        checkTakeRoot(p, dice);  // rooted players may still block in place
+        // First offensive block each turn is the Blitz action (eligible for Horns).
+        bool thisIsBlitz = !offenseBlitzUsed;
+        if (thisIsBlitz) offenseBlitzUsed = true;
         p.activated = true;
-        bool turnover = attemptBlock(p, defense, dice, offense);
+        bool turnover = attemptBlock(p, defense, dice, offense, thisIsBlitz);
         ++blocksThisTurn;
         if (turnover) return false;
     }
@@ -821,7 +866,9 @@ bool simulateTurn(TeamState& offense, TeamState& defense, Dice& dice,
             for (auto& d : defense.allPlayers()) {
                 if (!d.canAct()) continue;
                 if (std::abs(d.zone - carrier->zone) <= 1) {
-                    if (checkActivationRoll(d, defense, dice)) break;  // blitzer distracted — no blitz this turn
+                    if (checkActivationRoll(d, defense, dice)) break;
+                    // Take Root: rooted player can't blitz (requires movement).
+                    if (checkTakeRoot(d, dice)) break;
                     defenseBlitzUsed = true;
                     d.activated      = true;
                     d.zone = carrier->zone;
@@ -833,8 +880,9 @@ bool simulateTurn(TeamState& offense, TeamState& defense, Dice& dice,
                             if (std::abs(od.zone - d.zone) <= 1) ++defAssists;
                         }
                     }
-                    // Stunty carrier: blitzer gets an extra assist
                     if (carrier->stats.has(SK::Stunty)) ++defAssists;
+                    // Horns: +1 ST on the Blitz action.
+                    if (d.stats.has(SK::Horns)) ++defAssists;
 
                     int atkAssists = 0;
                     if (!carrier->stats.has(SK::Titchy)) {
@@ -842,6 +890,12 @@ bool simulateTurn(TeamState& offense, TeamState& defense, Dice& dice,
                             if (!op.canAct() || op.hasBall || op.stats.has(SK::Titchy)) continue;
                             if (std::abs(op.zone - carrier->zone) <= 1) ++atkAssists;
                         }
+                    }
+
+                    // Dauntless: blitzer with lower ST contests to equalize.
+                    if (d.stats.has(SK::Dauntless) && carrier->stats.st > d.stats.st) {
+                        if (dice.d6() + d.stats.st >= carrier->stats.st)
+                            defAssists += carrier->stats.st - d.stats.st;
                     }
 
                     bool hadBall = carrier->hasBall;
@@ -920,9 +974,18 @@ bool simulateTurn(TeamState& offense, TeamState& defense, Dice& dice,
     // ── Ball carrier advance ────────────────────────────────────────────────
     PlayerState* carrier = offense.ballCarrier();
 
-    // ── Bone Head: ball carrier rolls before any action ──────────────────────
+    // ── Activation rolls: Bone Head / Really Stupid ──────────────────────────
     if (carrier && carrier->canAct() && checkActivationRoll(*carrier, offense, dice))
-        return false;  // carrier bone-heads — no advance, no pass, no hand-off
+        return false;
+
+    // ── Take Root: carrier rolls 2+; on 1 they're rooted and can't advance ──
+    if (carrier && carrier->canAct()) {
+        checkTakeRoot(*carrier, dice);
+        if (carrier->rootedThisTurn) {
+            carrier->activated = true;
+            return false;
+        }
+    }
 
     // ── 2. Stalling: if ahead and carrier is safely in opponent territory,
     //    prefer to delay the TD rather than give defense time to equalise.
@@ -1014,6 +1077,9 @@ GameResult simulateGame(TeamState team1, TeamState team2, Dice& dice) {
     constexpr int TURNS_PER_HALF = 8;
 
     for (int half = 0; half < 2; ++half) {
+        team1.leaderRerollUsedThisHalf = false;
+        team2.leaderRerollUsedThisHalf = false;
+
         TeamState& offense = team1Receives ? team1 : team2;
         TeamState& defense = team1Receives ? team2 : team1;
 
