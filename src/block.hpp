@@ -77,11 +77,16 @@ inline BlockResult resolveBlock(
     PlayerState& attacker, PlayerState& defender,
     int attackerAssists, int defenderAssists,
     Dice& dice, bool attackerHasBall,
-    TeamState& attackerTeam, TeamState& defenderTeam)
+    TeamState& attackerTeam, TeamState& defenderTeam,
+    bool isBlitz = false)
 {
     BlockResult result{};
     const auto& aStats = attacker.stats;
     const auto& dStats = defender.stats;
+
+    // Juggernaut: on a Blitz, Both Down → Push; cancels defender Wrestle,
+    // Stand Firm, and Fend.
+    const bool juggernauting = isBlitz && aStats.has(SK::Juggernaut);
 
     int diceCount = blockDiceCount(aStats, dStats, attackerAssists, defenderAssists);
     int numDice   = std::abs(diceCount);
@@ -95,7 +100,9 @@ inline BlockResult resolveBlock(
 
     // ── Block skill: attacker may re-roll Both Down ──────────────────────────
     if (chosen == BlockFace::BothDown) {
-        bool defenderWrestles = dStats.has(SK::Wrestle)
+        // Juggernaut cancels defender Wrestle before the Block re-roll check.
+        bool defenderWrestles = !juggernauting
+                             && dStats.has(SK::Wrestle)
                              && dice.useSkill(defender.strategy.wrestle);
         bool attackerWrestles = aStats.has(SK::Wrestle)
                              && dice.useSkill(attacker.strategy.wrestle);
@@ -109,6 +116,9 @@ inline BlockResult resolveBlock(
                 (void)attackerWrestles;
             }
         }
+        // Juggernaut: after all re-rolls, convert remaining Both Down to Push.
+        if (juggernauting && chosen == BlockFace::BothDown)
+            chosen = BlockFace::Push;
     }
 
     // ── Injury helper ────────────────────────────────────────────────────────
@@ -128,7 +138,9 @@ inline BlockResult resolveBlock(
         int injBonus = brokeWithout ? mbBonus : 0;
         auto inj = dice.injuryRoll(injBonus);
 
-        if (inj == Dice::Injury::Casualty && team.hasApothecary && !team.apothecaryUsed) {
+        // Decay: apothecary cannot be used for this player's Casualty results.
+        if (inj == Dice::Injury::Casualty && team.hasApothecary && !team.apothecaryUsed
+                                          && !player.stats.has(SK::Decay)) {
             team.apothecaryUsed = true;
             auto reroll = dice.injuryRoll(0);
             if (reroll < inj) inj = reroll;
@@ -162,7 +174,9 @@ inline BlockResult resolveBlock(
         // Take Root: rooted players cannot be pushed (acts as automatic Stand Firm).
         if (defender.rootedThisTurn) return false;
 
-        bool defStandsFirm  = dStats.has(SK::StandFirm) && dice.useSkill(defender.strategy.standFirm);
+        // Juggernaut cancels Stand Firm on a Blitz.
+        bool defStandsFirm  = !juggernauting
+                           && dStats.has(SK::StandFirm) && dice.useSkill(defender.strategy.standFirm);
         bool attackerGrabs  = aStats.has(SK::Grab);
         // Sidestep lets defender move forward (away from their own endzone), negated by Grab
         bool defSidesteps   = dStats.has(SK::Sidestep) && !attackerGrabs;
@@ -219,31 +233,34 @@ inline BlockResult resolveBlock(
 
         case BlockFace::Push: {
             resolvePush();
-            // Strip Ball: a pushed ball carrier drops the ball (stays standing)
             if (aStats.has(SK::StripBall) && defender.hasBall) {
                 defender.hasBall  = false;
                 result.ballDropped = true;
             }
-            // Fend: attacker may not follow up after this push
-            result.followUpBlocked = dStats.has(SK::Fend);
+            // Juggernaut cancels Fend on a Blitz.
+            result.followUpBlocked = dStats.has(SK::Fend) && !juggernauting;
             result.outcome = BlockOutcome::DefenderPushed;
             break;
         }
 
         case BlockFace::DefenderStumbles:
             if (dStats.has(SK::Dodge) && !aStats.has(SK::Tackle)) {
-                // Defender stays up but is still pushed (Dodge negates the fall)
                 resolvePush();
                 if (aStats.has(SK::StripBall) && defender.hasBall) {
                     defender.hasBall   = false;
                     result.ballDropped = true;
                 }
-                result.followUpBlocked = dStats.has(SK::Fend);
+                result.followUpBlocked = dStats.has(SK::Fend) && !juggernauting;
                 result.outcome = BlockOutcome::DefenderPushed;
             } else {
                 defender.prone = true;
                 result.outcome = BlockOutcome::DefenderStumbles;
                 result.defenderInjured = applyKnockdown(defender, mightyBlowBonus, hasClaws, defenderTeam);
+                // Piling On: if armour held, attacker may go prone to re-roll.
+                if (!result.defenderInjured && aStats.has(SK::PilingOn) && !attackerHasBall) {
+                    attacker.prone = true;
+                    result.defenderInjured = applyKnockdown(defender, mightyBlowBonus, hasClaws, defenderTeam);
+                }
                 if (result.defenderInjured)
                     result.defenderInjury =
                         defender.ko       ? Dice::Injury::KO :
@@ -255,6 +272,11 @@ inline BlockResult resolveBlock(
             defender.prone = true;
             result.outcome = BlockOutcome::DefenderDown;
             result.defenderInjured = applyKnockdown(defender, mightyBlowBonus, hasClaws, defenderTeam);
+            // Piling On: if armour held, attacker may go prone to re-roll.
+            if (!result.defenderInjured && aStats.has(SK::PilingOn) && !attackerHasBall) {
+                attacker.prone = true;
+                result.defenderInjured = applyKnockdown(defender, mightyBlowBonus, hasClaws, defenderTeam);
+            }
             if (result.defenderInjured)
                 result.defenderInjury =
                     defender.ko       ? Dice::Injury::KO :

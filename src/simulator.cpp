@@ -45,6 +45,8 @@ TeamState buildTeamState(const TeamConfig& cfg, const SeedData& seed) {
         }
         for (const auto& sk : pc.extraSkills) setBit(sk);
         if (pc.isTeamCaptain) setBit("Pro");
+        // Loner (3+) implies Loner too, so both bits are set.
+        if (stats.has(SK::LonerThreePlus)) setBit("Loner");
 
         PlayerStrategy strategy = pc.strategy.mergedWith(cfg.defaultStrategy);
 
@@ -75,6 +77,7 @@ TeamState buildTeamState(const TeamConfig& cfg, const SeedData& seed) {
                     |= (1ULL << (idx & 63));
         };
         for (const auto& sk : sp->skills) setBitSP(sk);
+        if (stats.has(SK::LonerThreePlus)) setBitSP("Loner");
 
         PlayerState ps;
         ps.stats     = std::move(stats);
@@ -121,8 +124,11 @@ namespace {
 //     re-roll is free (count not decremented).
 static bool useTeamReroll(TeamState& team, Dice& dice,
                            const PlayerState* actor = nullptr) {
-    // Loner check: star players must roll 4+ to use a team re-roll.
-    if (actor && actor->stats.has(SK::Loner) && dice.d6() < 4) return false;
+    // Loner: star players and certain big guys must roll to use a team re-roll.
+    // Loner (3+): 3+ to use (67% success).  Loner (4+) or plain Loner: 4+ (50%).
+    if (actor && actor->stats.has(SK::LonerThreePlus) && dice.d6() < 3) return false;
+    else if (actor && actor->stats.has(SK::Loner) && !actor->stats.has(SK::LonerThreePlus)
+             && dice.d6() < 4) return false;
 
     // Leader: once per half, a Leader player on the pitch provides a free re-roll.
     if (!team.leaderRerollUsedThisHalf) {
@@ -186,8 +192,8 @@ void kickoffEvent(TeamState& offense, TeamState& defense, Dice& dice,
                     if (!d.canAct()) continue;
                     if (std::abs(d.zone - carrier->zone) <= 1) {
                         d.zone = carrier->zone;
-                        // Simple free block — don't count stats, don't cause game turnover
-                        resolveBlock(d, *carrier, 0, 0, dice, false, defense, offense);
+                        // Simple free blitz — don't count stats, don't cause game turnover
+                        resolveBlock(d, *carrier, 0, 0, dice, false, defense, offense, true);
                         break;
                     }
                 }
@@ -224,9 +230,19 @@ void kickoffEvent(TeamState& offense, TeamState& defense, Dice& dice,
 }
 
 // ── Kickoff setup ────────────────────────────────────────────────────────────
+// isFirstKickoff = true only for the very first kickoff of the game; Secret
+// Weapon ejection is skipped then (no previous drive has occurred).
 void setupKickoff(TeamState& offense, TeamState& defense, Dice& dice,
-                  const GameContext& ctx)
+                  const GameContext& ctx, bool isFirstKickoff = false)
 {
+    // Secret Weapon players are ejected after every drive (not before the first).
+    if (!isFirstKickoff) {
+        for (TeamState* team : {&offense, &defense})
+            for (auto& p : team->allPlayers())
+                if (p.stats.has(SK::SecretWeapon) && p.isOnPitch())
+                    p.casualty = true;  // ejected — out for the rest of the game
+    }
+
     // Return benched (non-Swarming) players to the pitch.
     for (TeamState* team : {&offense, &defense})
         for (auto& p : team->allPlayers())
@@ -323,7 +339,23 @@ bool checkActivationRoll(PlayerState& p, const TeamState& team, Dice& dice) {
         if (distracted) { p.activated = p.distractedThisTurn = true; return true; }
         return false;
     }
+    // Animal Savagery: on a 1/6 the player goes Wild.  Simplified: Distracted
+    // (the zone model cannot represent a forced team-mate block).
+    if (p.stats.has(SK::AnimalSavagery)) {
+        if (dice.d6() == 1) { p.activated = p.distractedThisTurn = true; return true; }
+        return false;
+    }
     return false;
+}
+
+// ── Unchannelled Fury ─────────────────────────────────────────────────────────
+// For non-Block/Blitz actions (running, passing): must pass an Agility test
+// (D6 >= AG) or become Distracted.
+static bool checkUnchannelledFury(PlayerState& p, Dice& dice) {
+    if (!p.stats.has(SK::UnchannelledFury)) return false;
+    if (dice.d6() >= p.stats.ag) return false;
+    p.activated = p.distractedThisTurn = true;
+    return true;
 }
 
 // ── Take Root ────────────────────────────────────────────────────────────────
@@ -422,7 +454,8 @@ bool attemptBlock(PlayerState& attacker, TeamState& defenseTeam,
 
     bool attackerHasBall = attacker.hasBall;
     BlockResult result = resolveBlock(attacker, *target, attackAssists, defAssists,
-                                      dice, attackerHasBall, attackerTeam, defenseTeam);
+                                      dice, attackerHasBall, attackerTeam, defenseTeam,
+                                      isBlitz);
 
     ++attackerTeam.blocksAttempted;
     if (result.outcome == BlockOutcome::DefenderDown     ||
@@ -893,7 +926,7 @@ bool simulateTurn(TeamState& offense, TeamState& defense, Dice& dice,
 
                     bool hadBall = carrier->hasBall;
                     BlockResult res = resolveBlock(d, *carrier, defAssists, atkAssists,
-                                                   dice, false, defense, offense);
+                                                   dice, false, defense, offense, true);
                     ++defense.blocksAttempted;
                     if (res.outcome == BlockOutcome::DefenderDown     ||
                         res.outcome == BlockOutcome::DefenderStumbles ||
@@ -967,7 +1000,7 @@ bool simulateTurn(TeamState& offense, TeamState& defense, Dice& dice,
     // ── Ball carrier advance ────────────────────────────────────────────────
     PlayerState* carrier = offense.ballCarrier();
 
-    // ── Activation rolls: Bone Head / Really Stupid ──────────────────────────
+    // ── Activation rolls: Bone Head / Really Stupid / Animal Savagery ───────
     if (carrier && carrier->canAct() && checkActivationRoll(*carrier, offense, dice))
         return false;
 
@@ -978,6 +1011,19 @@ bool simulateTurn(TeamState& offense, TeamState& defense, Dice& dice,
             carrier->activated = true;
             return false;
         }
+    }
+
+    // ── Unchannelled Fury: AG test before non-Block/Blitz actions ────────────
+    if (carrier && carrier->canAct() && checkUnchannelledFury(*carrier, dice))
+        return false;
+
+    // ── Animosity: 1/6 chance carrier refuses to pass, hand-off, or run ─────
+    // (Simplified: real Animosity only fires vs specific sub-races; here we
+    //  approximate as a flat 1/6 activation failure for any action.)
+    if (carrier && carrier->canAct() && carrier->stats.has(SK::Animosity)
+                && dice.d6() == 1) {
+        carrier->activated = true;
+        return false;
     }
 
     // ── 2. Stalling: if ahead and carrier is safely in opponent territory,
@@ -1076,7 +1122,7 @@ GameResult simulateGame(TeamState team1, TeamState team2, Dice& dice) {
         TeamState& offense = team1Receives ? team1 : team2;
         TeamState& defense = team1Receives ? team2 : team1;
 
-        setupKickoff(offense, defense, dice, ctx);
+        setupKickoff(offense, defense, dice, ctx, half == 0);
 
         for (int t = 0; t < TURNS_PER_HALF; ++t) {
             if (&offense == &team1) {

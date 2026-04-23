@@ -37,9 +37,9 @@ inline bool hasSkill(const Skills& skills, std::string_view skill) {
 
 // ---------------------------------------------------------------------------
 // Skill bitmask — O(1) hot-path lookup.
-// Each constant is a bit index (0-173).  PlayerStats stores
+// Each constant is a bit index (0-174).  PlayerStats stores
 // std::array<uint64_t,3> skillFlags; has(idx) tests the right word.
-// 174 skills fit in 3×64 = 192 bits.
+// 175 bits fit in 3×64 = 192 bits.
 // ---------------------------------------------------------------------------
 namespace SK {
     // ── Simulated (bits 0-17) ──────────────────────────────────────────────
@@ -219,6 +219,8 @@ namespace SK {
     inline constexpr int WorkingInTandem    = 172;  // Working In Tandem
     inline constexpr int Yoink              = 173;  // Yoink!
     inline constexpr int Swarming          = 174;  // Swarming
+    // Extended: not in the 175-skill catalogue but needed for simulation
+    inline constexpr int LonerThreePlus    = 175;  // Loner (3+) variant — 3+ to use team re-roll
 }  // namespace SK
 
 // Returns the bit index for a skill name, or -1 if unknown.
@@ -315,7 +317,7 @@ inline int skillNameToIndex(std::string_view s) {
     if (s == "Lone Fouler")                    return SK::LoneFouler;
     if (s == "Loner")                          return SK::Loner;
     if (s == "Loner (4+)")                     return SK::Loner;
-    if (s == "Loner (3+)")                     return SK::Loner;
+    if (s == "Loner (3+)")                     return SK::LonerThreePlus;
     if (s == "Look into my Eyes")              return SK::LookIntoMyEyes;
     if (s == "Lord of Chaos")                  return SK::LordOfChaos;
     if (s == "Master Assassin")                return SK::MasterAssassin;
