@@ -239,8 +239,10 @@ void setupKickoff(TeamState& offense, TeamState& defense, Dice& dice,
     if (!isFirstKickoff) {
         for (TeamState* team : {&offense, &defense})
             for (auto& p : team->allPlayers())
-                if (p.stats.has(SK::SecretWeapon) && p.isOnPitch())
-                    p.casualty = true;  // ejected — out for the rest of the game
+                if (p.stats.has(SK::SecretWeapon) && p.isOnPitch()) {
+                    p.ejected = true;
+                    ++team->ejections;
+                }
     }
 
     // Return benched (non-Swarming) players to the pitch.
@@ -1168,6 +1170,7 @@ GameResult simulateGame(TeamState team1, TeamState team2, Dice& dice) {
     r.score1      = team1.score;       r.score2      = team2.score;
     r.casualties1 = team1.casualties;  r.casualties2 = team2.casualties;
     r.ko1         = team1.knockouts;   r.ko2         = team2.knockouts;
+    r.ejections1  = team1.ejections;   r.ejections2  = team2.ejections;
     r.blocks1     = team1.blocksSuccessful; r.blocks2 = team2.blocksSuccessful;
     r.passes1     = team1.passesCompleted;  r.passes2 = team2.passesCompleted;
     return r;
@@ -1192,6 +1195,7 @@ SimulationStats runSimulations(const TeamConfig& cfg1, const TeamConfig& cfg2,
     long long score1 = 0, score2 = 0;
     long long cas1 = 0, cas2 = 0;
     long long ko1 = 0, ko2 = 0;
+    long long ej1 = 0, ej2 = 0;
     long long blk1 = 0, blk2 = 0;
     long long pass1 = 0, pass2 = 0;
 
@@ -1203,7 +1207,7 @@ SimulationStats runSimulations(const TeamConfig& cfg1, const TeamConfig& cfg2,
 
 #pragma omp parallel num_threads(numThreads) \
         reduction(+:wins1, wins2, draws, score1, score2, \
-                    cas1, cas2, ko1, ko2, blk1, blk2, pass1, pass2)
+                    cas1, cas2, ko1, ko2, ej1, ej2, blk1, blk2, pass1, pass2)
     {
         int tid = omp_get_thread_num();
         Dice dice(seeds[static_cast<size_t>(tid)] ^ static_cast<uint64_t>(tid * 0xDEADBEEFull));
@@ -1217,6 +1221,7 @@ SimulationStats runSimulations(const TeamConfig& cfg1, const TeamConfig& cfg2,
             score1 += r.score1;  score2 += r.score2;
             cas1   += r.casualties1; cas2 += r.casualties2;
             ko1    += r.ko1;         ko2  += r.ko2;
+            ej1    += r.ejections1;  ej2  += r.ejections2;
             blk1   += r.blocks1;     blk2 += r.blocks2;
             pass1  += r.passes1;     pass2 += r.passes2;
         }
@@ -1226,6 +1231,7 @@ SimulationStats runSimulations(const TeamConfig& cfg1, const TeamConfig& cfg2,
     stats.totalScore1 = score1; stats.totalScore2 = score2;
     stats.totalCasualties1 = cas1; stats.totalCasualties2 = cas2;
     stats.totalKO1 = ko1; stats.totalKO2 = ko2;
+    stats.totalEjections1 = ej1; stats.totalEjections2 = ej2;
     stats.totalBlocks1 = blk1; stats.totalBlocks2 = blk2;
     stats.totalPasses1 = pass1; stats.totalPasses2 = pass2;
     return stats;
@@ -1280,6 +1286,8 @@ SimulationStats aggregateResults(const std::vector<GameResult>& results) {
         stats.totalCasualties2 += r.casualties2;
         stats.totalKO1         += r.ko1;
         stats.totalKO2         += r.ko2;
+        stats.totalEjections1  += r.ejections1;
+        stats.totalEjections2  += r.ejections2;
         stats.totalBlocks1     += r.blocks1;
         stats.totalBlocks2     += r.blocks2;
         stats.totalPasses1     += r.passes1;

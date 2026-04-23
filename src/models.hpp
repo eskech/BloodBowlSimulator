@@ -622,6 +622,7 @@ struct PlayerState {
     bool stunned{false};          // misses next turn
     bool ko{false};               // knocked out – may return next half
     bool casualty{false};         // out for the game
+    bool ejected{false};          // Secret Weapon ejection — out for the game, not a casualty
     bool hasBall{false};
     bool activated{false};          // already took an action this turn — prevents double-activation
     bool inReserves{false};         // waiting in reserves/bench (Riotous Rookies, etc.)
@@ -630,10 +631,10 @@ struct PlayerState {
     bool rootedThisTurn{false};      // Take Root failed — cannot move or be pushed this turn
     int  stunTimer{0};
 
-    bool isActive()   const { return !ko && !casualty && !inReserves; }
+    bool isActive()   const { return !ko && !casualty && !ejected && !inReserves; }
     // canAct: physically able AND not yet activated this turn
     bool canAct()     const { return isActive() && !stunned && !prone && !activated; }
-    bool isOnPitch()  const { return !ko && !casualty && !inReserves; }
+    bool isOnPitch()  const { return !ko && !casualty && !ejected && !inReserves; }
 };
 
 // ---------------------------------------------------------------------------
@@ -660,6 +661,7 @@ struct TeamState {
     int blocksSuccessful{0};
     int casualties{0};
     int knockouts{0};
+    int ejections{0};          // Secret Weapon ejections (not counted as casualties)
     int touchdowns{0};
     int passesAttempted{0};
     int passesCompleted{0};
@@ -696,6 +698,7 @@ struct GameResult {
     int score1{}, score2{};
     int casualties1{}, casualties2{};
     int ko1{}, ko2{};
+    int ejections1{}, ejections2{};
     int blocks1{}, blocks2{};
     int passes1{}, passes2{};
 };
@@ -706,6 +709,7 @@ struct SimulationStats {
     long long totalScore1{}, totalScore2{};
     long long totalCasualties1{}, totalCasualties2{};
     long long totalKO1{}, totalKO2{};
+    long long totalEjections1{}, totalEjections2{};
     long long totalBlocks1{}, totalBlocks2{};
     long long totalPasses1{}, totalPasses2{};
 };

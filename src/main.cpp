@@ -149,6 +149,8 @@ static void printAggregateStats(const SimulationStats& s,
     std::println("║  Avg touchdowns          ║  {:>10.3f}  ║  {:>8.3f}  ║", avg(s.totalScore1), avg(s.totalScore2));
     std::println("║  Avg casualties caused   ║  {:>10.3f}  ║  {:>8.3f}  ║", avg(s.totalCasualties1), avg(s.totalCasualties2));
     std::println("║  Avg KOs caused          ║  {:>10.3f}  ║  {:>8.3f}  ║", avg(s.totalKO1), avg(s.totalKO2));
+    if (s.totalEjections1 > 0 || s.totalEjections2 > 0)
+        std::println("║  Avg ejections caused    ║  {:>10.3f}  ║  {:>8.3f}  ║", avg(s.totalEjections1), avg(s.totalEjections2));
     std::println("║  Avg blocks (success)    ║  {:>10.3f}  ║  {:>8.3f}  ║", avg(s.totalBlocks1), avg(s.totalBlocks2));
     std::println("║  Avg completions         ║  {:>10.3f}  ║  {:>8.3f}  ║", avg(s.totalPasses1), avg(s.totalPasses2));
     std::println("╚══════════════════════════╩══════════════╩════════════╝");

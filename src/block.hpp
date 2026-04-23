@@ -135,14 +135,16 @@ inline BlockResult resolveBlock(
 
         if (!brokeWith) return false;
 
-        int injBonus = brokeWithout ? mbBonus : 0;
+        // Decay: +1 to all injury rolls made against this player (both the initial
+        // roll and any apothecary re-roll), making Casualty results more likely.
+        const int decayBonus = player.stats.has(SK::Decay) ? 1 : 0;
+        int injBonus = (brokeWithout ? mbBonus : 0) + decayBonus;
         auto inj = dice.injuryRoll(injBonus);
 
-        // Decay: apothecary cannot be used for this player's Casualty results.
-        if (inj == Dice::Injury::Casualty && team.hasApothecary && !team.apothecaryUsed
-                                          && !player.stats.has(SK::Decay)) {
+        if (inj == Dice::Injury::Casualty && team.hasApothecary && !team.apothecaryUsed) {
             team.apothecaryUsed = true;
-            auto reroll = dice.injuryRoll(0);
+            // MB is excluded from the re-roll (BB rule); Decay still applies.
+            auto reroll = dice.injuryRoll(decayBonus);
             if (reroll < inj) inj = reroll;
         }
 
