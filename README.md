@@ -190,7 +190,7 @@ Star players are hired as inducements and listed by name:
 
 Each name must match an entry in the `starPlayers` catalogue in `bloodbowl-2025-seed.json`. If `allowedTeams` in the catalogue is non-empty, the team's race must appear in that list (e.g. Fungus the Loon is restricted to Orcs, Goblins, Skaven, and a few others; Morg 'n' Thorg may be hired by any team).
 
-Star players use their own stats from the seed rather than any roster position. All their skills — including **Loner** — are set automatically. Loner means: before the team may spend a re-roll on behalf of that player, a D6 is rolled; on a **4+** the re-roll is granted, otherwise it is declined (the re-roll count is not decremented). Star players are always fielded; they are not subject to the 11-player cap bench logic.
+Star players use their own stats from the seed rather than any roster position. All their skills — including **Loner** — are set automatically. Loner means: before the team may spend a re-roll on behalf of that player, a D6 is rolled; on a **4+** (or **3+** for Loner (3+)) the re-roll is granted, otherwise it is declined without consuming the re-roll. Star players are always fielded; they are not subject to the 11-player cap bench logic.
 
 Star players are displayed with `★` in the roster printout.
 
@@ -379,8 +379,9 @@ Each turn proceeds in this order:
 2. **Blocking phase**: up to 3 offensive blocks (each blocker activates once)
    - Bone Head / Really Stupid players must pass an activation roll before acting; failure wastes the action and the player's tackle zone (see Skills table)
    - Take Root players roll 2+; on a 1 they are Rooted and may still block in place but cannot move or be pushed this turn
-   - The first block each turn is the **Blitz action** — the acting player benefits from Horns (+1 ST) if they have it
+   - The first block each turn is the **Blitz action** — the acting player benefits from Horns (+1 ST) and Juggernaut (Both Down → Push, Wrestle/Stand Firm/Fend cancelled) if they have those skills
    - A successful push causes the blocker to follow up one zone forward (unless the defender has Fend or is Rooted)
+   - **Piling On**: after knocking an opponent down, the blocker may go prone to re-roll the armour roll
    - Frenzy players must follow up and immediately block again
 3. **Defense blitz**: one defender may move into the carrier's zone and attempt a block
    - Probability varies with turns remaining: 67% early (turns 6–8), 50% mid (3–5), 33% late (1–2), reflecting fresh vs depleted defenses
@@ -403,12 +404,15 @@ Each turn proceeds in this order:
 | Skill | Effect |
 |---|---|
 | **Accurate** | −1 to PA target number |
+| **Animal Savagery** | At activation, roll D6: on a 1 the player goes Wild — Distracted for the turn (simplified: zone model cannot represent the forced team-mate block) |
+| **Animosity** | 1/6 chance per activation the player refuses to pass, hand off, or run; activation ends (simplified: real rule fires only vs specific sub-races) |
 | **Block** | Re-roll Both Down results |
 | **Bone Head** | Before acting, roll D6: on a 1 the player is Distracted (no action, no tackle zone this turn); team re-roll may be used |
 | **Break Tackle** | Use ST instead of AG for dodge rolls (beneficial when ST is lower than AG, i.e. the player is strong but slow) |
 | **Catch** | Re-roll one failed catch per activation |
 | **Claws** | Armour rolls of 8+ break armour regardless of AV |
 | **Dauntless** | When blocking a player with higher ST, roll D6 + own ST; if equal to or higher than the opponent's ST, proceed as if the STs are equal (same block dice count) |
+| **Decay** | On a Casualty result, the apothecary may not be used for this player |
 | **Dirty Player** | +1 to armour and injury rolls when fouling |
 | **Diving Catch** | −1 to AG catch target (easier to catch) |
 | **Diving Tackle** | Fall prone after opponent dodges away to force an extra dodge roll |
@@ -418,10 +422,13 @@ Each turn proceeds in this order:
 | **Grab** | Negates the Sidestep skill on the defender |
 | **Guard** | Cancels one effective tackle zone on the ball carrier when in the same zone (cage effect) |
 | **Horns** | +1 ST when making a Blitz action (the one designated block per turn that involves movement) |
+| **Juggernaut** | On a Blitz action: Both Down is treated as Push; defender's Wrestle, Stand Firm, and Fend are all cancelled |
 | **Leader** | Once per half, while this player is active on the pitch, the team may use them as a free team re-roll (does not decrement the re-roll count) |
+| **Loner** | Before using a team re-roll, must roll D6: Loner (4+) requires a 4+ (50% success); Loner (3+) requires a 3+ (67% success); on failure the re-roll is declined and not consumed |
 | **Mighty Blow** | +1 to armour/injury rolls |
 | **Nerves of Steel** | Ignore tackle zone penalties on pass and catch rolls |
 | **Pass** | Re-roll one failed pass throw per activation |
+| **Piling On** | After knocking an opponent down (DefenderDown or fallen DefenderStumbles): if the attacker does not have the ball they may go prone to re-roll the armour roll once |
 | **Pro** | Once per activation: re-roll any failed roll on 3+ |
 | **Really Stupid** | Before acting, roll D6 (+2 if any adjacent standing team-mate without Really Stupid is not Distracted): 4+ acts normally, <4 = Distracted (no action, no tackle zone this turn); no team re-rolls |
 | **Regeneration** | On a Casualty result: roll 4+ to place in Reserves instead (after apothecary) |
@@ -432,11 +439,13 @@ Each turn proceeds in this order:
 | **Strip Ball** | On a push result against a ball carrier, the ball is knocked loose (no knockdown) |
 | **Sure Feet** | Re-roll a failed Sprint roll |
 | **Sure Hands** | Re-roll one failed pickup per activation |
+| **Secret Weapon** | Ejected (counted as Casualty) at the end of every drive |
 | **Swarming** | Snotling Linemen only — D3 enter the pitch from Reserves each drive, capped by on-pitch Swarming count |
 | **Take Root** | At activation, roll D6: on a 2+ the player acts normally; on a 1 the player is Rooted for the turn — they may still make a Block action in place but cannot move, follow up after a push, be pushed, or make a Blitz action |
 | **Tackle** | Cancels opponent's Dodge skill |
 | **Tentacles** | Before the ball carrier leaves a zone, each Tentacles defender in that zone contests ST vs ST (ties go to Tentacles); on a win the carrier is held and drops the ball |
 | **Titchy** | +1 AG modifier on own dodge rolls (easier to dodge); opponents do not suffer a tackle zone penalty when dodging away from this player (Titchy players do not mark opponents for dodge purposes) |
+| **Unchannelled Fury** | Before any non-Block/Blitz action, roll D6 against own AG; on failure the player is Distracted for the turn |
 | **Wrestle** | Accept Both Down to bring down opponent |
 
 All 175 skills from the 2025 rulebook are stored in a bitmask for O(1) lookup. Skills not listed above are loaded and displayed correctly but have no active simulation effect.
@@ -445,7 +454,7 @@ All 175 skills from the 2025 rulebook are stored in a bitmask for O(1) lookup. S
 
 - **Armour roll** (2d6 > AV): determines if the player is injured after being knocked down
 - **Injury roll** (2d6): Stunned (2–7), KO (8–9), Casualty (10–12)
-- **Apothecary**: once per game, on a Casualty result — opponent re-rolls, coach takes the better outcome
+- **Apothecary**: once per game, on a Casualty result — opponent re-rolls, coach takes the better outcome. Players with **Decay** cannot benefit from the apothecary
 - **Regeneration**: after apothecary, 4+ converts Casualty to Reserves (modelled as KO)
 - **KO recovery**: 4+ roll at every drive kickoff
 
@@ -493,7 +502,10 @@ src/
                      hand-off (attemptHandoff), foul (attemptFoul),
                      interception (attemptInterception), Tentacles, Bone Head,
                      crowd surfing, Frenzy, Fend, Strip Ball, Sidestep, Stunty,
-                     useTeamReroll (captain bonus + Loner gate)
+                     useTeamReroll (captain bonus + Loner/Leader gate),
+                     Juggernaut, Piling On, Decay, Secret Weapon ejection,
+                     Unchannelled Fury, Animal Savagery, Animosity,
+                     Loner (3+) vs Loner (4+)
   tournament.cpp/hpp Swiss bracket: pairing, standings, runTournament
                      match pool (buildMatchPool / sampleMatch) for fast sampling
   block.hpp          Block dice resolution, armour/injury rolls, apothecary,
